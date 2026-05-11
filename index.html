@@ -153,7 +153,7 @@
 <body>
 
 <!-- SETUP -->
-<div id="setup">
+<div id="setup" style="display:none;">
   <div style="text-align:center;padding:28px;border-bottom:1px solid var(--border);">
     <div style="display:inline-flex;align-items:center;gap:12px;">
       <div class="logo-mark">L</div>
@@ -176,7 +176,7 @@
 </div>
 
 <!-- APP -->
-<div class="app" id="app">
+<div class="app" id="app" style="display:block;">
   <div class="header">
     <div class="header-left">
       <div class="logo-mark">L</div>
@@ -516,7 +516,10 @@
   }
 
   // Pre-fill token
-  document.addEventListener('DOMContentLoaded', () => { connect(); });
+  document.addEventListener('DOMContentLoaded', () => {
+    renderSidebar();
+    setStatus('191 profiles loaded', 'ok');
+  });
 </script>
 </body>
 </html>
