@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>INTJ ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Life.Church Social Intel</title>
+<title>INTJ ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ Life.Church Social Intel</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:ital,wght@0,300;0,500;0,700;1,300&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
@@ -157,7 +157,7 @@
     <div style="display:inline-flex;align-items:center;gap:12px;">
       <div class="logo-mark">L</div>
       <div>
-        <div class="header-title">INTJ ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Life.Church Social Intel</div>
+        <div class="header-title">INTJ ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ Life.Church Social Intel</div>
         <div class="header-sub">Powered by Sprout Social</div>
       </div>
     </div>
@@ -165,10 +165,10 @@
   <div class="setup-screen">
     <div class="setup-card">
       <div class="setup-heading">Connect your account</div>
-      <div class="setup-sub">Enter your Sprout Social API token. Your token is only used to make requests to Sprout's API ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ it is never stored or logged.</div>
+      <div class="setup-sub">Enter your Sprout Social API token. Your token is only used to make requests to Sprout's API ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ it is never stored or logged.</div>
       <div class="field-label">Sprout API Token</div>
       <input type="password" class="token-input" id="token-input" placeholder="Paste your bearer token..." />
-      <button class="connect-btn" id="connect-btn" onclick="connect()">Connect to Sprout Social ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ</button>
+      <button class="connect-btn" id="connect-btn" onclick="connect()">Connect to Sprout Social ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ</button>
       <div class="error-box" id="setup-error"></div>
     </div>
   </div>
@@ -180,7 +180,7 @@
     <div class="header-left">
       <div class="logo-mark">L</div>
       <div>
-        <div class="header-title">INTJ ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Life.Church Social Intel</div>
+        <div class="header-title">INTJ ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ Life.Church Social Intel</div>
         <div class="header-sub">Pattern Analysis Engine</div>
       </div>
     </div>
@@ -204,7 +204,7 @@
             <option value="60">Last 60 days</option>
             <option value="90">Last 90 days</option>
           </select>
-          <button class="run-btn" id="run-btn" onclick="runAnalysis()">Run analysis ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ</button>
+          <button class="run-btn" id="run-btn" onclick="runAnalysis()">Run analysis ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ</button>
         </div>
       </div>
     </div>
@@ -293,17 +293,17 @@
     } catch(e) {
       document.getElementById('setup-error').style.display = 'block';
       document.getElementById('setup-error').textContent = 'Connection failed: ' + e.message;
-      btn.disabled = false; btn.textContent = 'Connect to Sprout Social ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ';
+      btn.disabled = false; btn.textContent = 'Connect to Sprout Social ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ';
     }
   }
 
   function renderSidebar() {
     selectedProfiles = allProfiles.map(p=>p.customer_profile_id);
-    const netEmoji={instagram:'ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ¸',facebook:'ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ¤',twitter:'ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ¦',linkedin:'ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ¼',youtube:'ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ¶ÃÂÃÂ¯ÃÂÃÂ¸ÃÂÃÂ',tiktok:'ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂµ'};
+    const netEmoji={instagram:'ÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¸',facebook:'ÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¤',twitter:'ÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¦',linkedin:'ÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¼',youtube:'ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¶ÃÂÃÂÃÂÃÂ¯ÃÂÃÂÃÂÃÂ¸ÃÂÃÂÃÂÃÂ',tiktok:'ÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂµ'};
     document.getElementById('profiles-list').innerHTML = allProfiles.map(p => {
       const net=(p.network_type||'').toLowerCase();
       return `<div class="profile-item active" data-id="${p.customer_profile_id}" onclick="toggleProfile(this,'${p.customer_profile_id}')">
-        <div class="profile-icon" style="background:${netColor(net)}22;">${netEmoji[net]||'ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ'}</div>
+        <div class="profile-icon" style="background:${netColor(net)}22;">${netEmoji[net]||'ÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ'}</div>
         <div>
           <div class="profile-name">${p.name||p.handle||'Profile'}</div>
           <div class="profile-network">${net}</div>
@@ -354,11 +354,11 @@
       document.getElementById('dashboard').style.display='block';
       document.getElementById('empty-state').style.display='none';
       await generateInsights(posts, days);
-      setStatus(`Done ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ ${posts.length} posts analyzed`,'ok');
+      setStatus(`Done ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ ${posts.length} posts analyzed`,'ok');
     } catch(e) {
       setStatus('Error: '+e.message,'error');
     } finally {
-      btn.disabled=false; btn.textContent='Run analysis ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ';
+      btn.disabled=false; btn.textContent='Run analysis ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ';
     }
   }
 
@@ -389,7 +389,7 @@
       const vLabel=verdict==='strong'?'Top performer':verdict==='weak'?'Underperformer':'Average';
       const net=(p.customer_profile?.network_type||'').toLowerCase();
       const date=p.sent_time?new Date(p.sent_time).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):'';
-      const txt=(p.text||'').slice(0,160)+((p.text||'').length>160?'ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ¦':'');
+      const txt=(p.text||'').slice(0,160)+((p.text||'').length>160?'ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¦':'');
       return `<div class="post-card">
         <div class="post-top">
           <span class="net-badge net-${net||'unknown'}">${net||'unknown'}</span>
