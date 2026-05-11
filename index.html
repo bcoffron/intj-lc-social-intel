@@ -516,9 +516,18 @@
   }
 
   // Pre-fill token
-  document.addEventListener('DOMContentLoaded', () => {
-    renderSidebar();
-    setStatus('191 profiles loaded', 'ok');
+  document.addEventListener('DOMContentLoaded', async () => {
+    setStatus('Loading profiles...', 'loading');
+    try {
+      const clientData = await sproutGet('/v1/metadata/client');
+      customerId = (clientData.data && clientData.data[0]) ? String(clientData.data[0].customer_id) : '';
+      const profileData = await sproutGet('/v1/' + customerId + '/metadata/customer');
+      allProfiles = profileData.data || [];
+      renderSidebar();
+      setStatus(allProfiles.length + ' profiles loaded', 'ok');
+    } catch(e) {
+      setStatus('Error: ' + e.message, 'error');
+    }
   });
 </script>
 </body>
