@@ -299,11 +299,11 @@
 
   function renderSidebar() {
     selectedProfiles = allProfiles.map(p=>p.customer_profile_id);
-    const netEmoji={instagram:'ÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¸',facebook:'ÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¤',twitter:'ÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¦',linkedin:'ÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¼',youtube:'ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¶ÃÂÃÂÃÂÃÂ¯ÃÂÃÂÃÂÃÂ¸ÃÂÃÂÃÂÃÂ',tiktok:'ÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂµ'};
+    const netEmoji={instagram:'IG',facebook:'FB',twitter:'TW',linkedin:'LI',youtube:'YT',tiktok:'TK',fb_instagram_account:'IG'};
     document.getElementById('profiles-list').innerHTML = allProfiles.map(p => {
       const net=(p.network_type||'').toLowerCase();
       return `<div class="profile-item active" data-id="${p.customer_profile_id}" onclick="toggleProfile(this,'${p.customer_profile_id}')">
-        <div class="profile-icon" style="background:${netColor(net)}22;">${netEmoji[net]||'ÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ'}</div>
+        <div class="profile-icon" style="background:${netColor(net)}22;">${netEmoji[net]||'--'}</div>
         <div>
           <div class="profile-name">${p.name||p.handle||'Profile'}</div>
           <div class="profile-network">${net}</div>
