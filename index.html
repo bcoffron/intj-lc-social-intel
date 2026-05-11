@@ -275,7 +275,7 @@
 
   async function connect() {
     const input = document.getElementById('token-input');
-    token = input.value.trim();
+    token = input.value.trim() || token;
     if (!token) return;
     const btn = document.getElementById('connect-btn');
     btn.disabled = true; btn.textContent = 'Connecting...';
