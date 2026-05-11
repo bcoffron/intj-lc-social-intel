@@ -150,24 +150,46 @@ async function sproutGet(path){const r=await fetch('/api/sprout?path='+encodeURI
 async function sproutPost(path,body){const r=await fetch('/api/sprout?path='+encodeURIComponent(path),{method:'POST',headers:{'Content-Type':'application/json','x-sprout-token':SPROUT_TOKEN},body:JSON.stringify(body)});if(!r.ok){const t=await r.text();throw new Error(r.status+': '+t.slice(0,200));}return r.json();}
 function renderSidebar(){
   const netLabel={instagram:'IG',fb_instagram_account:'IG',facebook:'FB',linkedin:'LI',youtube:'YT',tiktok:'TK'};
-  const profiles=allProfiles.filter(p=>!['twitter','fb_twitter_account'].includes((p.network_type||'').toLowerCase()));
+  const EXCLUDED=['twitter','fb_twitter_account','linkedin','youtube'];
+  const profiles=allProfiles.filter(p=>!EXCLUDED.includes((p.network_type||'').toLowerCase()));
+  // Build groups by name
   const groups={};
   profiles.forEach(p=>{const key=p.name||p.handle||'Unknown';if(!groups[key])groups[key]=[];groups[key].push(p);});
-  window._profileGroups=groups;window._netLabel=netLabel;selectedProfiles=[];
+  window._profileGroups=groups;
+  window._allFilteredProfiles=profiles;
+  window._netLabel=netLabel;
+  selectedProfiles=[];
+  // Build options: All, then each account name, then each individual profile
   const accountNames=Object.keys(groups);
+  let opts='<option value="">-- Pick an account --</option><option value="all">All accounts</option>';
+  // Add group headers with sub-options per platform
+  accountNames.forEach(name=>{
+    const profs=groups[name];
+    if(profs.length===1){
+      opts+='<option value="grp:'+name+'">'+name+'</option>';
+    } else {
+      opts+='<optgroup label="'+name+'">';
+      opts+='<option value="grp:'+name+'">'+name+' - All platforms</option>';
+      profs.forEach(p=>{
+        const net=(p.network_type||'').toLowerCase();
+        const label=netLabel[net]||net;
+        opts+='<option value="pid:'+p.customer_profile_id+'">'+name+' - '+label+'</option>';
+      });
+      opts+='</optgroup>';
+    }
+  });
   document.getElementById('profiles-list').innerHTML=
     '<div class="range-group" style="margin-bottom:10px;">'+
     '<select class="range-select" id="account-select" onchange="selectAccount(this.value)">'+
-    '<option value="">-- Pick an account --</option>'+
-    '<option value="all">All accounts</option>'+
-    accountNames.map(n=>'<option value="'+n+'">'+n+'</option>').join('')+
-    '</select></div><div id="profile-items"></div>';
+    opts+'</select></div><div id="profile-items"></div>';
 }
-function selectAccount(name){
+function selectAccount(val){
   const netLabel=window._netLabel||{};
-  const profiles=allProfiles.filter(p=>!['twitter','fb_twitter_account'].includes((p.network_type||'').toLowerCase()));
+  const allFiltered=window._allFilteredProfiles||[];
   let selected=[];
-  if(name==='all'){selected=profiles;}else if(name){selected=(window._profileGroups||{})[name]||[];}
+  if(val==='all'){selected=allFiltered;}
+  else if(val.startsWith('grp:')){const name=val.slice(4);selected=(window._profileGroups||{})[name]||[];}
+  else if(val.startsWith('pid:')){const id=parseInt(val.slice(4));selected=allFiltered.filter(p=>p.customer_profile_id===id);}
   selectedProfiles=selected.map(p=>p.customer_profile_id);
   document.getElementById('profile-items').innerHTML=selected.map(p=>{
     const net=(p.network_type||'').toLowerCase();
