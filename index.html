@@ -232,6 +232,7 @@
 <script>
   // All Sprout API calls go through /api/sprout?path=... (our Vercel proxy)
   let token = '';
+  let customerId = '';
   let selectedProfiles = [];
   let allProfiles = [];
   let dayChart = null, hourChart = null;
@@ -262,7 +263,8 @@
   }
 
   async function sproutPost(path, body) {
-    const r = await fetch(`/api/sprout?path=${encodeURIComponent(path)}`, {
+    const fullPath = customerId ? path.replace('/v1/', `/v1/${customerId}/`) : path;
+    const r = await fetch(`/api/sprout?path=${encodeURIComponent(fullPath)}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-sprout-token': token },
       body: JSON.stringify(body)
