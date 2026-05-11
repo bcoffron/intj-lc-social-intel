@@ -27,8 +27,7 @@ module.exports = async (req, res) => {
       })
     });
     const cd = await cr.json();
-    const text = (cd.content || []).filter(c => c.type === 'text').map(c => c.text).join('');
-    return res.status(200).json({ text });
+    return res.status(200).json({ debug: cd, text: (cd.content || []).filter(c => c.type === 'text').map(c => c.text).join('') });
   }
 
   // Handle Sprout API requests
