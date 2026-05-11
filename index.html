@@ -271,9 +271,9 @@ async function generateInsights(posts,days){
   const netSummary=Object.entries(byNet).map(([n,d])=>({network:n,avgEng:Math.round(d.t/d.c),posts:d.c}));
   const prompt='You are a sharp INTJ social media strategist analyzing Life.Church real data. Be direct, analytical, ruthlessly specific. No fluff.\n\nData (last '+days+' days):\n- '+posts.length+' posts, avg '+avgEng+' engagements/post\n- Platforms: '+JSON.stringify(netSummary)+'\n- Top 5: '+JSON.stringify(top5)+'\n- Bottom 5: '+JSON.stringify(bot5)+'\n\nReturn ONLY a JSON array with 6-8 insight objects. No markdown.\nSchema: [{"type":"strength|weakness|opportunity|pattern","text":"..."}]';
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})});
+    const res=await fetch('/api/sprout?path=/claude',{method:'POST',headers:{'Content-Type':'application/json','x-sprout-token':SPROUT_TOKEN},body:JSON.stringify({prompt:prompt})});
     const data=await res.json();
-    const text=(data.content||[]).filter(c=>c.type==='text').map(c=>c.text).join('');
+    const text=data.text||'';
     const insights=JSON.parse(text.replace(/```json|```/g,'').trim());
     document.getElementById('tab-insights').innerHTML='<div class="insights-list">'+insights.map(ins=>'<div class="insight-card"><div class="insight-type type-'+ins.type+'">'+ins.type+'</div><div class="insight-text">'+ins.text+'</div></div>').join('')+'</div>';
   }catch(e){document.getElementById('tab-insights').innerHTML='<div class="insights-loading" style="color:var(--red)">Could not generate insights: '+e.message+'</div>';}
