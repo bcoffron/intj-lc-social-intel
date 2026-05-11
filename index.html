@@ -252,20 +252,12 @@ function renderPatterns(posts){
   const netEntries=Object.entries(byNet).sort((a,b)=>(b[1].t/b[1].c)-(a[1].t/a[1].c));
   const maxNet=netEntries.length?Math.round(netEntries[0][1].t/netEntries[0][1].c):1;
   document.getElementById('tab-patterns').innerHTML=
-    '<div class="charts-grid">'+
-    '<div class="chart-card"><div class="chart-title">Avg engagement by day</div><div style="position:relative;height:190px;"><canvas id="dayChart"></canvas></div></div>'+
-    '<div class="chart-card"><div class="chart-title">Avg engagement by hour</div><div style="position:relative;height:190px;"><canvas id="hourChart"></canvas></div></div>'+
-    '</div><div class="chart-card"><div class="chart-title">Performance by platform</div>'+
+    '<div class="chart-card"><div class="chart-title">Performance by platform</div>'+
     '<div class="platform-bars" style="margin-top:10px;">'+
     netEntries.map(([net,d])=>{const avg=Math.round(d.t/d.c),pct=Math.round((avg/maxNet)*100);
       return '<div class="pbar-row"><div class="pbar-label">'+net+'</div><div class="pbar-track"><div class="pbar-fill" style="width:'+pct+'%;background:'+netColor(net)+';"></div></div><div class="pbar-val">'+fmtNum(avg)+'</div><div class="pbar-count">'+d.c+' posts</div></div>';
     }).join('')+'</div></div>';
-  if(dayChart){dayChart.destroy();dayChart=null;}if(hourChart){hourChart.destroy();hourChart=null;}
-  const co={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#565b6e',font:{size:10}},grid:{color:'rgba(255,255,255,0.04)'}},y:{ticks:{color:'#565b6e',font:{size:10},callback:v=>fmtNum(v)},grid:{color:'rgba(255,255,255,0.04)'},beginAtZero:true}}};
-  setTimeout(()=>{
-    if(document.getElementById('dayChart'))dayChart=new Chart(document.getElementById('dayChart'),{type:'bar',data:{labels:days,datasets:[{data:dayAvgs,backgroundColor:'rgba(79,142,247,0.7)',borderRadius:4}]},options:co});
-    if(document.getElementById('hourChart'))hourChart=new Chart(document.getElementById('hourChart'),{type:'line',data:{labels:hourLabels,datasets:[{data:hourAvgs,borderColor:'#3ecf8e',backgroundColor:'rgba(62,207,142,0.06)',tension:0.4,fill:true,pointRadius:2}]},options:{...co,scales:{...co.scales,x:{...co.scales.x,ticks:{...co.scales.x.ticks,maxTicksLimit:8}}}}});
-  },50);
+
 }
 async function generateInsights(posts,days){
   document.getElementById('tab-insights').innerHTML='<div class="insights-loading">Generating INTJ analysis via Claude...</div>';
@@ -279,9 +271,9 @@ async function generateInsights(posts,days){
   const netSummary=Object.entries(byNet).map(([n,d])=>({network:n,avgEng:Math.round(d.t/d.c),posts:d.c}));
   const prompt='You are a sharp INTJ social media strategist analyzing Life.Church real data. Be direct, analytical, ruthlessly specific. No fluff.\n\nData (last '+days+' days):\n- '+posts.length+' posts, avg '+avgEng+' engagements/post\n- Platforms: '+JSON.stringify(netSummary)+'\n- Top 5: '+JSON.stringify(top5)+'\n- Bottom 5: '+JSON.stringify(bot5)+'\n\nReturn ONLY a JSON array with 6-8 insight objects. No markdown.\nSchema: [{"type":"strength|weakness|opportunity|pattern","text":"..."}]';
   try{
-    const res=await fetch('/api/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:prompt})});
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})});
     const data=await res.json();
-    const text=data.text||((data.content||[]).filter(c=>c.type==='text').map(c=>c.text).join(''));
+    const text=(data.content||[]).filter(c=>c.type==='text').map(c=>c.text).join('');
     const insights=JSON.parse(text.replace(/```json|```/g,'').trim());
     document.getElementById('tab-insights').innerHTML='<div class="insights-list">'+insights.map(ins=>'<div class="insight-card"><div class="insight-type type-'+ins.type+'">'+ins.type+'</div><div class="insight-text">'+ins.text+'</div></div>').join('')+'</div>';
   }catch(e){document.getElementById('tab-insights').innerHTML='<div class="insights-loading" style="color:var(--red)">Could not generate insights: '+e.message+'</div>';}
