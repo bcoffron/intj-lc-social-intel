@@ -144,6 +144,7 @@ const SPROUT_TOKEN='NTI4OTg1fDE3NzgxNzc4Nzd8ZTU0YTk4ZGMtOWI0OS00MjUxLThjOTAtZDYz
 let customerId='',allProfiles=[],selectedProfiles=[],dayChart=null,hourChart=null;
 function setStatus(msg,state){document.getElementById('status-text').textContent=msg;document.getElementById('status-dot').className='status-dot '+(state||'loading');}
 function fmtNum(n){n=Number(n)||0;if(n>=1000000)return(n/1000000).toFixed(1)+'M';if(n>=1000)return(n/1000).toFixed(1)+'K';return Math.round(n).toLocaleString();}
+function guidToNet(g){if(!g)return'unknown';if(g.startsWith('igmed:'))return'instagram';if(g.startsWith('p:'))return'facebook';if(g.startsWith('li:'))return'linkedin';if(g.startsWith('yt:'))return'youtube';return'unknown';}
 function netColor(n){const m={instagram:'#f5a623',fb_instagram_account:'#f5a623',facebook:'#4f8ef7',linkedin:'#4f8ef7',youtube:'#f06060'};return m[(n||'').toLowerCase()]||'#8b90a0';}
 async function sproutGet(path){const r=await fetch('/api/sprout?path='+encodeURIComponent(path),{headers:{'x-sprout-token':SPROUT_TOKEN}});if(!r.ok){const t=await r.text();throw new Error(r.status+': '+t.slice(0,200));}return r.json();}
 async function sproutPost(path,body){const r=await fetch('/api/sprout?path='+encodeURIComponent(path),{method:'POST',headers:{'Content-Type':'application/json','x-sprout-token':SPROUT_TOKEN},body:JSON.stringify(body)});if(!r.ok){const t=await r.text();throw new Error(r.status+': '+t.slice(0,200));}return r.json();}
@@ -214,21 +215,19 @@ function renderPosts(posts){
   if(!posts.length){document.getElementById('tab-posts').innerHTML='<div class="empty"><div class="empty-title">No posts found</div>Try a wider date range.</div>';return;}
   const sorted=[...posts].sort((a,b)=>(b.metrics?.['lifetime.engagements']||0)-(a.metrics?.['lifetime.engagements']||0));
   const median=sorted[Math.floor(sorted.length/2)]?.metrics?.['lifetime.engagements']||0;
-  document.getElementById('tab-posts').innerHTML='<div class="posts-list">'+sorted.slice(0,20).map(p=>{
+  document.getElementById('tab-posts').innerHTML='<div class="posts-list">'+sorted.slice(0,20).map((p,i)=>{
     const eng=p.metrics?.['lifetime.engagements']||0,imp=p.metrics?.['lifetime.impressions']||0;
     const er=imp>0?((eng/imp)*100).toFixed(2):'0.00';
     const verdict=eng>median*1.5?'strong':eng<median*0.5?'weak':'mid';
     const vLabel=verdict==='strong'?'Top performer':verdict==='weak'?'Underperformer':'Average';
-    const net=(p.customer_profile?.network_type||'').toLowerCase();
-    const date=p.sent_time?new Date(p.sent_time).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):'';
-    const txt=(p.text||'').slice(0,160)+((p.text||'').length>160?'...':'');
+    const net=guidToNet(p.guid);
     return '<div class="post-card">'+
-      '<div class="post-top"><span class="net-badge net-'+(net||'unknown')+'">'+(net||'unknown')+'</span>'+
+      '<div class="post-top"><span class="net-badge net-'+net+'">'+net+'</span>'+
       '<span class="verdict-badge verdict-'+verdict+'">'+vLabel+'</span>'+
-      '<span class="post-date">'+date+'</span></div>'+
-      '<div class="post-text">'+(txt||'<em>No text</em>')+'</div>'+
+      '<span class="post-date">Post #'+(i+1)+'</span></div>'+
       '<div class="post-stats">'+
       '<div class="stat">impressions <span>'+fmtNum(imp)+'</span></div>'+
+      '<div class="stat">engagements <span>'+fmtNum(eng)+'</span></div>'+
       '<div class="stat">reactions <span>'+fmtNum(p.metrics?.['lifetime.reactions']||0)+'</span></div>'+
       '<div class="stat">comments <span>'+fmtNum(p.metrics?.['lifetime.comments_count']||0)+'</span></div>'+
       '<div class="stat">shares <span>'+fmtNum(p.metrics?.['lifetime.shares_count']||0)+'</span></div>'+
@@ -241,7 +240,7 @@ function renderPatterns(posts){
   const byDay={},byHour={},byNet={},days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
   posts.forEach(p=>{
     const eng=p.metrics?.['lifetime.engagements']||0;
-    const net=(p.customer_profile?.network_type||'unknown').toLowerCase();
+    const net=guidToNet(p.guid);
     if(p.sent_time){const d=new Date(p.sent_time),day=days[d.getDay()],hour=d.getHours();
       if(!byDay[day])byDay[day]={t:0,c:0};byDay[day].t+=eng;byDay[day].c++;
       if(!byHour[hour])byHour[hour]={t:0,c:0};byHour[hour].t+=eng;byHour[hour].c++;}
@@ -280,9 +279,9 @@ async function generateInsights(posts,days){
   const netSummary=Object.entries(byNet).map(([n,d])=>({network:n,avgEng:Math.round(d.t/d.c),posts:d.c}));
   const prompt='You are a sharp INTJ social media strategist analyzing Life.Church real data. Be direct, analytical, ruthlessly specific. No fluff.\n\nData (last '+days+' days):\n- '+posts.length+' posts, avg '+avgEng+' engagements/post\n- Platforms: '+JSON.stringify(netSummary)+'\n- Top 5: '+JSON.stringify(top5)+'\n- Bottom 5: '+JSON.stringify(bot5)+'\n\nReturn ONLY a JSON array with 6-8 insight objects. No markdown.\nSchema: [{"type":"strength|weakness|opportunity|pattern","text":"..."}]';
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})});
+    const res=await fetch('/api/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:prompt})});
     const data=await res.json();
-    const text=(data.content||[]).filter(c=>c.type==='text').map(c=>c.text).join('');
+    const text=data.text||((data.content||[]).filter(c=>c.type==='text').map(c=>c.text).join(''));
     const insights=JSON.parse(text.replace(/```json|```/g,'').trim());
     document.getElementById('tab-insights').innerHTML='<div class="insights-list">'+insights.map(ins=>'<div class="insight-card"><div class="insight-type type-'+ins.type+'">'+ins.type+'</div><div class="insight-text">'+ins.text+'</div></div>').join('')+'</div>';
   }catch(e){document.getElementById('tab-insights').innerHTML='<div class="insights-loading" style="color:var(--red)">Could not generate insights: '+e.message+'</div>';}
