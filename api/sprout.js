@@ -22,7 +22,7 @@ module.exports = async (req, res) => {
       },
       body: JSON.stringify({
         model: 'claude-3-5-sonnet-20241022',
-        max_tokens: 2000,
+        max_tokens: 20000,
         messages: [{ role: 'user', content: prompt }]
       })
     });
