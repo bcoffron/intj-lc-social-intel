@@ -6,14 +6,24 @@ module.exports = async (req, res) => {
 
   const path = req.query.path || '/v1/metadata/client';
 
-  // Handle Claude API requests
+  // Handle Claude API requests via server-side key
   if (path === '/claude') {
     const { prompt } = req.body || {};
     if (!prompt) return res.status(400).json({ error: 'Missing prompt' });
+    const apiKey = process.env.ANTHROPIC_API_KEY;
+    if (!apiKey) return res.status(500).json({ error: 'ANTHROPIC_API_KEY not configured' });
     const cr = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01' },
-      body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1000, messages: [{ role: 'user', content: prompt }] })
+      headers: {
+        'Content-Type': 'application/json',
+        'anthropic-version': '2023-06-01',
+        'x-api-key': apiKey
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 2000,
+        messages: [{ role: 'user', content: prompt }]
+      })
     });
     const cd = await cr.json();
     const text = (cd.content || []).filter(c => c.type === 'text').map(c => c.text).join('');
