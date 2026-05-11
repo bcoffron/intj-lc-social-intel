@@ -168,7 +168,7 @@
       <div class="setup-sub">Enter your Sprout Social API token. Your token is only used to make requests to Sprout's API ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ it is never stored or logged.</div>
       <div class="field-label">Sprout API Token</div>
       <input type="password" class="token-input" id="token-input" placeholder="Paste your bearer token..." />
-      <button class="connect-btn" id="connect-btn" onclick="connect()">Connect to Sprout Social ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ</button>
+      <button class="connect-btn" id="connect-btn" onclick="connect()">Connect to Sprout Social</button>
       <div class="error-box" id="setup-error"></div>
     </div>
   </div>
@@ -204,7 +204,7 @@
             <option value="60">Last 60 days</option>
             <option value="90">Last 90 days</option>
           </select>
-          <button class="run-btn" id="run-btn" onclick="runAnalysis()">Run analysis ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ</button>
+          <button class="run-btn" id="run-btn" onclick="runAnalysis()">Run analysis</button>
         </div>
       </div>
     </div>
@@ -293,7 +293,7 @@
     } catch(e) {
       document.getElementById('setup-error').style.display = 'block';
       document.getElementById('setup-error').textContent = 'Connection failed: ' + e.message;
-      btn.disabled = false; btn.textContent = 'Connect to Sprout Social ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ';
+      btn.disabled = false; btn.textContent = 'Connect to Sprout Social';
     }
   }
 
@@ -390,7 +390,7 @@
     } catch(e) {
       setStatus('Error: '+e.message,'error');
     } finally {
-      btn.disabled=false; btn.textContent='Run analysis ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ';
+      btn.disabled=false; btn.textContent='Run analysis
     }
   }
 
