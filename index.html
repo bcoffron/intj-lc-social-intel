@@ -391,12 +391,7 @@
     } catch(e) {
       setStatus('Error: '+e.message,'error');
     } finally {
-      btn.disabled=false; btn.textContent='Run analysis
-    }
-  }
-
-  function renderMetrics(posts) {
-    const totalImp=posts.reduce((s,p)=>s+(p.metrics?.['lifetime.impressions']||0),0);
+      btn.disabled=false; btn.textContent='Run analysis'lifetime.impressions']||0),0);
     const totalEng=posts.reduce((s,p)=>s+(p.metrics?.['lifetime.engagements']||0),0);
     const totalReach=posts.reduce((s,p)=>s+(p.metrics?.['lifetime.impressions']||0),0);
     const avgEng=posts.length?Math.round(totalEng/posts.length):0;
