@@ -1,40 +1,29 @@
-// fresh-1778521641081
+// rebuilt-1778521952255
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-Sprout-Token');
   if (req.method === 'OPTIONS') return res.status(200).end();
-
   const path = req.query.path || '/v1/metadata/client';
-
   if (path === '/claude') {
     const { prompt } = req.body || {};
     if (!prompt) return res.status(400).json({ error: 'Missing prompt' });
     const apiKey = process.env.ANTHROPIC_API_KEY;
-    if (!apiKey) return res.status(500).json({ error: 'No API key' });
+    if (!apiKey) return res.status(500).json({ error: 'No ANTHROPIC_API_KEY env var' });
     try {
       const cr = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'anthropic-version': '2023-06-01',
-          'x-api-key': apiKey
-        },
-        body: JSON.stringify({
-          model: 'claude-3-opus-20240229',
-          max_tokens: 2000,
-          messages: [{ role: 'user', content: prompt }]
-        })
+        headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01', 'x-api-key': apiKey },
+        body: JSON.stringify({ model: 'claude-haiku-4-5', max_tokens: 2000, messages: [{ role: 'user', content: prompt }] })
       });
       const cd = await cr.json();
-      if (cd.error) return res.status(500).json({ error: cd.error.message });
+      if (cd.error) return res.status(500).json({ error: cd.error.message, type: cd.error.type, full: cd });
       const text = (cd.content || []).filter(c => c.type === 'text').map(c => c.text).join('');
       return res.status(200).json({ text });
     } catch(e) {
       return res.status(500).json({ error: e.message });
     }
   }
-
   const token = req.headers['x-sprout-token'];
   if (!token) return res.status(401).json({ error: 'Missing token' });
   const url = 'https://api.sproutsocial.com' + path;
