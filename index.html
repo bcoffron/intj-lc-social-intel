@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>INTJ ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ Life.Church Social Intel</title>
+<title>INTJ - Life.Church Social Intel</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:ital,wght@0,300;0,500;0,700;1,300&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
@@ -299,7 +299,7 @@
 
   function renderSidebar() {
     selectedProfiles = allProfiles.map(p=>p.customer_profile_id);
-    const netEmoji={instagram:'IG',facebook:'FB',twitter:'TW',linkedin:'LI',youtube:'YT',tiktok:'TK',fb_instagram_account:'IG'};
+    const netEmoji={instagram:'IG',facebook:'FB',twitter:'TW',linkedin:'LI',youtube:'YT',tiktok:'TK',fb_instagram_account:'IG',fb_twitter_account:'TW'};
     document.getElementById('profiles-list').innerHTML = allProfiles.map(p => {
       const net=(p.network_type||'').toLowerCase();
       return `<div class="profile-item active" data-id="${p.customer_profile_id}" onclick="toggleProfile(this,'${p.customer_profile_id}')">
