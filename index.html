@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>INTJ Ã¢ÂÂ Life.Church Social Intel</title>
+<title>INTJ ÃÂ¢ÃÂÃÂ Life.Church Social Intel</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:ital,wght@0,300;0,500;0,700;1,300&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
@@ -157,7 +157,7 @@
     <div style="display:inline-flex;align-items:center;gap:12px;">
       <div class="logo-mark">L</div>
       <div>
-        <div class="header-title">INTJ Ã¢ÂÂ Life.Church Social Intel</div>
+        <div class="header-title">INTJ ÃÂ¢ÃÂÃÂ Life.Church Social Intel</div>
         <div class="header-sub">Powered by Sprout Social</div>
       </div>
     </div>
@@ -165,10 +165,10 @@
   <div class="setup-screen">
     <div class="setup-card">
       <div class="setup-heading">Connect your account</div>
-      <div class="setup-sub">Enter your Sprout Social API token. Your token is only used to make requests to Sprout's API Ã¢ÂÂ it is never stored or logged.</div>
+      <div class="setup-sub">Enter your Sprout Social API token. Your token is only used to make requests to Sprout's API ÃÂ¢ÃÂÃÂ it is never stored or logged.</div>
       <div class="field-label">Sprout API Token</div>
       <input type="password" class="token-input" id="token-input" placeholder="Paste your bearer token..." />
-      <button class="connect-btn" id="connect-btn" onclick="connect()">Connect to Sprout Social Ã¢ÂÂ</button>
+      <button class="connect-btn" id="connect-btn" onclick="connect()">Connect to Sprout Social ÃÂ¢ÃÂÃÂ</button>
       <div class="error-box" id="setup-error"></div>
     </div>
   </div>
@@ -180,7 +180,7 @@
     <div class="header-left">
       <div class="logo-mark">L</div>
       <div>
-        <div class="header-title">INTJ Ã¢ÂÂ Life.Church Social Intel</div>
+        <div class="header-title">INTJ ÃÂ¢ÃÂÃÂ Life.Church Social Intel</div>
         <div class="header-sub">Pattern Analysis Engine</div>
       </div>
     </div>
@@ -204,7 +204,7 @@
             <option value="60">Last 60 days</option>
             <option value="90">Last 90 days</option>
           </select>
-          <button class="run-btn" id="run-btn" onclick="runAnalysis()">Run analysis Ã¢ÂÂ</button>
+          <button class="run-btn" id="run-btn" onclick="runAnalysis()">Run analysis ÃÂ¢ÃÂÃÂ</button>
         </div>
       </div>
     </div>
@@ -292,17 +292,17 @@
     } catch(e) {
       document.getElementById('setup-error').style.display = 'block';
       document.getElementById('setup-error').textContent = 'Connection failed: ' + e.message;
-      btn.disabled = false; btn.textContent = 'Connect to Sprout Social Ã¢ÂÂ';
+      btn.disabled = false; btn.textContent = 'Connect to Sprout Social ÃÂ¢ÃÂÃÂ';
     }
   }
 
   function renderSidebar() {
     selectedProfiles = allProfiles.map(p=>p.customer_profile_id);
-    const netEmoji={instagram:'Ã°ÂÂÂ¸',facebook:'Ã°ÂÂÂ¤',twitter:'Ã°ÂÂÂ¦',linkedin:'Ã°ÂÂÂ¼',youtube:'Ã¢ÂÂ¶Ã¯Â¸Â',tiktok:'Ã°ÂÂÂµ'};
+    const netEmoji={instagram:'ÃÂ°ÃÂÃÂÃÂ¸',facebook:'ÃÂ°ÃÂÃÂÃÂ¤',twitter:'ÃÂ°ÃÂÃÂÃÂ¦',linkedin:'ÃÂ°ÃÂÃÂÃÂ¼',youtube:'ÃÂ¢ÃÂÃÂ¶ÃÂ¯ÃÂ¸ÃÂ',tiktok:'ÃÂ°ÃÂÃÂÃÂµ'};
     document.getElementById('profiles-list').innerHTML = allProfiles.map(p => {
       const net=(p.network_type||'').toLowerCase();
       return `<div class="profile-item active" data-id="${p.customer_profile_id}" onclick="toggleProfile(this,'${p.customer_profile_id}')">
-        <div class="profile-icon" style="background:${netColor(net)}22;">${netEmoji[net]||'Ã°ÂÂÂ'}</div>
+        <div class="profile-icon" style="background:${netColor(net)}22;">${netEmoji[net]||'ÃÂ°ÃÂÃÂÃÂ'}</div>
         <div>
           <div class="profile-name">${p.name||p.handle||'Profile'}</div>
           <div class="profile-network">${net}</div>
@@ -337,13 +337,12 @@
     const {start,end}=getDateRange(days);
     try {
       setStatus('Fetching post analytics...','loading');
-      const profileFilters = selectedProfiles.map(id => 'customer_profile_id.eq(' + id + ')').join(',');
       const postRes = await sproutPost('/v1/analytics/posts', {
         filters: [
-          'customer_profile_id.in(' + selectedProfiles.join(',') + ')',
+          'customer_profile_id.eq(' + selectedProfiles.join(',') + ')',
           'created_time.in(' + start.split(' ')[0] + '..' + end.split(' ')[0] + ')'
         ],
-        metrics:['impressions','engagements','reactions','shares','comments','clicks','reach','video_views'],
+        metrics:['lifetime.impressions','lifetime.engagements','lifetime.reactions','lifetime.shares_count','lifetime.comments_count','lifetime.post_link_clicks'],
         page_size:100
       });
       const posts=postRes.data||[];
@@ -354,18 +353,18 @@
       document.getElementById('dashboard').style.display='block';
       document.getElementById('empty-state').style.display='none';
       await generateInsights(posts, days);
-      setStatus(`Done Ã¢ÂÂ ${posts.length} posts analyzed`,'ok');
+      setStatus(`Done ÃÂ¢ÃÂÃÂ ${posts.length} posts analyzed`,'ok');
     } catch(e) {
       setStatus('Error: '+e.message,'error');
     } finally {
-      btn.disabled=false; btn.textContent='Run analysis Ã¢ÂÂ';
+      btn.disabled=false; btn.textContent='Run analysis ÃÂ¢ÃÂÃÂ';
     }
   }
 
   function renderMetrics(posts) {
-    const totalImp=posts.reduce((s,p)=>s+(p.metrics?.impressions||0),0);
-    const totalEng=posts.reduce((s,p)=>s+(p.metrics?.engagements||0),0);
-    const totalReach=posts.reduce((s,p)=>s+(p.metrics?.reach||0),0);
+    const totalImp=posts.reduce((s,p)=>s+(p.metrics?.['lifetime.impressions']||0),0);
+    const totalEng=posts.reduce((s,p)=>s+(p.metrics?.['lifetime.engagements']||0),0);
+    const totalReach=posts.reduce((s,p)=>s+(p.metrics?.['lifetime.impressions']||0),0);
     const avgEng=posts.length?Math.round(totalEng/posts.length):0;
     const avgER=totalImp>0?((totalEng/totalImp)*100).toFixed(2):'0.00';
     document.getElementById('metrics-grid').innerHTML=[
@@ -383,13 +382,13 @@
     const sorted=[...posts].sort((a,b)=>(b.metrics?.engagements||0)-(a.metrics?.engagements||0));
     const median=sorted[Math.floor(sorted.length/2)]?.metrics?.engagements||0;
     document.getElementById('tab-posts').innerHTML='<div class="posts-list">'+sorted.slice(0,20).map(p=>{
-      const eng=p.metrics?.engagements||0,imp=p.metrics?.impressions||0;
+      const eng=p.metrics?.['lifetime.engagements']||0,imp=p.metrics?.['lifetime.impressions']||0;
       const er=imp>0?((eng/imp)*100).toFixed(2):'0.00';
       const verdict=eng>median*1.5?'strong':eng<median*0.5?'weak':'mid';
       const vLabel=verdict==='strong'?'Top performer':verdict==='weak'?'Underperformer':'Average';
       const net=(p.customer_profile?.network_type||'').toLowerCase();
       const date=p.sent_time?new Date(p.sent_time).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):'';
-      const txt=(p.text||'').slice(0,160)+((p.text||'').length>160?'Ã¢ÂÂ¦':'');
+      const txt=(p.text||'').slice(0,160)+((p.text||'').length>160?'ÃÂ¢ÃÂÃÂ¦':'');
       return `<div class="post-card">
         <div class="post-top">
           <span class="net-badge net-${net||'unknown'}">${net||'unknown'}</span>
@@ -413,7 +412,7 @@
     const byDay={},byHour={},byNet={};
     const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
     posts.forEach(p=>{
-      const eng=p.metrics?.engagements||0;
+      const eng=p.metrics?.['lifetime.engagements']||0;
       const net=(p.customer_profile?.network_type||'unknown').toLowerCase();
       if (p.sent_time) {
         const d=new Date(p.sent_time);
@@ -456,9 +455,9 @@
   async function generateInsights(posts, days) {
     document.getElementById('tab-insights').innerHTML='<div class="insights-loading">Generating INTJ analysis via Claude...</div>';
     const sorted=[...posts].sort((a,b)=>(b.metrics?.engagements||0)-(a.metrics?.engagements||0));
-    const totalEng=posts.reduce((s,p)=>s+(p.metrics?.engagements||0),0);
+    const totalEng=posts.reduce((s,p)=>s+(p.metrics?.['lifetime.engagements']||0),0);
     const avgEng=posts.length?Math.round(totalEng/posts.length):0;
-    const top5=sorted.slice(0,5).map(p=>({text:(p.text||'').slice(0,100),eng:p.metrics?.engagements||0,network:p.customer_profile?.network_type,day:p.sent_time?new Date(p.sent_time).toLocaleDateString('en-US',{weekday:'short'}):'',hour:p.sent_time?new Date(p.sent_time).getHours():null}));
+    const top5=sorted.slice(0,5).map(p=>({text:(p.text||'').slice(0,100),eng:p.metrics?.['lifetime.engagements']||0,network:p.customer_profile?.network_type,day:p.sent_time?new Date(p.sent_time).toLocaleDateString('en-US',{weekday:'short'}):'',hour:p.sent_time?new Date(p.sent_time).getHours():null}));
     const bot5=sorted.slice(-5).map(p=>({text:(p.text||'').slice(0,100),eng:p.metrics?.engagements||0,network:p.customer_profile?.network_type}));
     const byNet={};
     posts.forEach(p=>{const n=(p.customer_profile?.network_type||'unknown').toLowerCase();if(!byNet[n])byNet[n]={t:0,c:0};byNet[n].t+=p.metrics?.engagements||0;byNet[n].c++;});
