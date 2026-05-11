@@ -1,4 +1,4 @@
-// v2
+// fresh-1778521641081
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
@@ -7,31 +7,34 @@ module.exports = async (req, res) => {
 
   const path = req.query.path || '/v1/metadata/client';
 
-  // Handle Claude API requests via server-side key
   if (path === '/claude') {
     const { prompt } = req.body || {};
     if (!prompt) return res.status(400).json({ error: 'Missing prompt' });
     const apiKey = process.env.ANTHROPIC_API_KEY;
-    if (!apiKey) return res.status(500).json({ error: 'ANTHROPIC_API_KEY not configured' });
-    const cr = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'anthropic-version': '2023-06-01',
-        'x-api-key': apiKey
-      },
-      body: JSON.stringify({
-        model: 'claude-3-5-sonnet-20241022',
-        max_tokens: 20000,
-        messages: [{ role: 'user', content: prompt }]
-      })
-    });
-    const cd = await cr.json();
-    const text = (cd.content || []).filter(c => c.type === 'text').map(c => c.text).join('');
-    return res.status(200).json({ text });
+    if (!apiKey) return res.status(500).json({ error: 'No API key' });
+    try {
+      const cr = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'anthropic-version': '2023-06-01',
+          'x-api-key': apiKey
+        },
+        body: JSON.stringify({
+          model: 'claude-3-5-sonnet-20241022',
+          max_tokens: 2000,
+          messages: [{ role: 'user', content: prompt }]
+        })
+      });
+      const cd = await cr.json();
+      if (cd.error) return res.status(500).json({ error: cd.error.message });
+      const text = (cd.content || []).filter(c => c.type === 'text').map(c => c.text).join('');
+      return res.status(200).json({ text });
+    } catch(e) {
+      return res.status(500).json({ error: e.message });
+    }
   }
 
-  // Handle Sprout API requests
   const token = req.headers['x-sprout-token'];
   if (!token) return res.status(401).json({ error: 'Missing token' });
   const url = 'https://api.sproutsocial.com' + path;
