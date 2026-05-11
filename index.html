@@ -157,7 +157,7 @@
     <div style="display:inline-flex;align-items:center;gap:12px;">
       <div class="logo-mark">L</div>
       <div>
-        <div class="header-title">INTJ ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ Life.Church Social Intel</div>
+        <div class="header-title">INTJ - Life.Church Social Intel</div>
         <div class="header-sub">Powered by Sprout Social</div>
       </div>
     </div>
@@ -180,7 +180,7 @@
     <div class="header-left">
       <div class="logo-mark">L</div>
       <div>
-        <div class="header-title">INTJ ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ Life.Church Social Intel</div>
+        <div class="header-title">INTJ - Life.Church Social Intel</div>
         <div class="header-sub">Pattern Analysis Engine</div>
       </div>
     </div>
@@ -463,7 +463,7 @@
     const byNet={};
     posts.forEach(p=>{const n=(p.customer_profile?.network_type||'unknown').toLowerCase();if(!byNet[n])byNet[n]={t:0,c:0};byNet[n].t+=p.metrics?.engagements||0;byNet[n].c++;});
     const netSummary=Object.entries(byNet).map(([n,d])=>({network:n,avgEng:Math.round(d.t/d.c),posts:d.c}));
-    const prompt=`You are a sharp INTJ social media strategist analyzing Life.Church's real social media data. Life.Church is a large multi-site church. Be direct, analytical, ruthlessly specific. No fluff. No corporate speak.\n\nData (last ${days} days):\n- ${posts.length} posts, avg ${avgEng} engagements/post\n- Platform breakdown: ${JSON.stringify(netSummary)}\n- Top 5 posts: ${JSON.stringify(top5)}\n- Bottom 5 posts: ${JSON.stringify(bot5)}\n\nReturn ONLY a JSON array with 6-8 insight objects. No markdown, no preamble, no backticks.\nSchema: [{"type":"strength|weakness|opportunity|pattern","text":"..."}]\nEach text 1-2 sentences. Be specific to what you see in the data.`;
+    const prompt=`You are a sharp INTJ - Life.Church's real social media data. Life.Church is a large multi-site church. Be direct, analytical, ruthlessly specific. No fluff. No corporate speak.\n\nData (last ${days} days):\n- ${posts.length} posts, avg ${avgEng} engagements/post\n- Platform breakdown: ${JSON.stringify(netSummary)}\n- Top 5 posts: ${JSON.stringify(top5)}\n- Bottom 5 posts: ${JSON.stringify(bot5)}\n\nReturn ONLY a JSON array with 6-8 insight objects. No markdown, no preamble, no backticks.\nSchema: [{"type":"strength|weakness|opportunity|pattern","text":"..."}]\nEach text 1-2 sentences. Be specific to what you see in the data.`;
     try {
       const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})});
       const data=await res.json();
