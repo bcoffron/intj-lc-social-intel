@@ -263,18 +263,48 @@ async function generateInsights(posts,days){
   document.getElementById('tab-insights').innerHTML='<div class="insights-loading">Generating INTJ analysis via Claude...</div>';
   const sorted=[...posts].sort((a,b)=>(b.metrics?.['lifetime.engagements']||0)-(a.metrics?.['lifetime.engagements']||0));
   const totalEng=posts.reduce((s,p)=>s+(p.metrics?.['lifetime.engagements']||0),0);
+  const totalImp=posts.reduce((s,p)=>s+(p.metrics?.['lifetime.impressions']||0),0);
   const avgEng=posts.length?Math.round(totalEng/posts.length):0;
-  const top5=sorted.slice(0,5).map(p=>({text:(p.text||'').slice(0,100),eng:p.metrics?.['lifetime.engagements']||0,network:p.customer_profile?.network_type}));
-  const bot5=sorted.slice(-5).map(p=>({text:(p.text||'').slice(0,100),eng:p.metrics?.['lifetime.engagements']||0,network:p.customer_profile?.network_type}));
+  const avgER=totalImp>0?((totalEng/totalImp)*100).toFixed(2):0;
+  const top10=sorted.slice(0,10).map(p=>({
+    guid:p.guid,
+    network:guidToNet(p.guid),
+    eng:p.metrics?.['lifetime.engagements']||0,
+    imp:p.metrics?.['lifetime.impressions']||0,
+    reactions:p.metrics?.['lifetime.reactions']||0,
+    comments:p.metrics?.['lifetime.comments_count']||0,
+    shares:p.metrics?.['lifetime.shares_count']||0,
+    er:p.metrics?.['lifetime.impressions']>0?((( p.metrics?.['lifetime.engagements']||0)/p.metrics?.['lifetime.impressions'])*100).toFixed(2):0
+  }));
+  const bot10=sorted.slice(-10).map(p=>({
+    guid:p.guid,
+    network:guidToNet(p.guid),
+    eng:p.metrics?.['lifetime.engagements']||0,
+    imp:p.metrics?.['lifetime.impressions']||0,
+    er:p.metrics?.['lifetime.impressions']>0?(((p.metrics?.['lifetime.engagements']||0)/p.metrics?.['lifetime.impressions'])*100).toFixed(2):0
+  }));
   const byNet={};
-  posts.forEach(p=>{const n=(p.customer_profile?.network_type||'unknown').toLowerCase();if(!byNet[n])byNet[n]={t:0,c:0};byNet[n].t+=p.metrics?.['lifetime.engagements']||0;byNet[n].c++;});
-  const netSummary=Object.entries(byNet).map(([n,d])=>({network:n,avgEng:Math.round(d.t/d.c),posts:d.c}));
-  const prompt='You are a sharp INTJ social media strategist analyzing Life.Church real data. Be direct, analytical, ruthlessly specific. No fluff.\n\nData (last '+days+' days):\n- '+posts.length+' posts, avg '+avgEng+' engagements/post\n- Platforms: '+JSON.stringify(netSummary)+'\n- Top 5: '+JSON.stringify(top5)+'\n- Bottom 5: '+JSON.stringify(bot5)+'\n\nReturn ONLY a JSON array with 6-8 insight objects. No markdown.\nSchema: [{"type":"strength|weakness|opportunity|pattern","text":"..."}]';
+  posts.forEach(p=>{const n=guidToNet(p.guid);if(!byNet[n])byNet[n]={t:0,c:0,imp:0,reactions:0,shares:0,comments:0};byNet[n].t+=p.metrics?.['lifetime.engagements']||0;byNet[n].imp+=p.metrics?.['lifetime.impressions']||0;byNet[n].reactions+=p.metrics?.['lifetime.reactions']||0;byNet[n].shares+=p.metrics?.['lifetime.shares_count']||0;byNet[n].comments+=p.metrics?.['lifetime.comments_count']||0;byNet[n].c++;});
+  const netSummary=Object.entries(byNet).map(([n,d])=>({
+    network:n,posts:d.c,
+    avgEng:Math.round(d.t/d.c),
+    avgImp:Math.round(d.imp/d.c),
+    avgER:d.imp>0?((d.t/d.imp)*100).toFixed(2):0,
+    avgReactions:Math.round(d.reactions/d.c),
+    avgShares:Math.round(d.shares/d.c),
+    avgComments:Math.round(d.comments/d.c)
+  }));
+  const engDist={high:0,mid:0,low:0};
+  posts.forEach(p=>{const e=p.metrics?.['lifetime.engagements']||0;if(e>avgEng*1.5)engDist.high++;else if(e<avgEng*0.5)engDist.low++;else engDist.mid++;});
+
+  const prompt='You are an elite INTJ social media strategist and data analyst. Life.Church is a large multi-site church with a major digital ministry presence including YouVersion Bible App.\n\nAnalyze this real social media performance data and provide RUTHLESSLY specific, actionable insights. No corporate speak. No vague advice. Every insight must reference specific numbers from the data.\n\nDATA SUMMARY (last '+days+' days):\n- Total posts analyzed: '+posts.length+'\n- Total impressions: '+totalImp.toLocaleString()+'\n- Total engagements: '+totalEng.toLocaleString()+'\n- Average engagements per post: '+avgEng+'\n- Overall engagement rate: '+avgER+'%\n- High performers (>1.5x avg): '+engDist.high+' posts\n- Average performers: '+engDist.mid+' posts\n- Underperformers (<0.5x avg): '+engDist.low+' posts\n\nPERFORMANCE BY PLATFORM:\n'+JSON.stringify(netSummary,null,2)+'\n\nTOP 10 POSTS (by engagement):\n'+JSON.stringify(top10,null,2)+'\n\nBOTTOM 10 POSTS (by engagement):\n'+JSON.stringify(bot10,null,2)+'\n\nProvide 8-10 insights covering:\n1. Platform performance gaps and what they mean strategically\n2. Engagement rate analysis - what the numbers actually indicate\n3. Reaction vs share vs comment ratios - what type of content is resonating emotionally vs intellectually\n4. Patterns between top and bottom performers\n5. Specific actionable recommendations with expected impact\n6. What Life.Church should stop doing immediately\n7. What they should double down on\n\nReturn ONLY a valid JSON array. No markdown, no backticks, no preamble.\nSchema: [{"type":"strength|weakness|opportunity|pattern|action","text":"..."}]\nEach insight must be 2-3 sentences max, data-specific, and immediately actionable.';
+
   try{
     const res=await fetch('/api/sprout?path=/claude',{method:'POST',headers:{'Content-Type':'application/json','x-sprout-token':SPROUT_TOKEN},body:JSON.stringify({prompt:prompt})});
     const data=await res.json();
-    const text=data.text||'';
-    const insights=JSON.parse(text.replace(/```json|```/g,'').trim());
+    const raw=data.text||'';
+    const cleaned=raw.replace(/^```jsons*/,'').replace(/```s*$/,'').trim();
+    const insights=JSON.parse(cleaned);
     document.getElementById('tab-insights').innerHTML='<div class="insights-list">'+insights.map(ins=>'<div class="insight-card"><div class="insight-type type-'+ins.type+'">'+ins.type+'</div><div class="insight-text">'+ins.text+'</div></div>').join('')+'</div>';
   }catch(e){document.getElementById('tab-insights').innerHTML='<div class="insights-loading" style="color:var(--red)">Could not generate insights: '+e.message+'</div>';}
 }
