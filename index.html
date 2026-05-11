@@ -231,7 +231,7 @@
 
 <script>
   // All Sprout API calls go through /api/sprout?path=... (our Vercel proxy)
-  let token = '';
+  let token = 'NTI4OTg1fDE3NzgxNzc4Nzd8ZTU0YTk4ZGMtOWI0OS00MjUxLThjOTAtZDYzNmFiMTNlNmM4';
   let customerId = '';
   let selectedProfiles = [];
   let allProfiles = [];
@@ -515,12 +515,7 @@
   }
 
   // Pre-fill token
-  document.addEventListener('DOMContentLoaded', () => {
-    const t = 'NTI4OTg1fDE3NzgxNzc4Nzd8ZTU0YTk4ZGMtOWI0OS00MjUxLThjOTAtZDYzNmFiMTNlNmM4';
-    document.getElementById('token-input').value = t;
-    token = t;
-    connect();
-  });
+  document.addEventListener('DOMContentLoaded', () => { connect(); });
 </script>
 </body>
 </html>
