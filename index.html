@@ -299,9 +299,7 @@
 
   function renderSidebar() {
     const netLabel={instagram:'IG',facebook:'FB',linkedin:'LI',youtube:'YT',tiktok:'TK',fb_instagram_account:'IG'};
-    // Filter out Twitter
     const profiles = allProfiles.filter(p => !['twitter','fb_twitter_account'].includes((p.network_type||'').toLowerCase()));
-    // Group by name
     const groups = {};
     profiles.forEach(p => {
       const key = p.name || p.handle || 'Unknown';
@@ -309,19 +307,33 @@
       groups[key].push(p);
     });
     window._profileGroups = groups;
-    // Build account dropdown
+    window._netLabel = netLabel;
     const accountNames = Object.keys(groups);
-    const dropdown = `<div class="range-group" style="margin-bottom:10px;">
-      <select class="range-select" id="account-select" onchange="selectAccount(this.value)">
-        <option value="all">All accounts</option>
-        ${accountNames.map(n => `<option value="${n}">${n}</option>`).join('')}
-      </select>
-    </div>`;
-    // Default: select all non-twitter profiles
-    selectedProfiles = profiles.map(p => p.customer_profile_id);
-    // Render profile list
-    document.getElementById('profiles-list').innerHTML = dropdown + profiles.map(p => {
-      const net=(p.network_type||'').toLowerCase();
+    // Start with nothing selected
+    selectedProfiles = [];
+    document.getElementById('profiles-list').innerHTML = `
+      <div class="range-group" style="margin-bottom:10px;">
+        <select class="range-select" id="account-select" onchange="selectAccount(this.value)">
+          <option value="">-- Pick an account --</option>
+          <option value="all">All accounts</option>
+          ${accountNames.map(n => `<option value="${n}">${n}</option>`).join('')}
+        </select>
+      </div>
+      <div id="profile-items"></div>`;
+  }
+
+  function selectAccount(name) {
+    const netLabel = window._netLabel || {};
+    const profiles = allProfiles.filter(p => !['twitter','fb_twitter_account'].includes((p.network_type||'').toLowerCase()));
+    let selected = [];
+    if (name === 'all') {
+      selected = profiles;
+    } else if (name) {
+      selected = (window._profileGroups||{})[name] || [];
+    }
+    selectedProfiles = selected.map(p => p.customer_profile_id);
+    document.getElementById('profile-items').innerHTML = selected.map(p => {
+      const net = (p.network_type||'').toLowerCase();
       return `<div class="profile-item active" data-id="${p.customer_profile_id}">
         <div class="profile-icon" style="background:${netColor(net)}22;">${netLabel[net]||'--'}</div>
         <div>
@@ -330,21 +342,6 @@
         </div>
       </div>`;
     }).join('');
-  }
-
-  function selectAccount(name) {
-    const profiles = allProfiles.filter(p => !['twitter','fb_twitter_account'].includes((p.network_type||'').toLowerCase()));
-    if (name === 'all') {
-      selectedProfiles = profiles.map(p => p.customer_profile_id);
-    } else {
-      const group = (window._profileGroups||{})[name] || [];
-      selectedProfiles = group.map(p => p.customer_profile_id);
-    }
-    // Update visual active state
-    document.querySelectorAll('.profile-item').forEach(el => {
-      const id = parseInt(el.dataset.id);
-      el.classList.toggle('active', selectedProfiles.includes(id));
-    });
   }
 
   function toggleProfile(el, id) {
