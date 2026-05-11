@@ -21,13 +21,14 @@ module.exports = async (req, res) => {
         'x-api-key': apiKey
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
+        model: 'claude-3-5-sonnet-20241022',
         max_tokens: 2000,
         messages: [{ role: 'user', content: prompt }]
       })
     });
     const cd = await cr.json();
-    return res.status(200).json({ debug: cd, text: (cd.content || []).filter(c => c.type === 'text').map(c => c.text).join('') });
+    const text = (cd.content || []).filter(c => c.type === 'text').map(c => c.text).join('');
+    return res.status(200).json({ text });
   }
 
   // Handle Sprout API requests
