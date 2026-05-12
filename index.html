@@ -85,6 +85,23 @@ body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;font
 .insights-loading{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;color:var(--text3);font-size:12px;text-align:center}
 .empty{text-align:center;padding:60px 20px;color:var(--text3);font-size:13px}
 .empty-title{font-family:'Fraunces',serif;font-size:22px;color:var(--text2);margin-bottom:8px}
+.adam-toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-bottom:14px}
+.adam-toolbar>div{min-width:140px;flex:1}
+.adam-table-wrap{overflow-x:auto}
+.adam-table{width:100%;border-collapse:collapse;font-size:13px}
+.adam-table th,.adam-table td{padding:10px 12px;border-bottom:1px solid var(--border);text-align:left;vertical-align:top}
+.adam-table th{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;cursor:pointer;white-space:nowrap;user-select:none}
+.adam-table th:hover{color:var(--text)}
+.adam-table tr:hover td{background:var(--surface2)}
+.adam-pill{display:inline-flex;align-items:center;border-radius:999px;padding:3px 8px;font-size:11px;font-weight:600;white-space:nowrap}
+.adam-pill.good{background:rgba(62,207,142,0.15);color:#3ecf8e}
+.adam-pill.warn{background:rgba(245,166,35,0.15);color:#f5a623}
+.adam-pill.bad{background:rgba(240,96,96,0.15);color:#f06060}
+.adam-pill.neutral{background:var(--surface2);color:var(--text2)}
+.adam-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:18px}
+.adam-metric{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px}
+.adam-metric-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px}
+.adam-metric-value{font-family:'Fraunces',serif;font-size:22px;font-weight:500;color:var(--text)}
 ::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
 </style>
@@ -132,10 +149,12 @@ body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;font
         <button class="tab-btn active" onclick="switchTab('posts',this)">Top posts</button>
         <button class="tab-btn" onclick="switchTab('patterns',this)">Patterns</button>
         <button class="tab-btn" onclick="switchTab('insights',this)">INTJ verdict</button>
+        <button class="tab-btn" onclick="switchTab('adam',this)">Adam metrics</button>
       </div>
       <div id="tab-posts" class="tab-pane active"></div>
       <div id="tab-patterns" class="tab-pane"></div>
       <div id="tab-insights" class="tab-pane"></div>
+      <div id="tab-adam" class="tab-pane"></div>
     </div>
   </div>
 </div>
@@ -215,7 +234,7 @@ async function runAnalysis(){
     });
     const posts=postRes.data||[];
     setStatus('Analyzing '+posts.length+' posts...','loading');
-    renderMetrics(posts);renderPosts(posts);renderPatterns(posts);
+    renderMetrics(posts);renderPosts(posts);renderPatterns(posts);renderAdamTab(posts);
     document.getElementById('dashboard').style.display='block';
     document.getElementById('empty-state').style.display='none';
     await generateInsights(posts,days);
@@ -330,7 +349,119 @@ async function generateInsights(posts,days){
     document.getElementById('tab-insights').innerHTML='<div class="insights-list">'+insights.map(ins=>'<div class="insight-card"><div class="insight-type type-'+ins.type+'">'+ins.type+'</div><div class="insight-text">'+ins.text+'</div></div>').join('')+'</div>';
   }catch(e){document.getElementById('tab-insights').innerHTML='<div class="insights-loading" style="color:var(--red)">Could not generate insights: '+e.message+'</div>';}
 }
-function switchTab(name,btn){
+
+  let adamSortKey='signalScore', adamSortDir='desc', adamRows=[];
+
+  function renderAdamTab(posts) {
+    const igProfiles = allProfiles.filter(p => ['instagram','fb_instagram_account'].includes((p.network_type||'').toLowerCase()));
+    const igIds = new Set(igProfiles.map(p => p.customer_profile_id));
+
+    // Filter to IG posts only using guid prefix
+    const igPosts = posts.filter(p => p.guid && (p.guid.startsWith('igmed:') || p.guid.startsWith('igm:')));
+
+    adamRows = igPosts.map((p, i) => {
+      const reach = p.metrics?.['lifetime.impressions'] || 0;
+      const sends = p.metrics?.['lifetime.shares_count'] || 0;
+      const likes = p.metrics?.['lifetime.reactions'] || 0;
+      const watchTime = p.metrics?.['lifetime.video_view_time_per_view'] || 0;
+      const sendRate = reach > 0 ? sends / reach : 0;
+      const likeRate = reach > 0 ? likes / reach : 0;
+      const score = (sendRate * 1000) + (likeRate * 250) + (watchTime ? Math.min(watchTime, 60) / 60 : 0);
+      return { idx: i+1, guid: p.guid, reach, sends, sendRate, likes, likeRate, watchTime, score };
+    }).filter(r => r.reach > 0);
+
+    renderAdamSummary();
+    renderAdamTable();
+
+    document.getElementById('tab-adam').innerHTML =
+      '<div class="adam-summary" id="adam-summary"></div>' +
+      '<div class="adam-toolbar">' +
+      '<div><select class="range-select" id="adam-type-filter" onchange="renderAdamTable()"><option value="">All types</option><option value="video">Video/Reel</option><option value="photo">Photo</option></select></div>' +
+      '<div><input class="range-select" id="adam-min-reach" type="number" placeholder="Min reach..." style="margin-bottom:0" oninput="renderAdamTable()" /></div>' +
+      '</div>' +
+      '<div class="adam-table-wrap"><table class="adam-table"><thead><tr>' +
+      '<th onclick="adamSort('idx')">Post</th>' +
+      '<th onclick="adamSort('reach')">Reach</th>' +
+      '<th onclick="adamSort('sends')">Sends</th>' +
+      '<th onclick="adamSort('sendRate')">Sends / Reach</th>' +
+      '<th onclick="adamSort('likes')">Likes</th>' +
+      '<th onclick="adamSort('likeRate')">Likes / Reach</th>' +
+      '<th onclick="adamSort('watchTime')">Watch Time</th>' +
+      '<th onclick="adamSort('score')">Signal Score</th>' +
+      '</tr></thead><tbody id="adam-tbody"></tbody></table></div>' +
+      '<p style="font-size:11px;color:var(--text3);margin-top:10px;">Signal Score weights sends/reach highest (1000x), likes/reach second (250x), watch time when available. Based on Adam Mosseri's stated distribution signals.</p>';
+
+    renderAdamSummary();
+    renderAdamTable();
+  }
+
+  function renderAdamSummary() {
+    const el = document.getElementById('adam-summary');
+    if (!el) return;
+    const avg = arr => arr.length ? arr.reduce((a,b)=>a+b,0)/arr.length : 0;
+    const avgSend = avg(adamRows.map(r=>r.sendRate));
+    const avgLike = avg(adamRows.map(r=>r.likeRate));
+    const watchRows = adamRows.filter(r=>r.watchTime>0);
+    const avgWatch = avg(watchRows.map(r=>r.watchTime));
+    el.innerHTML = [
+      ['IG Posts', adamRows.length],
+      ['Avg Sends/Reach', (avgSend*100).toFixed(2)+'%'],
+      ['Avg Likes/Reach', (avgLike*100).toFixed(2)+'%'],
+      ['Avg Watch Time', watchRows.length ? timeFmt(avgWatch) : '--'],
+    ].map(([l,v])=>'<div class="adam-metric"><div class="adam-metric-label">'+l+'</div><div class="adam-metric-value">'+v+'</div></div>').join('');
+  }
+
+  function timeFmt(s) {
+    if(!s||s<=0)return '--';
+    if(s<60)return s.toFixed(1)+'s';
+    const m=Math.floor(s/60),sec=Math.round(s%60);
+    return m+':'+(sec<10?'0':'')+sec;
+  }
+
+  function adamSort(key) {
+    if(adamSortKey===key) adamSortDir = adamSortDir==='asc'?'desc':'asc';
+    else { adamSortKey=key; adamSortDir='desc'; }
+    renderAdamTable();
+  }
+
+  function renderAdamTable() {
+    const tbody = document.getElementById('adam-tbody');
+    if (!tbody) return;
+    const minReach = parseFloat(document.getElementById('adam-min-reach')?.value||0)||0;
+    const typeFilter = document.getElementById('adam-type-filter')?.value||'';
+
+    let data = [...adamRows].filter(r => r.reach >= minReach);
+    if (typeFilter === 'video') data = data.filter(r => r.watchTime > 0);
+    if (typeFilter === 'photo') data = data.filter(r => r.watchTime === 0);
+
+    data.sort((a,b) => {
+      const av=a[adamSortKey], bv=b[adamSortKey];
+      return adamSortDir==='asc' ? av-bv : bv-av;
+    });
+
+    if (!data.length) { tbody.innerHTML='<tr><td colspan="8" style="text-align:center;color:var(--text3);padding:30px">No Instagram posts found in this date range.</td></tr>'; return; }
+
+    const pct = r => (r*100).toFixed(2)+'%';
+    const pillClass = (rate, kind) => {
+      if(kind==='send') return rate>=0.01?'good':rate>=0.004?'warn':'bad';
+      return rate>=0.04?'good':rate>=0.02?'warn':'bad';
+    };
+
+    tbody.innerHTML = data.map(r =>
+      '<tr>' +
+      '<td style="color:var(--text3);font-size:11px;">Post #'+r.idx+'<br><span style="font-size:10px;color:var(--text3);">'+r.guid.slice(0,30)+'...</span></td>' +
+      '<td>'+fmtNum(r.reach)+'</td>' +
+      '<td>'+fmtNum(r.sends)+'</td>' +
+      '<td><span class="adam-pill '+pillClass(r.sendRate,'send')+'">'+pct(r.sendRate)+'</span></td>' +
+      '<td>'+fmtNum(r.likes)+'</td>' +
+      '<td><span class="adam-pill '+pillClass(r.likeRate,'like')+'">'+pct(r.likeRate)+'</span></td>' +
+      '<td>'+(r.watchTime>0?timeFmt(r.watchTime):'--')+'</td>' +
+      '<td><span class="adam-pill neutral">'+r.score.toFixed(2)+'</span></td>' +
+      '</tr>'
+    ).join('');
+  }
+
+  function switchTab(name,btn){
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
   btn.classList.add('active');document.getElementById('tab-'+name).classList.add('active');
