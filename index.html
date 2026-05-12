@@ -380,14 +380,14 @@ async function generateInsights(posts,days){
       '<div><input class="range-select" id="adam-min-reach" type="number" placeholder="Min reach..." style="margin-bottom:0" oninput="renderAdamTable()" /></div>' +
       '</div>' +
       '<div class="adam-table-wrap"><table class="adam-table"><thead><tr>' +
-      '<th onclick="adamSort('idx')">Post</th>' +
-      '<th onclick="adamSort('reach')">Reach</th>' +
-      '<th onclick="adamSort('sends')">Sends</th>' +
-      '<th onclick="adamSort('sendRate')">Sends / Reach</th>' +
-      '<th onclick="adamSort('likes')">Likes</th>' +
-      '<th onclick="adamSort('likeRate')">Likes / Reach</th>' +
-      '<th onclick="adamSort('watchTime')">Watch Time</th>' +
-      '<th onclick="adamSort('score')">Signal Score</th>' +
+      '<th onclick="adamSort(\'idx\')">Post</th>' +
+      '<th onclick="adamSort(\'reach\')">Reach</th>' +
+      '<th onclick="adamSort(\'sends\')">Sends</th>' +
+      '<th onclick="adamSort(\'sendRate\')">Sends / Reach</th>' +
+      '<th onclick="adamSort(\'likes\')">Likes</th>' +
+      '<th onclick="adamSort(\'likeRate\')">Likes / Reach</th>' +
+      '<th onclick="adamSort(\'watchTime\')">Watch Time</th>' +
+      '<th onclick="adamSort(\'score\')">Signal Score</th>' +
       '</tr></thead><tbody id="adam-tbody"></tbody></table></div>' +
       '<p style="font-size:11px;color:var(--text3);margin-top:10px;">Signal Score weights sends/reach highest (1000x), likes/reach second (250x), watch time when available. Based on Adam Mosseri's stated distribution signals.</p>';
 
