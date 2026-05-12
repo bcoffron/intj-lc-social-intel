@@ -353,12 +353,7 @@ async function generateInsights(posts,days){
   let adamSortKey='signalScore', adamSortDir='desc', adamRows=[];
 
   function renderAdamTab(posts) {
-    const igProfiles = allProfiles.filter(p => ['instagram','fb_instagram_account'].includes((p.network_type||'').toLowerCase()));
-    const igIds = new Set(igProfiles.map(p => p.customer_profile_id));
-
-    // Filter to IG posts only using guid prefix
     const igPosts = posts.filter(p => p.guid && (p.guid.startsWith('igmed:') || p.guid.startsWith('igm:')));
-
     adamRows = igPosts.map((p, i) => {
       const reach = p.metrics?.['lifetime.impressions'] || 0;
       const sends = p.metrics?.['lifetime.shares_count'] || 0;
@@ -370,26 +365,48 @@ async function generateInsights(posts,days){
       return { idx: i+1, guid: p.guid, reach, sends, sendRate, likes, likeRate, watchTime, score };
     }).filter(r => r.reach > 0);
 
-    renderAdamSummary();
-    renderAdamTable();
+    const tab = document.getElementById('tab-adam');
+    tab.innerHTML = '';
 
-    document.getElementById('tab-adam').innerHTML =
-      '<div class="adam-summary" id="adam-summary"></div>' +
-      '<div class="adam-toolbar">' +
-      '<div><select class="range-select" id="adam-type-filter" onchange="renderAdamTable()"><option value="">All types</option><option value="video">Video/Reel</option><option value="photo">Photo</option></select></div>' +
-      '<div><input class="range-select" id="adam-min-reach" type="number" placeholder="Min reach..." style="margin-bottom:0" oninput="renderAdamTable()" /></div>' +
-      '</div>' +
-      '<div class="adam-table-wrap"><table class="adam-table"><thead><tr>' +
-      '<th onclick="adamSort(\'idx\')">Post</th>' +
-      '<th onclick="adamSort(\'reach\')">Reach</th>' +
-      '<th onclick="adamSort(\'sends\')">Sends</th>' +
-      '<th onclick="adamSort(\'sendRate\')">Sends / Reach</th>' +
-      '<th onclick="adamSort(\'likes\')">Likes</th>' +
-      '<th onclick="adamSort(\'likeRate\')">Likes / Reach</th>' +
-      '<th onclick="adamSort(\'watchTime\')">Watch Time</th>' +
-      '<th onclick="adamSort(\'score\')">Signal Score</th>' +
-      '</tr></thead><tbody id="adam-tbody"></tbody></table></div>' +
-      '<p style="font-size:11px;color:var(--text3);margin-top:10px;">Signal Score weights sends/reach highest (1000x), likes/reach second (250x), watch time when available. Based on Adam Mosseri's stated distribution signals.</p>';
+    const summary = document.createElement('div');
+    summary.className = 'adam-summary';
+    summary.id = 'adam-summary';
+    tab.appendChild(summary);
+
+    const toolbar = document.createElement('div');
+    toolbar.className = 'adam-toolbar';
+    toolbar.innerHTML =
+      '<div><select class="range-select" id="adam-type-filter"><option value="">All types</option><option value="video">Video/Reel</option><option value="photo">Photo</option></select></div>' +
+      '<div><input class="range-select" id="adam-min-reach" type="number" placeholder="Min reach..." style="margin-bottom:0" /></div>';
+    tab.appendChild(toolbar);
+
+    const wrap = document.createElement('div');
+    wrap.className = 'adam-table-wrap';
+    const table = document.createElement('table');
+    table.className = 'adam-table';
+    const thead = document.createElement('thead');
+    const headerRow = document.createElement('tr');
+    [['idx','Post'],['reach','Reach'],['sends','Sends'],['sendRate','Sends/Reach'],['likes','Likes'],['likeRate','Likes/Reach'],['watchTime','Watch Time'],['score','Signal Score']].forEach(([key, label]) => {
+      const th = document.createElement('th');
+      th.textContent = label;
+      th.onclick = () => adamSort(key);
+      headerRow.appendChild(th);
+    });
+    thead.appendChild(headerRow);
+    table.appendChild(thead);
+    const tbody = document.createElement('tbody');
+    tbody.id = 'adam-tbody';
+    table.appendChild(tbody);
+    wrap.appendChild(table);
+    tab.appendChild(wrap);
+
+    const note = document.createElement('p');
+    note.style.cssText = 'font-size:11px;color:var(--text3);margin-top:10px;';
+    note.textContent = 'Signal Score weights sends/reach highest (1000x), likes/reach second (250x), watch time when available. Based on Adam Mosseri stated distribution signals.';
+    tab.appendChild(note);
+
+    document.getElementById('adam-type-filter').addEventListener('change', renderAdamTable);
+    document.getElementById('adam-min-reach').addEventListener('input', renderAdamTable);
 
     renderAdamSummary();
     renderAdamTable();
