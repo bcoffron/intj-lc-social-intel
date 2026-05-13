@@ -3,221 +3,208 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>INTJ - Life.Church Social Intel</title>
+<title>LC Social Intel</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:ital,wght@0,300;0,500;0,700;1,300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
-:root{--bg:#0d0f12;--surface:#141720;--surface2:#1c2030;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);--text:#e8eaf0;--text2:#8b90a0;--text3:#565b6e;--accent:#4f8ef7;--accent-dim:rgba(79,142,247,0.12);--green:#3ecf8e;--green-dim:rgba(62,207,142,0.1);--amber:#f5a623;--amber-dim:rgba(245,166,35,0.1);--red:#f06060;--red-dim:rgba(240,96,96,0.1);--purple:#a78bfa;--purple-dim:rgba(167,139,250,0.1);--radius:10px;--radius-lg:16px}
+:root{--bg:#080a0d;--surface:#0f1117;--surface2:#161a24;--surface3:#1e2433;--border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.12);--text:#f0f2f7;--text2:#7a8199;--text3:#3d4259;--gold:#e8a923;--gold-dim:rgba(232,169,35,0.1);--gold-bright:#f5c842;--green:#2dd4a0;--green-dim:rgba(45,212,160,0.1);--red:#f05c5c;--red-dim:rgba(240,92,92,0.1);--amber:#f59e0b;--amber-dim:rgba(245,158,11,0.1);--blue:#4f8ef7;--r:8px}
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;font-size:13px;min-height:100vh;line-height:1.6}
-.header{display:flex;align-items:center;justify-content:space-between;padding:18px 32px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(13,15,18,0.92);backdrop-filter:blur(12px);z-index:100}
-.header-left{display:flex;align-items:center;gap:14px}
-.logo-mark{width:34px;height:34px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:17px;font-weight:700;color:#fff;flex-shrink:0}
-.header-title{font-family:'Fraunces',serif;font-size:16px;font-weight:500;color:var(--text);letter-spacing:-0.01em}
-.header-sub{font-size:10px;color:var(--text3);letter-spacing:0.06em;text-transform:uppercase}
-.status-pill{display:flex;align-items:center;gap:7px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:5px 14px;font-size:11px;color:var(--text2)}
-.status-dot{width:6px;height:6px;border-radius:50%;background:var(--text3);transition:background 0.3s}
-.status-dot.ok{background:var(--green);box-shadow:0 0 6px var(--green)}
-.status-dot.loading{background:var(--amber);animation:blink 1s infinite}
+body{background:var(--bg);color:var(--text);font-family:'Space Mono',monospace;font-size:12px;min-height:100vh;line-height:1.6;overflow-x:hidden}
+body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;opacity:0.25}
+.header{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;border-bottom:1px solid var(--border2);position:sticky;top:0;background:rgba(8,10,13,0.96);backdrop-filter:blur(20px);z-index:100}
+.header-brand{display:flex;align-items:center;gap:12px}
+.logo{width:32px;height:32px;background:var(--gold);border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:13px;color:#000;flex-shrink:0}
+.brand-name{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;color:var(--text);letter-spacing:-0.02em}
+.brand-sub{font-size:9px;color:var(--text3);letter-spacing:0.14em;text-transform:uppercase;margin-top:1px}
+.status-indicator{display:flex;align-items:center;gap:6px;background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:5px 12px;font-size:10px;color:var(--text2);letter-spacing:0.04em}
+.status-dot{width:5px;height:5px;border-radius:50%;background:var(--text3)}
+.status-dot.ok{background:var(--green);box-shadow:0 0 8px var(--green)}
+.status-dot.loading{background:var(--gold);animation:pulse 1.2s ease-in-out infinite}
 .status-dot.error{background:var(--red)}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
-.main{display:flex;min-height:calc(100vh - 65px)}
-.sidebar{width:230px;flex-shrink:0;border-right:1px solid var(--border);padding:22px 0;position:sticky;top:65px;height:calc(100vh - 65px);overflow-y:auto}
-.sidebar-section{margin-bottom:26px}
-.sidebar-label{font-size:10px;color:var(--text3);letter-spacing:0.1em;text-transform:uppercase;padding:0 18px;margin-bottom:8px}
-.profile-item{display:flex;align-items:center;gap:9px;padding:7px 18px;border-left:2px solid transparent}
-.profile-item.active{background:var(--accent-dim);border-left-color:var(--accent)}
-.profile-icon{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;flex-shrink:0}
-.profile-name{font-size:12px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.profile-network{font-size:10px;color:var(--text3)}
-.range-group{padding:0 18px}
-.range-select{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:8px 10px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;outline:none;cursor:pointer;margin-bottom:10px}
-.run-btn{width:100%;background:var(--accent);color:#fff;border:none;border-radius:var(--radius);padding:10px;font-family:'DM Mono',monospace;font-size:12px;font-weight:500;cursor:pointer;transition:opacity 0.2s}
-.run-btn:hover{opacity:0.85}
-.run-btn:disabled{opacity:0.4;cursor:not-allowed}
-.content{flex:1;padding:26px 30px;min-width:0}
-.metrics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px;margin-bottom:24px}
-.metric-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px}
-.metric-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:7px}
-.metric-value{font-family:'Fraunces',serif;font-size:26px;font-weight:500;color:var(--text);letter-spacing:-0.02em}
-.tabs{display:flex;gap:2px;margin-bottom:20px;background:var(--surface);border-radius:var(--radius);padding:4px;width:fit-content}
-.tab-btn{padding:6px 16px;border:none;background:none;color:var(--text2);font-family:'DM Mono',monospace;font-size:12px;cursor:pointer;border-radius:7px;transition:all 0.15s}
-.tab-btn.active{background:var(--accent);color:#fff}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.8)}}
+.app-layout{display:flex;min-height:calc(100vh - 53px);position:relative;z-index:1}
+.sidebar{width:220px;flex-shrink:0;border-right:1px solid var(--border);padding:20px 0;position:sticky;top:53px;height:calc(100vh - 53px);overflow-y:auto;background:var(--surface)}
+.sidebar::-webkit-scrollbar{width:3px}
+.sidebar::-webkit-scrollbar-thumb{background:var(--border2)}
+.sidebar-section{margin-bottom:24px}
+.sidebar-label{font-size:9px;color:var(--text3);letter-spacing:0.14em;text-transform:uppercase;padding:0 16px;margin-bottom:8px;font-family:'Syne',sans-serif}
+.sidebar-content{padding:0 14px}
+.profile-item{display:flex;align-items:center;gap:8px;padding:6px 16px;border-left:2px solid transparent}
+.profile-item.active{background:var(--gold-dim);border-left-color:var(--gold)}
+.profile-icon{width:24px;height:24px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0;font-family:'Syne',sans-serif}
+.profile-name{font-size:11px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:'Syne',sans-serif;font-weight:500}
+.profile-network{font-size:9px;color:var(--text3);letter-spacing:0.04em}
+.ctrl-select{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--r);padding:8px 10px;color:var(--text);font-family:'Space Mono',monospace;font-size:11px;outline:none;cursor:pointer;margin-bottom:8px;transition:border-color 0.15s}
+.ctrl-select:focus{border-color:var(--gold)}
+.run-btn{width:100%;background:var(--gold);color:#000;border:none;border-radius:var(--r);padding:10px;font-family:'Syne',sans-serif;font-size:12px;font-weight:800;cursor:pointer;transition:all 0.15s;letter-spacing:0.02em}
+.run-btn:hover{background:var(--gold-bright);transform:translateY(-1px)}
+.run-btn:active{transform:translateY(0)}
+.run-btn:disabled{opacity:0.35;cursor:not-allowed;transform:none}
+.content{flex:1;padding:24px 28px;min-width:0}
+.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;height:60vh;text-align:center}
+.empty-title{font-family:'Syne',sans-serif;font-size:28px;font-weight:700;color:var(--text2);margin-bottom:8px;letter-spacing:-0.03em}
+.empty-sub{font-size:11px;color:var(--text3);letter-spacing:0.04em}
+.metrics-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:22px}
+.metric-cell{background:var(--surface);padding:14px 16px}
+.metric-cell-label{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:6px;font-family:'Syne',sans-serif}
+.metric-cell-value{font-family:'Syne',sans-serif;font-size:24px;font-weight:700;color:var(--text);letter-spacing:-0.03em;line-height:1}
+.tab-bar{display:flex;gap:0;margin-bottom:20px;border-bottom:1px solid var(--border)}
+.tab-btn{padding:8px 18px;border:none;background:none;color:var(--text3);font-family:'Syne',sans-serif;font-size:12px;font-weight:600;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.15s;letter-spacing:0.02em}
+.tab-btn:hover{color:var(--text2)}
+.tab-btn.active{color:var(--gold);border-bottom-color:var(--gold)}
 .tab-pane{display:none}
 .tab-pane.active{display:block}
-.posts-list{display:flex;flex-direction:column;gap:10px}
-.post-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px}
-.post-top{display:flex;align-items:center;gap:8px;margin-bottom:9px;flex-wrap:wrap}
-.net-badge{font-size:10px;font-weight:500;padding:2px 8px;border-radius:5px;letter-spacing:0.04em;text-transform:uppercase}
-.net-fb_instagram_account,.net-instagram{background:rgba(245,166,35,0.15);color:var(--amber)}
-.net-facebook{background:rgba(79,142,247,0.15);color:var(--accent)}
-.net-linkedin{background:rgba(79,142,247,0.15);color:var(--accent)}
+.posts-list{display:flex;flex-direction:column;gap:8px}
+.post-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;transition:border-color 0.15s}
+.post-card:hover{border-color:var(--border2)}
+.post-top{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.net-badge{font-size:9px;font-weight:700;padding:2px 7px;border-radius:3px;letter-spacing:0.06em;text-transform:uppercase;font-family:'Syne',sans-serif}
+.net-fb_instagram_account,.net-instagram{background:rgba(232,169,35,0.15);color:var(--gold)}
+.net-facebook{background:rgba(79,142,247,0.15);color:var(--blue)}
 .net-unknown{background:var(--surface2);color:var(--text3)}
-.verdict-badge{font-size:10px;font-weight:500;padding:2px 8px;border-radius:5px;text-transform:uppercase;letter-spacing:0.04em}
+.verdict-badge{font-size:9px;font-weight:700;padding:2px 7px;border-radius:3px;text-transform:uppercase;letter-spacing:0.06em;font-family:'Syne',sans-serif}
 .verdict-strong{background:var(--green-dim);color:var(--green)}
 .verdict-mid{background:var(--amber-dim);color:var(--amber)}
 .verdict-weak{background:var(--red-dim);color:var(--red)}
-.post-date{font-size:11px;color:var(--text3);margin-left:auto}
-.post-text{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:10px;border-left:2px solid var(--border2);padding-left:12px}
-.post-stats{display:flex;gap:18px;flex-wrap:wrap}
-.stat{font-size:12px;color:var(--text3)}
-.stat span{color:var(--text);font-weight:500}
-.stat.highlight span{color:var(--accent)}
-.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
-.chart-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px}
-.chart-title{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:14px}
-.platform-bars{display:flex;flex-direction:column;gap:10px}
-.pbar-row{display:flex;align-items:center;gap:10px}
-.pbar-label{font-size:11px;color:var(--text2);width:80px;flex-shrink:0}
-.pbar-track{flex:1;background:var(--surface2);border-radius:3px;height:6px;overflow:hidden}
-.pbar-fill{height:100%;border-radius:3px;transition:width 0.6s ease}
-.pbar-val{font-size:11px;color:var(--text);width:50px;text-align:right}
-.pbar-count{font-size:10px;color:var(--text3)}
-.insights-list{display:flex;flex-direction:column;gap:10px}
-.insight-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;display:flex;gap:12px;align-items:flex-start}
-.insight-type{font-size:10px;font-weight:500;padding:2px 8px;border-radius:5px;text-transform:uppercase;letter-spacing:0.05em;flex-shrink:0;margin-top:2px}
-.type-strength{background:var(--green-dim);color:var(--green)}
-.type-weakness{background:var(--red-dim);color:var(--red)}
-.type-opportunity{background:var(--amber-dim);color:var(--amber)}
-.type-pattern{background:var(--purple-dim);color:var(--purple)}
-.insight-text{font-size:13px;color:var(--text2);line-height:1.65}
-.insights-loading{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;color:var(--text3);font-size:12px;text-align:center}
-.empty{text-align:center;padding:60px 20px;color:var(--text3);font-size:13px}
-.empty-title{font-family:'Fraunces',serif;font-size:22px;color:var(--text2);margin-bottom:8px}
-.adam-toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-bottom:14px}
-.adam-toolbar>div{min-width:140px;flex:1}
-.adam-table-wrap{overflow-x:auto}
-.adam-table{width:100%;border-collapse:collapse;font-size:13px}
-.adam-table th,.adam-table td{padding:10px 12px;border-bottom:1px solid var(--border);text-align:left;vertical-align:top}
-.adam-table th{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;cursor:pointer;white-space:nowrap;user-select:none}
-.adam-table th:hover{color:var(--text)}
+.post-link{font-size:10px;color:var(--gold);text-decoration:none;opacity:0.8;transition:opacity 0.15s;font-family:'Syne',sans-serif}
+.post-link:hover{opacity:1}
+.post-rank{font-size:10px;color:var(--text3);margin-left:auto;font-family:'Syne',sans-serif}
+.post-stats{display:flex;gap:16px;flex-wrap:wrap}
+.stat{font-size:11px;color:var(--text3)}
+.stat span{color:var(--text);font-weight:700}
+.stat.hl span{color:var(--gold)}
+.platform-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px;margin-bottom:14px}
+.section-title{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:16px;font-family:'Syne',sans-serif}
+.pbar-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.pbar-label{font-size:10px;color:var(--text2);width:90px;flex-shrink:0;font-family:'Syne',sans-serif;font-weight:600}
+.pbar-track{flex:1;background:var(--surface2);border-radius:2px;height:4px;overflow:hidden}
+.pbar-fill{height:100%;border-radius:2px;transition:width 0.8s cubic-bezier(0.4,0,0.2,1)}
+.pbar-val{font-size:11px;color:var(--text);width:55px;text-align:right;font-weight:700}
+.pbar-count{font-size:10px;color:var(--text3);width:80px}
+.adam-header{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.adam-header>div{flex:1;min-width:120px}
+.adam-summary-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:16px}
+.adam-cell{background:var(--surface);padding:12px 14px}
+.adam-cell-label{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:4px;font-family:'Syne',sans-serif}
+.adam-cell-value{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--text);letter-spacing:-0.02em}
+.adam-wrap{overflow-x:auto}
+.adam-table{width:100%;border-collapse:collapse;font-size:11px}
+.adam-table th{padding:8px 12px;border-bottom:1px solid var(--border2);text-align:left;font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;cursor:pointer;white-space:nowrap;font-family:'Syne',sans-serif;font-weight:600;user-select:none}
+.adam-table th:hover{color:var(--gold)}
+.adam-table th.sorted{color:var(--gold)}
+.adam-table td{padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:middle}
 .adam-table tr:hover td{background:var(--surface2)}
-.adam-pill{display:inline-flex;align-items:center;border-radius:999px;padding:3px 8px;font-size:11px;font-weight:600;white-space:nowrap}
-.adam-pill.good{background:rgba(62,207,142,0.15);color:#3ecf8e}
-.adam-pill.warn{background:rgba(245,166,35,0.15);color:#f5a623}
-.adam-pill.bad{background:rgba(240,96,96,0.15);color:#f06060}
+.adam-pill{display:inline-flex;align-items:center;border-radius:3px;padding:2px 7px;font-size:10px;font-weight:700;white-space:nowrap;font-family:'Syne',sans-serif}
+.adam-pill.good{background:var(--green-dim);color:var(--green)}
+.adam-pill.warn{background:var(--amber-dim);color:var(--amber)}
+.adam-pill.bad{background:var(--red-dim);color:var(--red)}
 .adam-pill.neutral{background:var(--surface2);color:var(--text2)}
-.adam-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:18px}
-.adam-metric{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px}
-.adam-metric-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px}
-.adam-metric-value{font-family:'Fraunces',serif;font-size:22px;font-weight:500;color:var(--text)}
-::-webkit-scrollbar{width:4px}
-::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+.adam-note{font-size:10px;color:var(--text3);margin-top:12px;line-height:1.6;padding:10px 14px;background:var(--surface2);border-radius:var(--r);border-left:2px solid var(--gold)}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+#dashboard>*{animation:fadeUp 0.25s ease forwards}
 </style>
 </head>
 <body>
 <div class="header">
-  <div class="header-left">
-    <div class="logo-mark">L</div>
+  <div class="header-brand">
+    <div class="logo">LC</div>
     <div>
-      <div class="header-title">INTJ - Life.Church Social Intel</div>
-      <div class="header-sub">Pattern Analysis Engine</div>
+      <div class="brand-name">Social Intel</div>
+      <div class="brand-sub">Life.Church // Pattern Engine</div>
     </div>
   </div>
-  <div class="status-pill">
+  <div class="status-indicator">
     <div class="status-dot" id="status-dot"></div>
-    <span id="status-text">Loading...</span>
+    <span id="status-text">Initializing</span>
   </div>
 </div>
-<div class="main">
+<div class="app-layout">
   <div class="sidebar">
     <div class="sidebar-section">
-      <div class="sidebar-label">Profiles</div>
-      <div id="profiles-list"></div>
+      <div class="sidebar-label">Account</div>
+      <div class="sidebar-content">
+        <select class="ctrl-select" id="account-select" onchange="selectAccount(this.value)">
+          <option value="">-- Select account --</option>
+        </select>
+        <div id="profile-items"></div>
+      </div>
     </div>
     <div class="sidebar-section">
       <div class="sidebar-label">Date Range</div>
-      <div class="range-group">
-        <select class="range-select" id="date-range">
+      <div class="sidebar-content">
+        <select class="ctrl-select" id="date-range">
           <option value="30">Last 30 days</option>
           <option value="60">Last 60 days</option>
           <option value="90">Last 90 days</option>
         </select>
-        <button class="run-btn" id="run-btn" onclick="runAnalysis()">Run analysis</button>
+        <button class="run-btn" id="run-btn" onclick="runAnalysis()">Run Analysis</button>
       </div>
     </div>
   </div>
   <div class="content">
-    <div id="empty-state" class="empty">
+    <div id="empty-state" class="empty-state">
       <div class="empty-title">No data yet</div>
-      Select an account and click Run analysis
+      <div class="empty-sub">Select an account and click Run Analysis</div>
     </div>
     <div id="dashboard" style="display:none;">
-      <div class="metrics-grid" id="metrics-grid"></div>
-      <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('posts',this)">Top posts</button>
+      <div class="metrics-strip" id="metrics-grid"></div>
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab('posts',this)">Top Posts</button>
         <button class="tab-btn" onclick="switchTab('patterns',this)">Patterns</button>
-        
-        <button class="tab-btn" onclick="switchTab('adam',this)">Adam metrics</button>
+        <button class="tab-btn" onclick="switchTab('adam',this)">Adam Metrics</button>
       </div>
       <div id="tab-posts" class="tab-pane active"></div>
       <div id="tab-patterns" class="tab-pane"></div>
-      
       <div id="tab-adam" class="tab-pane"></div>
     </div>
   </div>
 </div>
 <script>
 const SPROUT_TOKEN='NTI4OTg1fDE3NzgxNzc4Nzd8ZTU0YTk4ZGMtOWI0OS00MjUxLThjOTAtZDYzNmFiMTNlNmM4';
-let customerId='',allProfiles=[],selectedProfiles=[],dayChart=null,hourChart=null;
+let customerId='',allProfiles=[],selectedProfiles=[],adamSortKey='score',adamSortDir='desc',adamRows=[];
 function setStatus(msg,state){document.getElementById('status-text').textContent=msg;document.getElementById('status-dot').className='status-dot '+(state||'loading');}
 function fmtNum(n){n=Number(n)||0;if(n>=1000000)return(n/1000000).toFixed(1)+'M';if(n>=1000)return(n/1000).toFixed(1)+'K';return Math.round(n).toLocaleString();}
+function netColor(n){const m={instagram:'#e8a923',fb_instagram_account:'#e8a923',facebook:'#4f8ef7',linkedin:'#4f8ef7'};return m[(n||'').toLowerCase()]||'#3d4259';}
 function guidToNet(g){if(!g)return'unknown';if(g.startsWith('igmed:'))return'instagram';if(g.startsWith('p:'))return'facebook';if(g.startsWith('li:'))return'linkedin';if(g.startsWith('yt:'))return'youtube';return'unknown';}
 function guidToUrl(g){if(!g)return null;if(g.startsWith('p:')){const parts=g.slice(2).split('_');return parts.length===2?'https://www.facebook.com/'+parts[0]+'/posts/'+parts[1]:null;}if(g.startsWith('igmed:')){return'https://www.instagram.com/p/'+g.slice(6)+'/';}return null;}
-function guidToUrl(g){if(!g)return null;if(g.startsWith('p:')){const parts=g.slice(2).split('_');return parts.length===2?'https://www.facebook.com/'+parts[0]+'/posts/'+parts[1]:null;}if(g.startsWith('igmed:')){return'https://www.instagram.com/p/'+g.slice(6)+'/';}return null;}
-function netColor(n){const m={instagram:'#f5a623',fb_instagram_account:'#f5a623',facebook:'#4f8ef7',linkedin:'#4f8ef7',youtube:'#f06060'};return m[(n||'').toLowerCase()]||'#8b90a0';}
 async function sproutGet(path){const r=await fetch('/api/sprout?path='+encodeURIComponent(path),{headers:{'x-sprout-token':SPROUT_TOKEN}});if(!r.ok){const t=await r.text();throw new Error(r.status+': '+t.slice(0,200));}return r.json();}
 async function sproutPost(path,body){const r=await fetch('/api/sprout?path='+encodeURIComponent(path),{method:'POST',headers:{'Content-Type':'application/json','x-sprout-token':SPROUT_TOKEN},body:JSON.stringify(body)});if(!r.ok){const t=await r.text();throw new Error(r.status+': '+t.slice(0,200));}return r.json();}
 function renderSidebar(){
   const netLabel={instagram:'IG',fb_instagram_account:'IG',facebook:'FB',linkedin:'LI',youtube:'YT',tiktok:'TK'};
   const EXCLUDED=['twitter','fb_twitter_account','linkedin','youtube'];
   const profiles=allProfiles.filter(p=>!EXCLUDED.includes((p.network_type||'').toLowerCase()));
-  // Build groups by name
   const groups={};
   profiles.forEach(p=>{const key=p.name||p.handle||'Unknown';if(!groups[key])groups[key]=[];groups[key].push(p);});
-  window._profileGroups=groups;
-  window._allFilteredProfiles=profiles;
-  window._netLabel=netLabel;
+  window._profileGroups=groups;window._allFilteredProfiles=profiles;window._netLabel=netLabel;
   selectedProfiles=[];
-  // Build options: All, then each account name, then each individual profile
   const accountNames=Object.keys(groups);
-  let opts='<option value="">-- Pick an account --</option><option value="all">All accounts</option>';
-  // Add group headers with sub-options per platform
+  let opts='<option value="">-- Select account --</option><option value="all">All accounts</option>';
   accountNames.forEach(name=>{
     const profs=groups[name];
-    if(profs.length===1){
-      opts+='<option value="grp:'+name+'">'+name+'</option>';
-    } else {
+    if(profs.length===1){opts+='<option value="grp:'+name+'">'+name+'</option>';}
+    else{
       opts+='<optgroup label="'+name+'">';
-      opts+='<option value="grp:'+name+'">'+name+' - All platforms</option>';
-      profs.forEach(p=>{
-        const net=(p.network_type||'').toLowerCase();
-        const label=netLabel[net]||net;
-        opts+='<option value="pid:'+p.customer_profile_id+'">'+name+' - '+label+'</option>';
-      });
+      opts+='<option value="grp:'+name+'">'+name+' - All</option>';
+      profs.forEach(p=>{const net=(p.network_type||'').toLowerCase();opts+='<option value="pid:'+p.customer_profile_id+'">'+name+' - '+(netLabel[net]||net)+'</option>';});
       opts+='</optgroup>';
     }
   });
-  document.getElementById('profiles-list').innerHTML=
-    '<div class="range-group" style="margin-bottom:10px;">'+
-    '<select class="range-select" id="account-select" onchange="selectAccount(this.value)">'+
-    opts+'</select></div><div id="profile-items"></div>';
+  document.getElementById('account-select').innerHTML=opts;
 }
 function selectAccount(val){
   const netLabel=window._netLabel||{};
   const allFiltered=window._allFilteredProfiles||[];
   let selected=[];
   if(val==='all'){selected=allFiltered;}
-  else if(val.startsWith('grp:')){const name=val.slice(4);selected=(window._profileGroups||{})[name]||[];}
+  else if(val.startsWith('grp:')){selected=(window._profileGroups||{})[val.slice(4)]||[];}
   else if(val.startsWith('pid:')){const id=parseInt(val.slice(4));selected=allFiltered.filter(p=>p.customer_profile_id===id);}
   selectedProfiles=selected.map(p=>p.customer_profile_id);
   document.getElementById('profile-items').innerHTML=selected.map(p=>{
     const net=(p.network_type||'').toLowerCase();
-    return '<div class="profile-item active" data-id="'+p.customer_profile_id+'">'+
-      '<div class="profile-icon" style="background:'+netColor(net)+'22;">'+(netLabel[net]||'--')+'</div>'+
-      '<div><div class="profile-name">'+(p.name||p.handle||'Profile')+'</div>'+
-      '<div class="profile-network">'+net+'</div></div></div>';
+    return '<div class="profile-item active"><div class="profile-icon" style="background:'+netColor(net)+'22;color:'+netColor(net)+';">'+(netLabel[net]||'--')+'</div><div><div class="profile-name">'+(p.name||'Profile')+'</div><div class="profile-network">'+net+'</div></div></div>';
   }).join('');
 }
 function getDateRange(days){const end=new Date(),start=new Date();start.setDate(start.getDate()-parseInt(days));const fmt=d=>d.toISOString().split('T')[0];return{start:fmt(start),end:fmt(end)};}
@@ -228,7 +215,7 @@ async function runAnalysis(){
   const days=document.getElementById('date-range').value;
   const{start,end}=getDateRange(days);
   try{
-    setStatus('Fetching post analytics...','loading');
+    setStatus('Fetching analytics...','loading');
     const postRes=await sproutPost('/v1/'+customerId+'/analytics/posts',{
       filters:['customer_profile_id.eq('+selectedProfiles.join(',')+')', 'created_time.in('+start+'..'+end+')'],
       metrics:['lifetime.impressions','lifetime.engagements','lifetime.reactions','lifetime.shares_count','lifetime.comments_count'],
@@ -239,250 +226,148 @@ async function runAnalysis(){
     renderMetrics(posts);renderPosts(posts);renderPatterns(posts);renderAdamTab(posts);
     document.getElementById('dashboard').style.display='block';
     document.getElementById('empty-state').style.display='none';
-    await generateInsights(posts,days);
-    setStatus('Done - '+posts.length+' posts analyzed','ok');
+    setStatus(posts.length+' posts - '+days+'d','ok');
   }catch(e){setStatus('Error: '+e.message,'error');}
-  finally{btn.disabled=false;btn.textContent='Run analysis';}
+  finally{btn.disabled=false;btn.textContent='Run Analysis';}
 }
 function renderMetrics(posts){
   const totalImp=posts.reduce((s,p)=>s+(p.metrics?.['lifetime.impressions']||0),0);
   const totalEng=posts.reduce((s,p)=>s+(p.metrics?.['lifetime.engagements']||0),0);
   const avgEng=posts.length?Math.round(totalEng/posts.length):0;
-  const avgER=totalImp>0?((totalEng/totalImp)*100).toFixed(2):'0.00';
+  const avgER=totalImp>0?((totalEng/totalImp)*100).toFixed(2):0;
   document.getElementById('metrics-grid').innerHTML=[
     ['Impressions',fmtNum(totalImp)],['Engagements',fmtNum(totalEng)],
-    ['Avg eng/post',fmtNum(avgEng)],['Eng rate',avgER+'%'],['Posts analyzed',posts.length]
-  ].map(([l,v])=>'<div class="metric-card"><div class="metric-label">'+l+'</div><div class="metric-value">'+v+'</div></div>').join('');
+    ['Avg Eng/Post',fmtNum(avgEng)],['Eng Rate',avgER+'%'],['Posts',posts.length]
+  ].map(([l,v])=>'<div class="metric-cell"><div class="metric-cell-label">'+l+'</div><div class="metric-cell-value">'+v+'</div></div>').join('');
 }
 function renderPosts(posts){
-  if(!posts.length){document.getElementById('tab-posts').innerHTML='<div class="empty"><div class="empty-title">No posts found</div>Try a wider date range.</div>';return;}
+  if(!posts.length){document.getElementById('tab-posts').innerHTML='<div class="empty-state" style="height:200px"><div class="empty-title" style="font-size:18px">No posts found</div></div>';return;}
   const sorted=[...posts].sort((a,b)=>(b.metrics?.['lifetime.engagements']||0)-(a.metrics?.['lifetime.engagements']||0));
   const median=sorted[Math.floor(sorted.length/2)]?.metrics?.['lifetime.engagements']||0;
   document.getElementById('tab-posts').innerHTML='<div class="posts-list">'+sorted.slice(0,20).map((p,i)=>{
     const eng=p.metrics?.['lifetime.engagements']||0,imp=p.metrics?.['lifetime.impressions']||0;
     const er=imp>0?((eng/imp)*100).toFixed(2):'0.00';
     const verdict=eng>median*1.5?'strong':eng<median*0.5?'weak':'mid';
-    const vLabel=verdict==='strong'?'Top performer':verdict==='weak'?'Underperformer':'Average';
-    const net=guidToNet(p.guid);
+    const vLabel=verdict==='strong'?'Top Performer':verdict==='weak'?'Underperformer':'Average';
+    const net=guidToNet(p.guid);const url=guidToUrl(p.guid);
     return '<div class="post-card">'+
       '<div class="post-top"><span class="net-badge net-'+net+'">'+net+'</span>'+
       '<span class="verdict-badge verdict-'+verdict+'">'+vLabel+'</span>'+
-      '<span class="post-date">Post #'+(i+1)+'</span></div>'+
+      (url?'<a href="'+url+'" target="_blank" class="post-link">View post &rarr;</a>':'')+
+      '<span class="post-rank">#'+(i+1)+'</span></div>'+
       '<div class="post-stats">'+
-      '<div class="stat">impressions <span>'+fmtNum(imp)+'</span></div>'+
-      '<div class="stat">engagements <span>'+fmtNum(eng)+'</span></div>'+
-      '<div class="stat">reactions <span>'+fmtNum(p.metrics?.['lifetime.reactions']||0)+'</span></div>'+
-      '<div class="stat">comments <span>'+fmtNum(p.metrics?.['lifetime.comments_count']||0)+'</span></div>'+
-      '<div class="stat">shares <span>'+fmtNum(p.metrics?.['lifetime.shares_count']||0)+'</span></div>'+
-      '<div class="stat highlight">eng rate <span>'+er+'%</span></div>'+
+      '<div class="stat">IMP <span>'+fmtNum(imp)+'</span></div>'+
+      '<div class="stat">ENG <span>'+fmtNum(eng)+'</span></div>'+
+      '<div class="stat">REACT <span>'+fmtNum(p.metrics?.['lifetime.reactions']||0)+'</span></div>'+
+      '<div class="stat">CMT <span>'+fmtNum(p.metrics?.['lifetime.comments_count']||0)+'</span></div>'+
+      '<div class="stat">SHARE <span>'+fmtNum(p.metrics?.['lifetime.shares_count']||0)+'</span></div>'+
+      '<div class="stat hl">ER <span>'+er+'%</span></div>'+
       '</div></div>';
   }).join('')+'</div>';
 }
 function renderPatterns(posts){
   if(!posts.length)return;
-  const byDay={},byHour={},byNet={},days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-  posts.forEach(p=>{
-    const eng=p.metrics?.['lifetime.engagements']||0;
-    const net=guidToNet(p.guid);
-    if(p.sent_time){const d=new Date(p.sent_time),day=days[d.getDay()],hour=d.getHours();
-      if(!byDay[day])byDay[day]={t:0,c:0};byDay[day].t+=eng;byDay[day].c++;
-      if(!byHour[hour])byHour[hour]={t:0,c:0};byHour[hour].t+=eng;byHour[hour].c++;}
-    if(!byNet[net])byNet[net]={t:0,c:0};byNet[net].t+=eng;byNet[net].c++;
-  });
-  const dayAvgs=days.map(d=>byDay[d]?Math.round(byDay[d].t/byDay[d].c):0);
-  const hourLabels=Array.from({length:24},(_,h)=>h===0?'12a':h<12?h+'a':h===12?'12p':(h-12)+'p');
-  const hourAvgs=Array.from({length:24},(_,h)=>byHour[h]?Math.round(byHour[h].t/byHour[h].c):0);
-  const netEntries=Object.entries(byNet).sort((a,b)=>(b[1].t/b[1].c)-(a[1].t/a[1].c));
-  const maxNet=netEntries.length?Math.round(netEntries[0][1].t/netEntries[0][1].c):1;
-  document.getElementById('tab-patterns').innerHTML=
-    '<div class="chart-card"><div class="chart-title">Performance by platform</div>'+
-    '<div class="platform-bars" style="margin-top:10px;">'+
-    netEntries.map(([net,d])=>{const avg=Math.round(d.t/d.c),pct=Math.round((avg/maxNet)*100);
-      return '<div class="pbar-row"><div class="pbar-label">'+net+'</div><div class="pbar-track"><div class="pbar-fill" style="width:'+pct+'%;background:'+netColor(net)+';"></div></div><div class="pbar-val">'+fmtNum(avg)+'</div><div class="pbar-count">'+d.c+' posts</div></div>';
-    }).join('')+'</div></div>';
-
-}
-async function generateInsights(posts,days){
-  document.getElementById('tab-insights').innerHTML='<div class="insights-loading">Generating INTJ analysis via Claude...</div>';
-  const sorted=[...posts].sort((a,b)=>(b.metrics?.['lifetime.engagements']||0)-(a.metrics?.['lifetime.engagements']||0));
-  const totalEng=posts.reduce((s,p)=>s+(p.metrics?.['lifetime.engagements']||0),0);
-  const totalImp=posts.reduce((s,p)=>s+(p.metrics?.['lifetime.impressions']||0),0);
-  const avgEng=posts.length?Math.round(totalEng/posts.length):0;
-  const avgER=totalImp>0?((totalEng/totalImp)*100).toFixed(2):0;
-  const top10=sorted.slice(0,10).map(p=>({
-    guid:p.guid,
-    network:guidToNet(p.guid),
-    eng:p.metrics?.['lifetime.engagements']||0,
-    imp:p.metrics?.['lifetime.impressions']||0,
-    reactions:p.metrics?.['lifetime.reactions']||0,
-    comments:p.metrics?.['lifetime.comments_count']||0,
-    shares:p.metrics?.['lifetime.shares_count']||0,
-    er:p.metrics?.['lifetime.impressions']>0?((( p.metrics?.['lifetime.engagements']||0)/p.metrics?.['lifetime.impressions'])*100).toFixed(2):0
-  }));
-  const bot10=sorted.slice(-10).map(p=>({
-    guid:p.guid,
-    network:guidToNet(p.guid),
-    eng:p.metrics?.['lifetime.engagements']||0,
-    imp:p.metrics?.['lifetime.impressions']||0,
-    er:p.metrics?.['lifetime.impressions']>0?(((p.metrics?.['lifetime.engagements']||0)/p.metrics?.['lifetime.impressions'])*100).toFixed(2):0
-  }));
   const byNet={};
-  posts.forEach(p=>{const n=guidToNet(p.guid);if(!byNet[n])byNet[n]={t:0,c:0,imp:0,reactions:0,shares:0,comments:0};byNet[n].t+=p.metrics?.['lifetime.engagements']||0;byNet[n].imp+=p.metrics?.['lifetime.impressions']||0;byNet[n].reactions+=p.metrics?.['lifetime.reactions']||0;byNet[n].shares+=p.metrics?.['lifetime.shares_count']||0;byNet[n].comments+=p.metrics?.['lifetime.comments_count']||0;byNet[n].c++;});
-  const netSummary=Object.entries(byNet).map(([n,d])=>({
-    network:n,posts:d.c,
-    avgEng:Math.round(d.t/d.c),
-    avgImp:Math.round(d.imp/d.c),
-    avgER:d.imp>0?((d.t/d.imp)*100).toFixed(2):0,
-    avgReactions:Math.round(d.reactions/d.c),
-    avgShares:Math.round(d.shares/d.c),
-    avgComments:Math.round(d.comments/d.c)
-  }));
-  const engDist={high:0,mid:0,low:0};
-  posts.forEach(p=>{const e=p.metrics?.['lifetime.engagements']||0;if(e>avgEng*1.5)engDist.high++;else if(e<avgEng*0.5)engDist.low++;else engDist.mid++;});
-
-  const prompt='You are an elite INTJ social media strategist and data analyst. Life.Church is a large multi-site church with a major digital ministry presence including YouVersion Bible App.\n\nAnalyze this real social media performance data and provide RUTHLESSLY specific, actionable insights. No corporate speak. No vague advice. Every insight must reference specific numbers from the data.\n\nDATA SUMMARY (last '+days+' days):\n- Total posts analyzed: '+posts.length+'\n- Total impressions: '+totalImp.toLocaleString()+'\n- Total engagements: '+totalEng.toLocaleString()+'\n- Average engagements per post: '+avgEng+'\n- Overall engagement rate: '+avgER+'%\n- High performers (>1.5x avg): '+engDist.high+' posts\n- Average performers: '+engDist.mid+' posts\n- Underperformers (<0.5x avg): '+engDist.low+' posts\n\nPERFORMANCE BY PLATFORM:\n'+JSON.stringify(netSummary,null,2)+'\n\nTOP 10 POSTS (by engagement):\n'+JSON.stringify(top10,null,2)+'\n\nBOTTOM 10 POSTS (by engagement):\n'+JSON.stringify(bot10,null,2)+'\n\nProvide 8-10 insights covering:\n1. Platform performance gaps and what they mean strategically\n2. Engagement rate analysis - what the numbers actually indicate\n3. Reaction vs share vs comment ratios - what type of content is resonating emotionally vs intellectually\n4. Patterns between top and bottom performers\n5. Specific actionable recommendations with expected impact\n6. What Life.Church should stop doing immediately\n7. What they should double down on\n\nReturn ONLY a valid JSON array. No markdown, no backticks, no preamble.\nSchema: [{"type":"strength|weakness|opportunity|pattern|action","text":"..."}]\nEach insight must be 2-3 sentences max, data-specific, and immediately actionable.';
-
-  try{
-    const res=await fetch('/api/sprout?path=/claude',{method:'POST',headers:{'Content-Type':'application/json','x-sprout-token':SPROUT_TOKEN},body:JSON.stringify({prompt:prompt})});
-    const data=await res.json();
-    const raw=data.text||'';
-    const cleaned=raw.replace(/^```jsons*/,'').replace(/```s*$/,'').trim();
-    const insights=JSON.parse(cleaned);
-    document.getElementById('tab-insights').innerHTML='<div class="insights-list">'+insights.map(ins=>'<div class="insight-card"><div class="insight-type type-'+ins.type+'">'+ins.type+'</div><div class="insight-text">'+ins.text+'</div></div>').join('')+'</div>';
-  }catch(e){document.getElementById('tab-insights').innerHTML='<div class="insights-loading" style="color:var(--red)">Could not generate insights: '+e.message+'</div>';}
+  posts.forEach(p=>{
+    const net=guidToNet(p.guid);
+    const eng=p.metrics?.['lifetime.engagements']||0,imp=p.metrics?.['lifetime.impressions']||0;
+    if(!byNet[net])byNet[net]={t:0,imp:0,reactions:0,shares:0,comments:0,c:0};
+    byNet[net].t+=eng;byNet[net].imp+=imp;
+    byNet[net].reactions+=p.metrics?.['lifetime.reactions']||0;
+    byNet[net].shares+=p.metrics?.['lifetime.shares_count']||0;
+    byNet[net].comments+=p.metrics?.['lifetime.comments_count']||0;
+    byNet[net].c++;
+  });
+  const netEntries=Object.entries(byNet).sort((a,b)=>(b[1].t/b[1].c)-(a[1].t/a[1].c));
+  const maxAvg=netEntries.length?Math.round(netEntries[0][1].t/netEntries[0][1].c):1;
+  document.getElementById('tab-patterns').innerHTML='<div class="platform-section"><div class="section-title">Platform Performance</div>'+
+    netEntries.map(([net,d])=>{
+      const avg=Math.round(d.t/d.c),pct=Math.round((avg/maxAvg)*100);
+      const er=d.imp>0?((d.t/d.imp)*100).toFixed(2):0;
+      return '<div class="pbar-row"><div class="pbar-label">'+net+'</div>'+
+        '<div class="pbar-track"><div class="pbar-fill" style="width:'+pct+'%;background:'+netColor(net)+';"></div></div>'+
+        '<div class="pbar-val">'+fmtNum(avg)+'</div>'+
+        '<div class="pbar-count">'+d.c+' posts / '+er+'% ER</div></div>';
+    }).join('')+'</div>';
 }
-
-  let adamSortKey='signalScore', adamSortDir='desc', adamRows=[];
-
-  function renderAdamTab(posts) {
-    const igPosts = posts.filter(p => p.guid && (p.guid.startsWith('igmed:') || p.guid.startsWith('igm:')));
-    adamRows = igPosts.map((p, i) => {
-      const reach = p.metrics?.['lifetime.impressions'] || 0;
-      const sends = p.metrics?.['lifetime.shares_count'] || 0;
-      const likes = p.metrics?.['lifetime.reactions'] || 0;
-      const watchTime = p.metrics?.['lifetime.video_view_time_per_view'] || 0;
-      const sendRate = reach > 0 ? sends / reach : 0;
-      const likeRate = reach > 0 ? likes / reach : 0;
-      const score = (sendRate * 1000) + (likeRate * 250) + (watchTime ? Math.min(watchTime, 60) / 60 : 0);
-      return { idx: i+1, guid: p.guid, reach, sends, sendRate, likes, likeRate, watchTime, score };
-    }).filter(r => r.reach > 0);
-
-    const tab = document.getElementById('tab-adam');
-    tab.innerHTML = '';
-
-    const summary = document.createElement('div');
-    summary.className = 'adam-summary';
-    summary.id = 'adam-summary';
-    tab.appendChild(summary);
-
-    const toolbar = document.createElement('div');
-    toolbar.className = 'adam-toolbar';
-    toolbar.innerHTML =
-      '<div><select class="range-select" id="adam-type-filter"><option value="">All types</option><option value="video">Video/Reel</option><option value="photo">Photo</option></select></div>' +
-      '<div><input class="range-select" id="adam-min-reach" type="number" placeholder="Min reach..." style="margin-bottom:0" /></div>';
-    tab.appendChild(toolbar);
-
-    const wrap = document.createElement('div');
-    wrap.className = 'adam-table-wrap';
-    const table = document.createElement('table');
-    table.className = 'adam-table';
-    const thead = document.createElement('thead');
-    const headerRow = document.createElement('tr');
-    [['idx','Post'],['reach','Reach'],['sends','Sends'],['sendRate','Sends/Reach'],['likes','Likes'],['likeRate','Likes/Reach'],['watchTime','Watch Time'],['score','Signal Score']].forEach(([key, label]) => {
-      const th = document.createElement('th');
-      th.textContent = label + (adamSortKey===key ? (adamSortDir==='desc'?' v':' ^') : '');
-      th.onclick = () => adamSort(key);
-      headerRow.appendChild(th);
-    });
-    thead.appendChild(headerRow);
-    table.appendChild(thead);
-    const tbody = document.createElement('tbody');
-    tbody.id = 'adam-tbody';
-    table.appendChild(tbody);
-    wrap.appendChild(table);
-    tab.appendChild(wrap);
-
-    const note = document.createElement('p');
-    note.style.cssText = 'font-size:11px;color:var(--text3);margin-top:10px;';
-    note.textContent = 'Signal Score weights sends/reach highest (1000x), likes/reach second (250x), watch time when available. Based on Adam Mosseri stated distribution signals.';
-    tab.appendChild(note);
-
-    document.getElementById('adam-type-filter').addEventListener('change', renderAdamTable);
-    document.getElementById('adam-min-reach').addEventListener('input', renderAdamTable);
-
-    renderAdamSummary();
-    renderAdamTable();
-  }
-
-  function renderAdamSummary() {
-    const el = document.getElementById('adam-summary');
-    if (!el) return;
-    const avg = arr => arr.length ? arr.reduce((a,b)=>a+b,0)/arr.length : 0;
-    const avgSend = avg(adamRows.map(r=>r.sendRate));
-    const avgLike = avg(adamRows.map(r=>r.likeRate));
-    const watchRows = adamRows.filter(r=>r.watchTime>0);
-    const avgWatch = avg(watchRows.map(r=>r.watchTime));
-    el.innerHTML = [
-      ['IG Posts', adamRows.length],
-      ['Avg Sends/Reach', (avgSend*100).toFixed(2)+'%'],
-      ['Avg Likes/Reach', (avgLike*100).toFixed(2)+'%'],
-      ['Avg Watch Time', watchRows.length ? timeFmt(avgWatch) : '--'],
-    ].map(([l,v])=>'<div class="adam-metric"><div class="adam-metric-label">'+l+'</div><div class="adam-metric-value">'+v+'</div></div>').join('');
-  }
-
-  function timeFmt(s) {
-    if(!s||s<=0)return '--';
-    if(s<60)return s.toFixed(1)+'s';
-    const m=Math.floor(s/60),sec=Math.round(s%60);
-    return m+':'+(sec<10?'0':'')+sec;
-  }
-
-  function adamSort(key) {
-    if(adamSortKey===key) adamSortDir = adamSortDir==='asc'?'desc':'asc';
-    else { adamSortKey=key; adamSortDir='desc'; }
-    renderAdamTable();
-  }
-
-  function renderAdamTable() {
-    const tbody = document.getElementById('adam-tbody');
-    if (!tbody) return;
-    const minReach = parseFloat(document.getElementById('adam-min-reach')?.value||0)||0;
-    const typeFilter = document.getElementById('adam-type-filter')?.value||'';
-
-    let data = [...adamRows].filter(r => r.reach >= minReach);
-    if (typeFilter === 'video') data = data.filter(r => r.watchTime > 0);
-    if (typeFilter === 'photo') data = data.filter(r => r.watchTime === 0);
-
-    data.sort((a,b) => {
-      const av=a[adamSortKey], bv=b[adamSortKey];
-      return adamSortDir==='asc' ? av-bv : bv-av;
-    });
-
-    if (!data.length) { tbody.innerHTML='<tr><td colspan="8" style="text-align:center;color:var(--text3);padding:30px">No Instagram posts found in this date range.</td></tr>'; return; }
-
-    const pct = r => (r*100).toFixed(2)+'%';
-    const pillClass = (rate, kind) => {
-      if(kind==='send') return rate>=0.01?'good':rate>=0.004?'warn':'bad';
-      return rate>=0.04?'good':rate>=0.02?'warn':'bad';
-    };
-
-    tbody.innerHTML = data.map(r => {
-      const url=guidToUrl(r.guid);
-      const link=url?'<a href="'+url+'" target="_blank" style="font-size:10px;color:var(--accent);">View post</a>':'<span style="font-size:10px;color:var(--text3);">'+r.guid.slice(0,20)+'</span>';
-      return '<tr>' +
-      '<td style="color:var(--text);font-size:12px;">Post #'+r.idx+'<br>'+link+'</td>' +
-      '<td>'+fmtNum(r.reach)+'</td>' +
-      '<td>'+fmtNum(r.sends)+'</td>' +
-      '<td><span class="adam-pill '+pillClass(r.sendRate,'send')+'">'+pct(r.sendRate)+'</span></td>' +
-      '<td>'+fmtNum(r.likes)+'</td>' +
-      '<td><span class="adam-pill '+pillClass(r.likeRate,'like')+'">'+pct(r.likeRate)+'</span></td>' +
-      '<td>'+(r.watchTime>0?timeFmt(r.watchTime):'--')+'</td>' +
-      '<td><span class="adam-pill neutral">'+r.score.toFixed(2)+'</span></td>' +
-      '</tr>'
-    ).join('');
-  }
-
-  function switchTab(name,btn){
+function renderAdamTab(posts){
+  const igPosts=posts.filter(p=>p.guid&&(p.guid.startsWith('igmed:')||p.guid.startsWith('igm:')));
+  adamRows=igPosts.map((p,i)=>{
+    const reach=p.metrics?.['lifetime.impressions']||0;
+    const sends=p.metrics?.['lifetime.shares_count']||0;
+    const likes=p.metrics?.['lifetime.reactions']||0;
+    const watchTime=p.metrics?.['lifetime.video_view_time_per_view']||0;
+    const sendRate=reach>0?sends/reach:0,likeRate=reach>0?likes/reach:0;
+    const score=(sendRate*1000)+(likeRate*250)+(watchTime?Math.min(watchTime,60)/60:0);
+    return{idx:i+1,guid:p.guid,reach,sends,sendRate,likes,likeRate,watchTime,score};
+  }).filter(r=>r.reach>0);
+  const tab=document.getElementById('tab-adam');
+  tab.innerHTML='';
+  if(!adamRows.length){tab.innerHTML='<div class="empty-state" style="height:200px"><div class="empty-title" style="font-size:18px">No Instagram posts</div><div class="empty-sub">Select an Instagram profile</div></div>';return;}
+  const summary=document.createElement('div');summary.className='adam-summary-strip';summary.id='adam-summary';tab.appendChild(summary);
+  const toolbar=document.createElement('div');toolbar.className='adam-header';
+  toolbar.innerHTML='<div><select class="ctrl-select" id="adam-type-filter" style="margin-bottom:0"><option value="">All types</option><option value="video">Video / Reel</option><option value="photo">Photo / Static</option></select></div>'+
+    '<div><input class="ctrl-select" id="adam-min-reach" type="number" placeholder="Min reach..." style="margin-bottom:0;padding:7px 10px;"></div>';
+  tab.appendChild(toolbar);
+  const wrap=document.createElement('div');wrap.className='adam-wrap';
+  const table=document.createElement('table');table.className='adam-table';
+  const thead=document.createElement('thead');const hr=document.createElement('tr');
+  [['idx','Post'],['reach','Reach'],['sends','Sends'],['sendRate','Sends/Reach'],['likes','Likes'],['likeRate','Likes/Reach'],['watchTime','Watch Time'],['score','Signal Score']].forEach(([key,label])=>{
+    const th=document.createElement('th');th.textContent=label;th.dataset.key=key;
+    if(key===adamSortKey)th.classList.add('sorted');
+    th.onclick=()=>adamSort(key);hr.appendChild(th);
+  });
+  thead.appendChild(hr);table.appendChild(thead);
+  const tbody=document.createElement('tbody');tbody.id='adam-tbody';table.appendChild(tbody);
+  wrap.appendChild(table);tab.appendChild(wrap);
+  const note=document.createElement('div');note.className='adam-note';
+  note.textContent='Signal Score: sends/reach x1000 + likes/reach x250 + watch time contribution. Based on Adam Mosseri stated Instagram distribution signals.';
+  tab.appendChild(note);
+  document.getElementById('adam-type-filter').addEventListener('change',renderAdamTable);
+  document.getElementById('adam-min-reach').addEventListener('input',renderAdamTable);
+  renderAdamSummary();renderAdamTable();
+}
+function renderAdamSummary(){
+  const el=document.getElementById('adam-summary');if(!el)return;
+  const avg=arr=>arr.length?arr.reduce((a,b)=>a+b,0)/arr.length:0;
+  const avgSend=avg(adamRows.map(r=>r.sendRate)),avgLike=avg(adamRows.map(r=>r.likeRate));
+  const watchRows=adamRows.filter(r=>r.watchTime>0),avgWatch=avg(watchRows.map(r=>r.watchTime));
+  el.innerHTML=[['IG Posts',adamRows.length],['Avg Sends/Reach',(avgSend*100).toFixed(2)+'%'],['Avg Likes/Reach',(avgLike*100).toFixed(2)+'%'],['Avg Watch Time',watchRows.length?timeFmt(avgWatch):'--']]
+    .map(([l,v])=>'<div class="adam-cell"><div class="adam-cell-label">'+l+'</div><div class="adam-cell-value">'+v+'</div></div>').join('');
+}
+function timeFmt(s){if(!s||s<=0)return'--';if(s<60)return s.toFixed(1)+'s';const m=Math.floor(s/60),sec=Math.round(s%60);return m+':'+(sec<10?'0':'')+sec;}
+function adamSort(key){
+  if(adamSortKey===key)adamSortDir=adamSortDir==='asc'?'desc':'asc';
+  else{adamSortKey=key;adamSortDir='desc';}
+  document.querySelectorAll('.adam-table th').forEach(th=>th.classList.toggle('sorted',th.dataset.key===key));
+  renderAdamTable();
+}
+function renderAdamTable(){
+  const tbody=document.getElementById('adam-tbody');if(!tbody)return;
+  const minReach=parseFloat(document.getElementById('adam-min-reach')?.value||0)||0;
+  const typeFilter=document.getElementById('adam-type-filter')?.value||'';
+  let data=[...adamRows].filter(r=>r.reach>=minReach);
+  if(typeFilter==='video')data=data.filter(r=>r.watchTime>0);
+  if(typeFilter==='photo')data=data.filter(r=>r.watchTime===0);
+  data.sort((a,b)=>adamSortDir==='asc'?a[adamSortKey]-b[adamSortKey]:b[adamSortKey]-a[adamSortKey]);
+  if(!data.length){tbody.innerHTML='<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--text3);">No posts match filters</td></tr>';return;}
+  const pillClass=(rate,kind)=>{if(kind==='send')return rate>=0.01?'good':rate>=0.004?'warn':'bad';return rate>=0.04?'good':rate>=0.02?'warn':'bad';};
+  const pct=r=>(r*100).toFixed(2)+'%';
+  tbody.innerHTML=data.map(r=>{
+    const url=guidToUrl(r.guid);
+    return '<tr>'+
+      '<td>Post #'+r.idx+'<br>'+(url?'<a href="'+url+'" target="_blank" class="post-link">View &rarr;</a>':'<span style="font-size:10px;color:var(--text3);">'+r.guid.slice(0,22)+'</span>')+'</td>'+
+      '<td>'+fmtNum(r.reach)+'</td>'+
+      '<td>'+fmtNum(r.sends)+'</td>'+
+      '<td><span class="adam-pill '+pillClass(r.sendRate,'send')+'">'+pct(r.sendRate)+'</span></td>'+
+      '<td>'+fmtNum(r.likes)+'</td>'+
+      '<td><span class="adam-pill '+pillClass(r.likeRate,'like')+'">'+pct(r.likeRate)+'</span></td>'+
+      '<td>'+(r.watchTime>0?timeFmt(r.watchTime):'--')+'</td>'+
+      '<td><span class="adam-pill neutral">'+r.score.toFixed(2)+'</span></td>'+
+      '</tr>';
+  }).join('');
+}
+function switchTab(name,btn){
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
   btn.classList.add('active');document.getElementById('tab-'+name).classList.add('active');
@@ -496,7 +381,7 @@ document.addEventListener('DOMContentLoaded',async()=>{
     allProfiles=pd.data||[];
     renderSidebar();
     setStatus(allProfiles.length+' profiles loaded','ok');
-  }catch(e){setStatus('Error: '+e.message,'error');}
+  }catch(e){setStatus('Connection error','error');}
 });
 </script>
 </body>
