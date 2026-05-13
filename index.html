@@ -131,6 +131,49 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 .adam-pill.neutral{background:var(--surface2);color:var(--text2)}
 .adam-note{font-size:11px;color:var(--text3);margin-top:14px;line-height:1.6;padding:12px 16px;background:var(--surface2);border-radius:var(--r);border-left:3px solid var(--coral)}
 
+.adam-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;margin-bottom:10px;display:flex;gap:16px;align-items:flex-start;transition:border-color 0.15s}
+.adam-card:hover{border-color:var(--border2)}
+.adam-donut-wrap{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:4px;width:64px}
+.adam-donut{width:56px;height:56px}
+.adam-donut-lbl{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;text-align:center;font-weight:600}
+.adam-card-main{flex:1;min-width:0}
+.adam-card-top{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.adam-card-title{font-size:13px;font-weight:600;color:var(--text)}
+.adam-card-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.adam-card-metric{background:var(--surface2);border-radius:8px;padding:10px 12px}
+.adam-cml{font-size:9px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px}
+.adam-cmv{font-size:18px;font-weight:600;color:var(--text);letter-spacing:-0.02em;line-height:1}
+.adam-cms{font-size:10px;color:var(--text3);margin-top:3px}
+.adam-sort-bar{display:flex;align-items:center;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.adam-sort-btn{font-size:11px;font-weight:600;padding:5px 12px;border-radius:20px;border:1px solid var(--border2);background:var(--surface);color:var(--text2);cursor:pointer;transition:all 0.15s;font-family:'DM Sans',sans-serif}
+.adam-sort-btn:hover{border-color:var(--coral);color:var(--coral)}
+.adam-sort-btn.active{background:var(--coral);border-color:var(--coral);color:#fff}
+.pat-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.pat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px}
+.pat-card.full{grid-column:span 2}
+.pat-title{font-size:9px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:16px}
+.pat-compare{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pat-group{padding:12px;border-radius:8px}
+.pat-group-top{background:var(--green-dim);border:1px solid rgba(42,122,58,0.15)}
+.pat-group-bot{background:var(--red-dim);border:1px solid rgba(192,57,43,0.15)}
+.pat-group-label{font-size:10px;font-weight:600;margin-bottom:10px;letter-spacing:0.04em}
+.pat-group-top .pat-group-label{color:var(--green)}
+.pat-group-bot .pat-group-label{color:var(--red)}
+.pat-stat-row{display:flex;justify-content:space-between;margin-bottom:6px;font-size:11px}
+.pat-stat-key{color:var(--text2)}
+.pat-stat-val{font-weight:600;color:var(--text)}
+.pat-pbar-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.pat-pbar-label{font-size:11px;color:var(--text2);width:80px;flex-shrink:0;font-weight:500}
+.pat-pbar-track{flex:1;background:var(--surface2);border-radius:2px;height:5px;overflow:hidden;display:flex;gap:2px}
+.pat-pbar-fill{height:100%;border-radius:1px;transition:width 0.6s}
+.pat-pbar-val{font-size:11px;color:var(--text);width:50px;text-align:right;font-weight:600}
+.pat-scatter{position:relative;height:160px;border:1px solid var(--border);border-radius:6px;background:var(--surface2)}
+.pat-scatter-dot{position:absolute;width:8px;height:8px;border-radius:50%;transform:translate(-50%,-50%);cursor:default;transition:transform 0.15s}
+.pat-scatter-dot:hover{transform:translate(-50%,-50%) scale(1.5)}
+.pat-dist-bars{display:flex;align-items:flex-end;gap:3px;height:80px;margin-top:8px}
+.pat-dist-bar{flex:1;border-radius:2px 2px 0 0;background:var(--coral-dim);border:1px solid var(--coral);transition:height 0.4s}
+.pat-dist-labels{display:flex;gap:3px;margin-top:4px}
+.pat-dist-label{flex:1;font-size:9px;color:var(--text3);text-align:center}
 ::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
 @keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
@@ -300,28 +343,110 @@ function renderPosts(posts){
 }
 function renderPatterns(posts){
   if(!posts.length)return;
+  const sorted=[...posts].sort((a,b)=>(b.metrics?.['lifetime.engagements']||0)-(a.metrics?.['lifetime.engagements']||0));
+  const cutoff=Math.max(1,Math.floor(sorted.length*0.25));
+  const top=sorted.slice(0,cutoff), bot=sorted.slice(-cutoff);
+  const avg=(arr,fn)=>arr.length?arr.reduce((s,p)=>s+(fn(p)||0),0)/arr.length:0;
+  const m=k=>p=>p.metrics?.[k]||0;
+  const topEng=avg(top,m('lifetime.engagements')), botEng=avg(bot,m('lifetime.engagements'));
+  const topImp=avg(top,m('lifetime.impressions')), botImp=avg(bot,m('lifetime.impressions'));
+  const topER=topImp>0?(topEng/topImp*100).toFixed(2):0;
+  const botER=botImp>0?(botEng/botImp*100).toFixed(2):0;
+  const topShares=avg(top,m('lifetime.shares_count')), botShares=avg(bot,m('lifetime.shares_count'));
+  const topComments=avg(top,m('lifetime.comments_count')), botComments=avg(bot,m('lifetime.comments_count'));
+  const topReactions=avg(top,m('lifetime.reactions')), botReactions=avg(bot,m('lifetime.reactions'));
+
   const byNet={};
   posts.forEach(p=>{
     const net=guidToNet(p.guid);
-    const eng=p.metrics?.['lifetime.engagements']||0,imp=p.metrics?.['lifetime.impressions']||0;
+    const eng=m('lifetime.engagements')(p),imp=m('lifetime.impressions')(p);
     if(!byNet[net])byNet[net]={t:0,imp:0,reactions:0,shares:0,comments:0,c:0};
     byNet[net].t+=eng;byNet[net].imp+=imp;
-    byNet[net].reactions+=p.metrics?.['lifetime.reactions']||0;
-    byNet[net].shares+=p.metrics?.['lifetime.shares_count']||0;
-    byNet[net].comments+=p.metrics?.['lifetime.comments_count']||0;
+    byNet[net].reactions+=m('lifetime.reactions')(p);
+    byNet[net].shares+=m('lifetime.shares_count')(p);
+    byNet[net].comments+=m('lifetime.comments_count')(p);
     byNet[net].c++;
   });
   const netEntries=Object.entries(byNet).sort((a,b)=>(b[1].t/b[1].c)-(a[1].t/a[1].c));
-  const maxAvg=netEntries.length?Math.round(netEntries[0][1].t/netEntries[0][1].c):1;
-  document.getElementById('tab-patterns').innerHTML='<div class="platform-section"><div class="section-title">Platform Performance</div>'+
-    netEntries.map(([net,d])=>{
-      const avg=Math.round(d.t/d.c),pct=Math.round((avg/maxAvg)*100);
-      const er=d.imp>0?((d.t/d.imp)*100).toFixed(2):0;
-      return '<div class="pbar-row"><div class="pbar-label">'+net+'</div>'+
-        '<div class="pbar-track"><div class="pbar-fill" style="width:'+pct+'%;background:'+netColor(net)+';"></div></div>'+
-        '<div class="pbar-val">'+fmtNum(avg)+'</div>'+
-        '<div class="pbar-count">'+d.c+' posts &middot; '+er+'% ER</div></div>';
-    }).join('')+'</div>';
+  const maxReact=Math.max(...netEntries.map(([,d])=>d.c>0?d.reactions/d.c:0),1);
+  const maxShare=Math.max(...netEntries.map(([,d])=>d.c>0?d.shares/d.c:0),1);
+  const maxComment=Math.max(...netEntries.map(([,d])=>d.c>0?d.comments/d.c:0),1);
+
+  const engList=sorted.map(p=>m('lifetime.engagements')(p));
+  const maxE=Math.max(...engList,1);
+  const buckets=5;
+  const dist=Array(buckets).fill(0);
+  engList.forEach(e=>dist[Math.min(buckets-1,Math.floor((e/maxE)*buckets))]++);
+  const maxDist=Math.max(...dist,1);
+
+  const shareList=sorted.map(p=>m('lifetime.shares_count')(p));
+  const likeList=sorted.map(p=>m('lifetime.reactions')(p));
+  const maxS=Math.max(...shareList,1), maxL=Math.max(...likeList,1);
+
+  const scatterDots=sorted.slice(0,20).map((p,i)=>{
+    const s=m('lifetime.shares_count')(p), l=m('lifetime.reactions')(p);
+    const x=Math.round((s/maxS)*88)+6, y=Math.round(100-(l/maxL)*88)+6;
+    const e=m('lifetime.engagements')(p);
+    const c=e>topEng?'var(--green)':e<botEng?'var(--red)':'var(--amber)';
+    return '<div class="pat-scatter-dot" title="Post #'+(i+1)+'" style="left:'+x+'%;top:'+y+'%;background:'+c+';border:2px solid '+c.replace(')','-dim)').replace('var(--','var(--')+'"></div>';
+  }).join('');
+
+  document.getElementById('tab-patterns').innerHTML=
+    '<div class="pat-grid">'+
+    '<div class="pat-card"><div class="pat-title">Top 25% vs Bottom 25% of posts</div>'+
+      '<div class="pat-compare">'+
+        '<div class="pat-group pat-group-top"><div class="pat-group-label">Top '+cutoff+' posts</div>'+
+          '<div class="pat-stat-row"><span class="pat-stat-key">Avg eng</span><span class="pat-stat-val">'+fmtNum(Math.round(topEng))+'</span></div>'+
+          '<div class="pat-stat-row"><span class="pat-stat-key">Avg reach</span><span class="pat-stat-val">'+fmtNum(Math.round(topImp))+'</span></div>'+
+          '<div class="pat-stat-row"><span class="pat-stat-key">Eng rate</span><span class="pat-stat-val">'+topER+'%</span></div>'+
+          '<div class="pat-stat-row"><span class="pat-stat-key">Avg shares</span><span class="pat-stat-val">'+fmtNum(Math.round(topShares))+'</span></div>'+
+          '<div class="pat-stat-row"><span class="pat-stat-key">Avg comments</span><span class="pat-stat-val">'+fmtNum(Math.round(topComments))+'</span></div>'+
+        '</div>'+
+        '<div class="pat-group pat-group-bot"><div class="pat-group-label">Bottom '+cutoff+' posts</div>'+
+          '<div class="pat-stat-row"><span class="pat-stat-key">Avg eng</span><span class="pat-stat-val">'+fmtNum(Math.round(botEng))+'</span></div>'+
+          '<div class="pat-stat-row"><span class="pat-stat-key">Avg reach</span><span class="pat-stat-val">'+fmtNum(Math.round(botImp))+'</span></div>'+
+          '<div class="pat-stat-row"><span class="pat-stat-key">Eng rate</span><span class="pat-stat-val">'+botER+'%</span></div>'+
+          '<div class="pat-stat-row"><span class="pat-stat-key">Avg shares</span><span class="pat-stat-val">'+fmtNum(Math.round(botShares))+'</span></div>'+
+          '<div class="pat-stat-row"><span class="pat-stat-key">Avg comments</span><span class="pat-stat-val">'+fmtNum(Math.round(botComments))+'</span></div>'+
+        '</div>'+
+      '</div>'+
+    '</div>'+
+    '<div class="pat-card"><div class="pat-title">Platform breakdown - reactions vs shares vs comments</div>'+
+      netEntries.map(([net,d])=>{
+        const avgR=d.c>0?Math.round(d.reactions/d.c):0;
+        const avgS=d.c>0?Math.round(d.shares/d.c):0;
+        const avgC=d.c>0?Math.round(d.comments/d.c):0;
+        const rPct=Math.round((avgR/maxReact)*100), sPct=Math.round((avgS/maxShare)*100), cPct=Math.round((avgC/maxComment)*100);
+        return '<div style="margin-bottom:14px"><div style="font-size:11px;font-weight:600;color:var(--text);margin-bottom:8px;display:flex;align-items:center;gap:6px"><div style="width:8px;height:8px;border-radius:50%;background:'+netColor(net)+'"></div>'+net+' <span style="font-size:10px;color:var(--text3);font-weight:400">('+d.c+' posts)</span></div>'+
+          '<div class="pat-pbar-row"><div class="pat-pbar-label">Reactions</div><div class="pat-pbar-track"><div class="pat-pbar-fill" style="width:'+rPct+'%;background:var(--coral)"></div></div><div class="pat-pbar-val">'+fmtNum(avgR)+'</div></div>'+
+          '<div class="pat-pbar-row"><div class="pat-pbar-label">Shares</div><div class="pat-pbar-track"><div class="pat-pbar-fill" style="width:'+sPct+'%;background:var(--green)"></div></div><div class="pat-pbar-val">'+fmtNum(avgS)+'</div></div>'+
+          '<div class="pat-pbar-row" style="margin-bottom:0"><div class="pat-pbar-label">Comments</div><div class="pat-pbar-track"><div class="pat-pbar-fill" style="width:'+cPct+'%;background:var(--amber)"></div></div><div class="pat-pbar-val">'+fmtNum(avgC)+'</div></div>'+
+          '</div>';
+      }).join('')+
+    '</div>'+
+    '<div class="pat-card"><div class="pat-title">Engagement distribution - how consistent is your performance?</div>'+
+      '<div style="display:flex;align-items:flex-end;gap:4px;height:80px">'+
+        dist.map((v,i)=>'<div style="flex:1;border-radius:3px 3px 0 0;background:var(--coral);opacity:'+(0.4+i*0.15)+';height:'+Math.round((v/maxDist)*100)+'%"></div>').join('')+
+      '</div>'+
+      '<div style="display:flex;gap:4px;margin-top:6px">'+
+        ['Low','','Mid','','High'].map(l=>'<div style="flex:1;font-size:9px;color:var(--text3);text-align:center">'+l+'</div>').join('')+
+      '</div>'+
+      '<div style="margin-top:12px;font-size:11px;color:var(--text2)">'+
+        (dist[0]+dist[1]>dist[3]+dist[4]?'Most posts are underperforming. A few outliers are carrying your metrics.':dist[3]+dist[4]>dist[0]+dist[1]?'Strong consistent performance. Your content is reliably engaging.':'Mixed distribution. Some consistency but also high variance.')+
+      '</div>'+
+    '</div>'+
+    '<div class="pat-card"><div class="pat-title">Sends vs likes scatter - viral vs feel-good content</div>'+
+      '<div class="pat-scatter" style="margin-bottom:8px;">'+scatterDots+
+        '<div style="position:absolute;bottom:4px;left:0;right:0;text-align:center;font-size:9px;color:var(--text3)">Sends &rarr;</div>'+
+        '<div style="position:absolute;top:0;bottom:0;left:4px;display:flex;align-items:center;font-size:9px;color:var(--text3);writing-mode:vertical-rl;transform:rotate(180deg)">Likes &uarr;</div>'+
+      '</div>'+
+      '<div style="display:flex;gap:14px;font-size:10px;color:var(--text3)">'+
+        '<span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block"></span>Top 25%</span>'+
+        '<span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:50%;background:var(--amber);display:inline-block"></span>Average</span>'+
+        '<span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:50%;background:var(--red);display:inline-block"></span>Bottom 25%</span>'+
+      '</div>'+
+    '</div>'+
+    '</div>';
 }
 function renderAdamTab(posts){
   const igPosts=posts.filter(p=>p.guid&&(p.guid.startsWith('igmed:')||p.guid.startsWith('igm:')));
@@ -341,17 +466,13 @@ function renderAdamTab(posts){
   toolbar.innerHTML='<div><select class="ctrl-select" id="adam-type-filter" style="margin-bottom:0"><option value="">All types</option><option value="video">Video / Reel</option><option value="photo">Photo / Static</option></select></div>'+
     '<div><input class="ctrl-select" id="adam-min-reach" type="number" placeholder="Min reach..." style="margin-bottom:0;padding:7px 10px;"></div>';
   tab.appendChild(toolbar);
-  const wrap=document.createElement('div');wrap.className='adam-wrap';
-  const table=document.createElement('table');table.className='adam-table';
-  const thead=document.createElement('thead');const hr=document.createElement('tr');
-  [['idx','Post'],['reach','Reach'],['sends','Sends'],['sendRate','Sends/Reach'],['likes','Likes'],['likeRate','Likes/Reach'],['watchTime','Watch Time'],['score','Signal Score']].forEach(([key,label])=>{
-    const th=document.createElement('th');th.textContent=label;th.dataset.key=key;
-    if(key===adamSortKey)th.classList.add('sorted');
-    th.onclick=()=>adamSort(key);hr.appendChild(th);
-  });
-  thead.appendChild(hr);table.appendChild(thead);
-  const tbody=document.createElement('tbody');tbody.id='adam-tbody';table.appendChild(tbody);
-  wrap.appendChild(table);tab.appendChild(wrap);
+  const sortBar=document.createElement('div');sortBar.className='adam-sort-bar';
+  sortBar.innerHTML='<span style="font-size:11px;color:var(--text3);font-weight:600;">Sort by:</span>'+
+    [['score','Signal Score'],['sendRate','Sends/Reach'],['likeRate','Likes/Reach'],['reach','Reach'],['watchTime','Watch Time']].map(([key,label])=>
+      '<button class="adam-sort-btn'+(key===adamSortKey?' active':'')+'" onclick="adamSort(''+key+'')">'+label+'</button>'
+    ).join('');
+  tab.appendChild(sortBar);
+  const cards=document.createElement('div');cards.id='adam-cards';tab.appendChild(cards);
   const note=document.createElement('div');note.className='adam-note';
   note.textContent='Signal Score: sends/reach x1000 + likes/reach x250 + watch time contribution. Based on Adam Mosseri stated Instagram distribution signals.';
   tab.appendChild(note);
@@ -371,32 +492,53 @@ function timeFmt(s){if(!s||s<=0)return'--';if(s<60)return s.toFixed(1)+'s';const
 function adamSort(key){
   if(adamSortKey===key)adamSortDir=adamSortDir==='asc'?'desc':'asc';
   else{adamSortKey=key;adamSortDir='desc';}
-  document.querySelectorAll('.adam-table th').forEach(th=>th.classList.toggle('sorted',th.dataset.key===key));
+  document.querySelectorAll('.adam-sort-btn').forEach(btn=>{
+    btn.classList.toggle('active',btn.textContent.toLowerCase().includes(key==='score'?'signal':key==='sendRate'?'sends':key==='likeRate'?'likes':key==='watchTime'?'watch':key));
+  });
   renderAdamTable();
 }
 function renderAdamTable(){
-  const tbody=document.getElementById('adam-tbody');if(!tbody)return;
+  const container=document.getElementById('adam-cards');if(!container)return;
   const minReach=parseFloat(document.getElementById('adam-min-reach')?.value||0)||0;
   const typeFilter=document.getElementById('adam-type-filter')?.value||'';
   let data=[...adamRows].filter(r=>r.reach>=minReach);
   if(typeFilter==='video')data=data.filter(r=>r.watchTime>0);
   if(typeFilter==='photo')data=data.filter(r=>r.watchTime===0);
   data.sort((a,b)=>adamSortDir==='asc'?a[adamSortKey]-b[adamSortKey]:b[adamSortKey]-a[adamSortKey]);
-  if(!data.length){tbody.innerHTML='<tr><td colspan="8" style="text-align:center;padding:28px;color:var(--text3);">No posts match filters</td></tr>';return;}
-  const pillClass=(rate,kind)=>{if(kind==='send')return rate>=0.01?'good':rate>=0.004?'warn':'bad';return rate>=0.04?'good':rate>=0.02?'warn':'bad';};
+  if(!data.length){container.innerHTML='<div style="text-align:center;padding:32px;color:var(--text3)">No posts match filters</div>';return;}
   const pct=r=>(r*100).toFixed(2)+'%';
-  tbody.innerHTML=data.map(r=>{
+  const maxScore=Math.max(...data.map(r=>r.score),1);
+  container.innerHTML=data.map((r,i)=>{
     const url=guidToUrl(r.guid);
-    return '<tr>'+
-      '<td style="font-size:12px;font-weight:500;">Post #'+r.idx+'<br>'+(url?'<a href="'+url+'" target="_blank" class="post-link" style="font-size:10px;">View &rarr;</a>':'<span style="font-size:10px;color:var(--text3);">'+r.guid.slice(0,20)+'...</span>')+'</td>'+
-      '<td>'+fmtNum(r.reach)+'</td>'+
-      '<td>'+fmtNum(r.sends)+'</td>'+
-      '<td><span class="adam-pill '+pillClass(r.sendRate,'send')+'">'+pct(r.sendRate)+'</span></td>'+
-      '<td>'+fmtNum(r.likes)+'</td>'+
-      '<td><span class="adam-pill '+pillClass(r.likeRate,'like')+'">'+pct(r.likeRate)+'</span></td>'+
-      '<td>'+(r.watchTime>0?timeFmt(r.watchTime):'--')+'</td>'+
-      '<td><span class="adam-pill neutral">'+r.score.toFixed(2)+'</span></td>'+
-      '</tr>';
+    const verdict=r.score>maxScore*0.75?'strong':r.score>maxScore*0.4?'mid':'weak';
+    const vLabel=verdict==='strong'?'Top signal':verdict==='weak'?'Low signal':'Average';
+    const dashLen=138, filled=Math.round((r.score/maxScore)*dashLen);
+    const scoreColor=verdict==='strong'?'var(--coral)':verdict==='weak'?'var(--text3)':'var(--amber)';
+    const srClass=r.sendRate>=0.01?'good':r.sendRate>=0.004?'warn':'bad';
+    const lrClass=r.likeRate>=0.04?'good':r.likeRate>=0.02?'warn':'bad';
+    return '<div class="adam-card">'+
+      '<div class="adam-donut-wrap">'+
+        '<svg class="adam-donut" viewBox="0 0 56 56">'+
+          '<circle cx="28" cy="28" r="22" fill="none" stroke="var(--surface2)" stroke-width="6"/>'+
+          '<circle cx="28" cy="28" r="22" fill="none" stroke="'+scoreColor+'" stroke-width="6" stroke-dasharray="'+filled+' '+(dashLen-filled)+'" stroke-dashoffset="34" stroke-linecap="round"/>'+
+          '<text x="28" y="32" text-anchor="middle" font-size="11" font-weight="700" fill="'+scoreColor+'">'+r.score.toFixed(1)+'</text>'+
+        '</svg>'+
+        '<div class="adam-donut-lbl">signal</div>'+
+      '</div>'+
+      '<div class="adam-card-main">'+
+        '<div class="adam-card-top">'+
+          '<span class="adam-card-title">#'+(i+1)+' &nbsp; Post #'+r.idx+'</span>'+
+          '<span class="adam-pill '+verdict+'">'+vLabel+'</span>'+
+          (url?'<a href="'+url+'" target="_blank" class="post-link">View &rarr;</a>':'')+
+          '<span style="font-size:10px;color:var(--text3);margin-left:auto;">'+r.guid.slice(0,24)+'...</span>'+
+        '</div>'+
+        '<div class="adam-card-metrics">'+
+          '<div class="adam-card-metric"><div class="adam-cml">Reach</div><div class="adam-cmv">'+fmtNum(r.reach)+'</div><div class="adam-cms">impressions</div></div>'+
+          '<div class="adam-card-metric"><div class="adam-cml">Sends / reach</div><div class="adam-cmv" style="color:'+( r.sendRate>=0.01?'var(--green)':r.sendRate>=0.004?'var(--amber)':'var(--red)')+'">'+pct(r.sendRate)+'</div><div class="adam-cms">'+fmtNum(r.sends)+' sends</div></div>'+
+          '<div class="adam-card-metric"><div class="adam-cml">Likes / reach</div><div class="adam-cmv" style="color:'+( r.likeRate>=0.04?'var(--green)':r.likeRate>=0.02?'var(--amber)':'var(--red)')+'">'+pct(r.likeRate)+'</div><div class="adam-cms">'+fmtNum(r.likes)+' likes</div></div>'+
+        '</div>'+
+      '</div>'+
+    '</div>';
   }).join('');
 }
 function switchTab(name,btn){
