@@ -165,6 +165,7 @@ function setStatus(msg,state){document.getElementById('status-text').textContent
 function fmtNum(n){n=Number(n)||0;if(n>=1000000)return(n/1000000).toFixed(1)+'M';if(n>=1000)return(n/1000).toFixed(1)+'K';return Math.round(n).toLocaleString();}
 function guidToNet(g){if(!g)return'unknown';if(g.startsWith('igmed:'))return'instagram';if(g.startsWith('p:'))return'facebook';if(g.startsWith('li:'))return'linkedin';if(g.startsWith('yt:'))return'youtube';return'unknown';}
 function guidToUrl(g){if(!g)return null;if(g.startsWith('p:')){const parts=g.slice(2).split('_');return parts.length===2?'https://www.facebook.com/'+parts[0]+'/posts/'+parts[1]:null;}if(g.startsWith('igmed:')){return'https://www.instagram.com/p/'+g.slice(6)+'/';}return null;}
+function guidToUrl(g){if(!g)return null;if(g.startsWith('p:')){const parts=g.slice(2).split('_');return parts.length===2?'https://www.facebook.com/'+parts[0]+'/posts/'+parts[1]:null;}if(g.startsWith('igmed:')){return'https://www.instagram.com/p/'+g.slice(6)+'/';}return null;}
 function netColor(n){const m={instagram:'#f5a623',fb_instagram_account:'#f5a623',facebook:'#4f8ef7',linkedin:'#4f8ef7',youtube:'#f06060'};return m[(n||'').toLowerCase()]||'#8b90a0';}
 async function sproutGet(path){const r=await fetch('/api/sprout?path='+encodeURIComponent(path),{headers:{'x-sprout-token':SPROUT_TOKEN}});if(!r.ok){const t=await r.text();throw new Error(r.status+': '+t.slice(0,200));}return r.json();}
 async function sproutPost(path,body){const r=await fetch('/api/sprout?path='+encodeURIComponent(path),{method:'POST',headers:{'Content-Type':'application/json','x-sprout-token':SPROUT_TOKEN},body:JSON.stringify(body)});if(!r.ok){const t=await r.text();throw new Error(r.status+': '+t.slice(0,200));}return r.json();}
@@ -389,7 +390,7 @@ async function generateInsights(posts,days){
     const headerRow = document.createElement('tr');
     [['idx','Post'],['reach','Reach'],['sends','Sends'],['sendRate','Sends/Reach'],['likes','Likes'],['likeRate','Likes/Reach'],['watchTime','Watch Time'],['score','Signal Score']].forEach(([key, label]) => {
       const th = document.createElement('th');
-      th.textContent = label;
+      th.textContent = label + (adamSortKey===key ? (adamSortDir==='desc'?' v':' ^') : '');
       th.onclick = () => adamSort(key);
       headerRow.appendChild(th);
     });
