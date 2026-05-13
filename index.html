@@ -498,25 +498,28 @@ function adamSort(key){
   renderAdamTable();
 }
 function renderAdamTable(){
-  const container=document.getElementById('adam-cards');if(!container)return;
-  const minReach=parseFloat(document.getElementById('adam-min-reach')?.value||0)||0;
-  const typeFilter=document.getElementById('adam-type-filter')?.value||'';
-  let data=[...adamRows].filter(r=>r.reach>=minReach);
-  if(typeFilter==='video')data=data.filter(r=>r.watchTime>0);
-  if(typeFilter==='photo')data=data.filter(r=>r.watchTime===0);
-  data.sort((a,b)=>adamSortDir==='asc'?a[adamSortKey]-b[adamSortKey]:b[adamSortKey]-a[adamSortKey]);
+  var container=document.getElementById('adam-cards');if(!container)return;
+  var minReach=parseFloat(document.getElementById('adam-min-reach')&&document.getElementById('adam-min-reach').value||0)||0;
+  var typeFilter=document.getElementById('adam-type-filter')&&document.getElementById('adam-type-filter').value||'';
+  var data=adamRows.filter(function(r){return r.reach>=minReach});
+  if(typeFilter==='video')data=data.filter(function(r){return r.watchTime>0});
+  if(typeFilter==='photo')data=data.filter(function(r){return r.watchTime===0});
+  data=data.slice().sort(function(a,b){return adamSortDir==='asc'?a[adamSortKey]-b[adamSortKey]:b[adamSortKey]-a[adamSortKey]});
   if(!data.length){container.innerHTML='<div style="text-align:center;padding:32px;color:var(--text3)">No posts match filters</div>';return;}
-  const pct=r=>(r*100).toFixed(2)+'%';
-  const maxScore=Math.max(...data.map(r=>r.score),1);
-  container.innerHTML=data.map((r,i)=>{
-    const url=guidToUrl(r.guid);
-    const verdict=r.score>maxScore*0.75?'strong':r.score>maxScore*0.4?'mid':'weak';
-    const vLabel=verdict==='strong'?'Top signal':verdict==='weak'?'Low signal':'Average';
-    const dashLen=138, filled=Math.round((r.score/maxScore)*dashLen);
-    const scoreColor=verdict==='strong'?'var(--coral)':verdict==='weak'?'var(--text3)':'var(--amber)';
-    const srClass=r.sendRate>=0.01?'good':r.sendRate>=0.004?'warn':'bad';
-    const lrClass=r.likeRate>=0.04?'good':r.likeRate>=0.02?'warn':'bad';
-    return '<div class="adam-card">'+
+  var maxScore=Math.max.apply(null,data.map(function(r){return r.score}).concat([1]));
+  container.innerHTML='';
+  data.forEach(function(r,i){
+    var url=guidToUrl(r.guid);
+    var verdict=r.score>maxScore*0.75?'strong':r.score>maxScore*0.4?'mid':'weak';
+    var vLabel=verdict==='strong'?'Top signal':verdict==='weak'?'Low signal':'Average';
+    var dashLen=138, filled=Math.round((r.score/maxScore)*dashLen);
+    var scoreColor=verdict==='strong'?'var(--coral)':verdict==='weak'?'var(--text3)':'var(--amber)';
+    var srColor=r.sendRate>=0.01?'var(--green)':r.sendRate>=0.004?'var(--amber)':'var(--red)';
+    var lrColor=r.likeRate>=0.04?'var(--green)':r.likeRate>=0.02?'var(--amber)':'var(--red)';
+    var pct=function(v){return(v*100).toFixed(2)+'%'};
+    var card=document.createElement('div');
+    card.className='adam-card';
+    card.innerHTML=
       '<div class="adam-donut-wrap">'+
         '<svg class="adam-donut" viewBox="0 0 56 56">'+
           '<circle cx="28" cy="28" r="22" fill="none" stroke="var(--surface2)" stroke-width="6"/>'+
@@ -527,19 +530,19 @@ function renderAdamTable(){
       '</div>'+
       '<div class="adam-card-main">'+
         '<div class="adam-card-top">'+
-          '<span class="adam-card-title">#'+(i+1)+' &nbsp; Post #'+r.idx+'</span>'+
+          '<span class="adam-card-title">#'+(i+1)+' Post #'+r.idx+'</span>'+
           '<span class="adam-pill '+verdict+'">'+vLabel+'</span>'+
-          (url?'<a href="'+url+'" target="_blank" class="post-link">View &rarr;</a>':'')+
-          '<span style="font-size:10px;color:var(--text3);margin-left:auto;">'+r.guid.slice(0,24)+'...</span>'+
+          (url ? '<a href="'+url+'" target="_blank" class="post-link">View</a>' : '')+
+          '<span style="font-size:10px;color:var(--text3);margin-left:auto">'+r.guid.slice(0,22)+'...</span>'+
         '</div>'+
         '<div class="adam-card-metrics">'+
           '<div class="adam-card-metric"><div class="adam-cml">Reach</div><div class="adam-cmv">'+fmtNum(r.reach)+'</div><div class="adam-cms">impressions</div></div>'+
-          '<div class="adam-card-metric"><div class="adam-cml">Sends / reach</div><div class="adam-cmv" style="color:'+( r.sendRate>=0.01?'var(--green)':r.sendRate>=0.004?'var(--amber)':'var(--red)')+'">'+pct(r.sendRate)+'</div><div class="adam-cms">'+fmtNum(r.sends)+' sends</div></div>'+
-          '<div class="adam-card-metric"><div class="adam-cml">Likes / reach</div><div class="adam-cmv" style="color:'+( r.likeRate>=0.04?'var(--green)':r.likeRate>=0.02?'var(--amber)':'var(--red)')+'">'+pct(r.likeRate)+'</div><div class="adam-cms">'+fmtNum(r.likes)+' likes</div></div>'+
+          '<div class="adam-card-metric"><div class="adam-cml">Sends / reach</div><div class="adam-cmv" style="color:'+srColor+'">'+pct(r.sendRate)+'</div><div class="adam-cms">'+fmtNum(r.sends)+' sends</div></div>'+
+          '<div class="adam-card-metric"><div class="adam-cml">Likes / reach</div><div class="adam-cmv" style="color:'+lrColor+'">'+pct(r.likeRate)+'</div><div class="adam-cms">'+fmtNum(r.likes)+' likes</div></div>'+
         '</div>'+
-      '</div>'+
-    '</div>';
-  }).join('');
+      '</div>';
+    container.appendChild(card);
+  });
 }
 function switchTab(name,btn){
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
