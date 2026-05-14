@@ -526,54 +526,40 @@ function renderAdamTab(posts){
     var reach=(p.metrics&&p.metrics['lifetime.impressions'])||0;
     var sends=(p.metrics&&p.metrics['lifetime.shares_count'])||0;
     var likes=(p.metrics&&p.metrics['lifetime.reactions'])||0;
-    var watchRaw=(p.metrics&&p.metrics['lifetime.video_view_time_per_view'])||0; var watchTime=watchRaw>100?watchRaw/1000:watchRaw;
+    var watchRaw=(p.metrics&&p.metrics['lifetime.video_view_time_per_view'])||0;
+    var watchTime=watchRaw>100?watchRaw/1000:watchRaw;
     var sendRate=reach>0?sends/reach:0,likeRate=reach>0?likes/reach:0;
     var score=(sendRate*1000)+(likeRate*250)+(watchTime>0?Math.min(watchTime,60)/60*50:0);
     return{idx:i+1,guid:p.guid,reach:reach,sends:sends,sendRate:sendRate,likes:likes,likeRate:likeRate,watchTime:watchTime,score:score};
   }).filter(function(r){return r.reach>0;});
 
   var tab=document.getElementById('tab-adam');
-  tab.innerHTML='';
 
   if(!adamRows.length){
     tab.innerHTML='<div class="empty-state" style="height:200px"><div class="empty-title">No Instagram posts</div><div class="empty-sub">Select an Instagram profile</div></div>';
     return;
   }
 
-  // Summary strip
-  var strip=document.createElement('div');strip.className='adam-summary-strip';strip.id='adam-summary';tab.appendChild(strip);
-  renderAdamSummary();
-
-  // Sort buttons
-  var sortBar=document.createElement('div');sortBar.className='adam-sort-bar';
-  var sortKeys=[['score','Signal Score ℹ'],['sendRate','Sends/Reach'],['likeRate','Likes/Reach'],['reach','Reach'],['watchTime','Watch Time']];
+  // Build entire tab as one innerHTML string - no createElement/appendChild
+  var sortKeys=[['score','Signal Score'],['sendRate','Sends/Reach'],['likeRate','Likes/Reach'],['reach','Reach'],['watchTime','Watch Time']];
+  var sortHtml='<div class="adam-sort-bar"><span style="font-size:11px;color:var(--text3);font-weight:600">Sort by:</span>';
   sortKeys.forEach(function(sk){
-    var btn=document.createElement('button');
-    btn.className='adam-sort-btn'+(sk[0]===adamSortKey?' active':'');
-    btn.textContent=sk[1];
-    btn.dataset.key=sk[0];
-    btn.onclick=function(){adamSort(sk[0]);};
-    sortBar.appendChild(btn);
+    sortHtml+='<button class="adam-sort-btn'+(sk[0]===adamSortKey?' active':'')+'" onclick="adamSort(''+sk[0]+'')">'+sk[1]+'</button>';
   });
-  tab.appendChild(sortBar);
+  sortHtml+='</div>';
 
-  // Filters
-  var filters=document.createElement('div');filters.className='adam-filters';
-  filters.innerHTML='<div><select class="ctrl-select" id="adam-type" style="margin-bottom:0"><option value="">All types</option><option value="video">Video/Reel</option><option value="photo">Photo/Static</option></select></div>'+
-    '<div><input class="ctrl-select" id="adam-min-reach" type="number" placeholder="Min reach..." style="margin-bottom:0;padding:7px 10px"></div>';
-  tab.appendChild(filters);
+  var filtersHtml='<div class="adam-filters">'+
+    '<div><select class="ctrl-select" id="adam-type" style="margin-bottom:0" onchange="renderAdamCards()"><option value="">All types</option><option value="video">Video/Reel</option><option value="photo">Photo/Static</option></select></div>'+
+    '<div><input class="ctrl-select" id="adam-min-reach" type="number" placeholder="Min reach..." style="margin-bottom:0;padding:7px 10px" oninput="renderAdamCards()"></div>'+
+    '</div>';
 
-  // Cards container
-  tab.appendChild(infoBar);
-  var cards=document.createElement('div');cards.id='adam-cards';tab.appendChild(cards);
+  var infoHtml='<div class="adam-note">Signal Score = Sends/reach x1000 + Likes/reach x250 + Watch time bonus up to 50pts for 60s avg. Stories excluded. 30+ strong, 10-30 average, under 10 low shareability.</div>';
 
-  // Note
-  var infoBar=document.createElement('p');
-  infoBar.className='adam-note';
-  infoBar.textContent='Signal Score = Sends/reach x1000 + Likes/reach x250 + Watch time bonus (up to 50pts for 60s+ avg). Stories excluded. 30+ = strong distribution. 10-30 = average. Under 10 = low shareability.';
+  var summaryHtml='<div class="adam-summary-strip" id="adam-summary"></div>';
 
-  document.getElementById('adam-type').addEventListener('change',renderAdamCards);
-  document.getElementById('adam-min-reach').addEventListener('input',renderAdamCards);
+  tab.innerHTML=summaryHtml+sortHtml+filtersHtml+infoHtml+'<div id="adam-cards"></div>';
+
+  renderAdamSummary();
   renderAdamCards();
 }
 
@@ -607,7 +593,7 @@ function renderAdamCards(){
   data=data.slice().sort(function(a,b){return adamSortDir==='asc'?a[adamSortKey]-b[adamSortKey]:b[adamSortKey]-a[adamSortKey];});
   if(!data.length){container.innerHTML='<div style="text-align:center;padding:32px;color:var(--text3)">No posts match filters</div>';return;}
   var maxScore=Math.max.apply(null,data.map(function(r){return r.score;}).concat([1]));
-  container.innerHTML='';
+  var html='';
   data.forEach(function(r,i){
     var verdict=r.score>maxScore*0.75?'strong':r.score>maxScore*0.4?'mid':'weak';
     var vLabel=verdict==='strong'?'Top signal':verdict==='weak'?'Low signal':'Average';
@@ -615,29 +601,29 @@ function renderAdamCards(){
     var scoreColor=verdict==='strong'?'var(--coral)':verdict==='weak'?'var(--text3)':'var(--amber)';
     var srColor=r.sendRate>=0.01?'var(--green)':r.sendRate>=0.004?'var(--amber)':'var(--red)';
     var lrColor=r.likeRate>=0.04?'var(--green)':r.likeRate>=0.02?'var(--amber)':'var(--red)';
-    var card=document.createElement('div');card.className='adam-card';
     var url=guidToUrl(r.guid);
-    var inner='<div class="adam-donut-wrap">';
-    inner+='<svg width="56" height="56" viewBox="0 0 56 56">';
-    inner+='<circle cx="28" cy="28" r="22" fill="none" stroke="var(--surface2)" stroke-width="6"/>';
-    inner+='<circle cx="28" cy="28" r="22" fill="none" stroke="'+scoreColor+'" stroke-width="6" stroke-dasharray="'+filled+' '+(dashLen-filled)+'" stroke-dashoffset="34" stroke-linecap="round"/>';
-    inner+='<text x="28" y="32" text-anchor="middle" font-size="11" font-weight="700" fill="'+scoreColor+'">'+r.score.toFixed(1)+'</text>';
-    inner+='</svg><div class="adam-donut-lbl">signal</div></div>';
-    inner+='<div class="adam-card-main">';
-    inner+='<div class="adam-card-top">';
-    inner+='<span class="adam-card-title">#'+(i+1)+' Post #'+r.idx+'</span>';
-    inner+='<span class="adam-pill '+verdict+'">'+vLabel+'</span>';
-    if(url)inner+='<a href="'+url+'" target="_blank" class="post-link">View &rarr;</a>';
-    inner+='<span style="font-size:10px;color:var(--text3);margin-left:auto">'+r.guid.slice(0,22)+'...</span>';
-    inner+='</div>';
-    inner+='<div class="adam-card-metrics">';
-    inner+='<div class="adam-card-metric"><div class="adam-cml">Reach</div><div class="adam-cmv">'+fmtNum(r.reach)+'</div><div class="adam-cms">impressions</div></div>';
-    inner+='<div class="adam-card-metric"><div class="adam-cml">Sends / reach</div><div class="adam-cmv" style="color:'+srColor+'">'+pct(r.sendRate)+'</div><div class="adam-cms">'+fmtNum(r.sends)+' sends</div></div>';
-    inner+='<div class="adam-card-metric"><div class="adam-cml">Likes / reach</div><div class="adam-cmv" style="color:'+lrColor+'">'+pct(r.likeRate)+'</div><div class="adam-cms">'+fmtNum(r.likes)+' likes</div></div>';
-    inner+='</div></div>';
-    card.innerHTML=inner;
-    container.appendChild(card);
+    var viewLink=url?'<a href="'+url+'" target="_blank" class="post-link">View</a>':'';
+    html+='<div class="adam-card">';
+    html+='<div class="adam-donut-wrap">';
+    html+='<svg width="56" height="56" viewBox="0 0 56 56">';
+    html+='<circle cx="28" cy="28" r="22" fill="none" stroke="var(--surface2)" stroke-width="6"/>';
+    html+='<circle cx="28" cy="28" r="22" fill="none" stroke="'+scoreColor+'" stroke-width="6" stroke-dasharray="'+filled+' '+(dashLen-filled)+'" stroke-dashoffset="34" stroke-linecap="round"/>';
+    html+='<text x="28" y="32" text-anchor="middle" font-size="11" font-weight="700" fill="'+scoreColor+'">'+r.score.toFixed(1)+'</text>';
+    html+='</svg><div class="adam-donut-lbl">signal</div></div>';
+    html+='<div class="adam-card-main">';
+    html+='<div class="adam-card-top">';
+    html+='<span class="adam-card-title">#'+(i+1)+' Post #'+r.idx+'</span>';
+    html+='<span class="adam-pill '+verdict+'">'+vLabel+'</span>';
+    html+=viewLink;
+    html+='<span style="font-size:10px;color:var(--text3);margin-left:auto">'+r.guid.slice(0,20)+'...</span>';
+    html+='</div>';
+    html+='<div class="adam-card-metrics">';
+    html+='<div class="adam-card-metric"><div class="adam-cml">Reach</div><div class="adam-cmv">'+fmtNum(r.reach)+'</div><div class="adam-cms">impressions</div></div>';
+    html+='<div class="adam-card-metric"><div class="adam-cml">Sends/reach</div><div class="adam-cmv" style="color:'+srColor+'">'+pct(r.sendRate)+'</div><div class="adam-cms">'+fmtNum(r.sends)+' sends</div></div>';
+    html+='<div class="adam-card-metric"><div class="adam-cml">Likes/reach</div><div class="adam-cmv" style="color:'+lrColor+'">'+pct(r.likeRate)+'</div><div class="adam-cms">'+fmtNum(r.likes)+' likes</div></div>';
+    html+='</div></div></div>';
   });
+  container.innerHTML=html;
 }
 
 function switchTab(name,btn){
