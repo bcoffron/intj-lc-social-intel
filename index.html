@@ -5,36 +5,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LC Social Intel</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#fdf6ee;
-  --surface:#fff9f2;
-  --surface2:#f0e8dc;
-  --surface3:#e8ddd0;
-  --border:#e8ddd0;
-  --border2:#d4c4b0;
-  --text:#2d1e0f;
-  --text2:#7a5c3e;
-  --text3:#b8987a;
-  --coral:#e8720a;
-  --coral-dim:rgba(232,114,10,0.1);
-  --coral-bright:#f08030;
-  --green:#2a7a3a;
-  --green-dim:rgba(42,122,58,0.1);
-  --red:#c0392b;
-  --red-dim:rgba(192,57,43,0.1);
-  --amber:#c87a00;
-  --r:10px;
+  --bg:#fdf6ee;--surface:#fff9f2;--surface2:#f0e8dc;--surface3:#e8ddd0;
+  --border:#e8ddd0;--border2:#d4c4b0;
+  --text:#2d1e0f;--text2:#7a5c3e;--text3:#b8987a;
+  --coral:#e8720a;--coral-dim:rgba(232,114,10,0.1);--coral-bright:#f08030;
+  --green:#2a7a3a;--green-dim:rgba(42,122,58,0.12);
+  --red:#c0392b;--red-dim:rgba(192,57,43,0.1);
+  --amber:#c87a00;--amber-dim:rgba(200,122,0,0.1);
+  --blue:#2a5ab4;--r:10px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;min-height:100vh;line-height:1.6}
-
 .header{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(253,246,238,0.96);backdrop-filter:blur(12px);z-index:100}
 .header-brand{display:flex;align-items:center;gap:12px}
 .logo{width:34px;height:34px;background:var(--text);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Instrument Serif',serif;font-size:15px;font-style:italic;color:var(--coral);flex-shrink:0}
-.brand-name{font-family:'Instrument Serif',serif;font-size:18px;color:var(--text);letter-spacing:-0.01em;line-height:1}
+.brand-name{font-family:'Instrument Serif',serif;font-size:18px;color:var(--text);line-height:1}
 .brand-sub{font-size:10px;color:var(--text3);letter-spacing:0.06em;text-transform:uppercase;margin-top:1px}
 .status-pill{display:flex;align-items:center;gap:6px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:5px 13px;font-size:10px;color:var(--text2);font-weight:500}
 .status-dot{width:5px;height:5px;border-radius:50%;background:var(--text3)}
@@ -42,138 +30,99 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 .status-dot.loading{background:var(--coral);animation:pulse 1.2s ease-in-out infinite}
 .status-dot.error{background:var(--red)}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
-
 .app-layout{display:flex;min-height:calc(100vh - 57px)}
 .sidebar{width:220px;flex-shrink:0;border-right:1px solid var(--border);padding:22px 0;position:sticky;top:57px;height:calc(100vh - 57px);overflow-y:auto;background:var(--surface)}
-.sidebar::-webkit-scrollbar{width:3px}
-.sidebar::-webkit-scrollbar-thumb{background:var(--border2)}
 .sidebar-section{margin-bottom:26px}
-.sidebar-label{font-size:9px;font-weight:600;color:var(--text3);letter-spacing:0.12em;text-transform:uppercase;padding:0 18px;margin-bottom:8px}
+.sidebar-label{font-size:9px;font-weight:700;color:var(--text3);letter-spacing:0.12em;text-transform:uppercase;padding:0 18px;margin-bottom:8px}
 .sidebar-content{padding:0 14px}
-.profile-item{display:flex;align-items:center;gap:9px;padding:7px 18px;border-left:2px solid transparent;transition:all 0.15s}
+.profile-item{display:flex;align-items:center;gap:9px;padding:6px 18px;border-left:2px solid transparent}
 .profile-item.active{background:var(--coral-dim);border-left-color:var(--coral)}
-.profile-icon{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
+.profile-icon{width:24px;height:24px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
 .profile-name{font-size:12px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500}
 .profile-network{font-size:10px;color:var(--text3)}
-.ctrl-select{width:100%;background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);padding:8px 10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;outline:none;cursor:pointer;margin-bottom:8px;transition:border-color 0.15s}
+.ctrl-select{width:100%;background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);padding:8px 10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;outline:none;cursor:pointer;margin-bottom:8px}
 .ctrl-select:focus{border-color:var(--coral)}
-.run-btn{width:100%;background:var(--text);color:var(--bg);border:none;border-radius:var(--r);padding:11px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.15s;letter-spacing:-0.01em}
-.run-btn:hover{background:var(--coral);color:#fff;transform:translateY(-1px)}
-.run-btn:active{transform:translateY(0)}
-.run-btn:disabled{opacity:0.35;cursor:not-allowed;transform:none}
-
+.run-btn{width:100%;background:var(--text);color:var(--bg);border:none;border-radius:var(--r);padding:11px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.15s}
+.run-btn:hover{background:var(--coral);color:#fff}
+.run-btn:disabled{opacity:0.35;cursor:not-allowed}
 .content{flex:1;padding:26px 32px;min-width:0}
 .empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;height:60vh;text-align:center}
 .empty-title{font-family:'Instrument Serif',serif;font-size:32px;color:var(--text2);margin-bottom:8px;font-style:italic}
 .empty-sub{font-size:12px;color:var(--text3)}
-
 .metrics-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:24px}
 .metric-cell{background:var(--surface);padding:16px 18px}
-.metric-cell-label{font-size:9px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px}
-.metric-cell-value{font-family:'Instrument Serif',serif;font-size:28px;color:var(--text);letter-spacing:-0.02em;line-height:1}
-.metric-cell-delta{font-size:11px;margin-top:4px;font-weight:500}
-.delta-up{color:var(--green)}
-.delta-down{color:var(--red)}
-
-.tab-bar{display:flex;gap:0;margin-bottom:22px;border-bottom:1px solid var(--border)}
+.metric-cell-label{font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px}
+.metric-cell-value{font-family:'Instrument Serif',serif;font-size:28px;color:var(--text);line-height:1}
+.tab-bar{display:flex;margin-bottom:22px;border-bottom:1px solid var(--border)}
 .tab-btn{padding:9px 20px;border:none;background:none;color:var(--text3);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.15s}
 .tab-btn:hover{color:var(--text2)}
 .tab-btn.active{color:var(--coral);border-bottom-color:var(--coral);font-weight:600}
-.tab-pane{display:none}
-.tab-pane.active{display:block}
-
+.tab-pane{display:none}.tab-pane.active{display:block}
 .posts-list{display:flex;flex-direction:column;gap:10px}
 .post-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;transition:border-color 0.15s}
 .post-card:hover{border-color:var(--border2)}
 .post-top{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
-.net-badge{font-size:9px;font-weight:600;padding:3px 8px;border-radius:4px;letter-spacing:0.05em;text-transform:uppercase}
-.net-fb_instagram_account,.net-instagram{background:var(--coral-dim);color:var(--coral)}
-.net-facebook{background:rgba(42,90,180,0.1);color:#2a5ab4}
+.net-badge{font-size:9px;font-weight:700;padding:3px 8px;border-radius:4px;letter-spacing:0.05em;text-transform:uppercase}
+.net-instagram,.net-fb_instagram_account{background:var(--coral-dim);color:var(--coral)}
+.net-facebook{background:rgba(42,90,180,0.1);color:var(--blue)}
 .net-unknown{background:var(--surface2);color:var(--text3)}
-.verdict-badge{font-size:9px;font-weight:600;padding:3px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:0.05em}
+.verdict-badge{font-size:9px;font-weight:700;padding:3px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:0.05em}
 .verdict-strong{background:var(--green-dim);color:var(--green)}
-.verdict-mid{background:rgba(200,122,0,0.1);color:var(--amber)}
+.verdict-mid{background:var(--amber-dim);color:var(--amber)}
 .verdict-weak{background:var(--red-dim);color:var(--red)}
-.post-link{font-size:11px;color:var(--coral);text-decoration:none;font-weight:500;transition:opacity 0.15s}
+.post-link{font-size:11px;color:var(--coral);text-decoration:none;font-weight:500}
 .post-link:hover{opacity:0.7}
-.post-rank{font-size:11px;color:var(--text3);margin-left:auto;font-weight:500}
+.post-rank{font-size:11px;color:var(--text3);margin-left:auto}
 .post-stats{display:flex;gap:18px;flex-wrap:wrap}
-.stat{font-size:11px;color:var(--text3)}
-.stat span{color:var(--text);font-weight:600}
+.stat{font-size:11px;color:var(--text3)}.stat span{color:var(--text);font-weight:600}
 .stat.hl span{color:var(--coral)}
-
-.platform-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px;margin-bottom:14px}
-.section-title{font-size:9px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:16px}
-.pbar-row{display:flex;align-items:center;gap:12px;margin-bottom:12px}
-.pbar-label{font-size:11px;color:var(--text2);width:90px;flex-shrink:0;font-weight:500}
-.pbar-track{flex:1;background:var(--surface2);border-radius:2px;height:5px;overflow:hidden}
-.pbar-fill{height:100%;border-radius:2px;transition:width 0.8s cubic-bezier(0.4,0,0.2,1)}
-.pbar-val{font-size:12px;color:var(--text);width:55px;text-align:right;font-weight:600}
-.pbar-count{font-size:10px;color:var(--text3);width:90px}
-
+.pat-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.pat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px}
+.pat-card.full{grid-column:span 2}
+.pat-title{font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:16px}
+.pat-compare{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pat-group{padding:12px;border-radius:8px}
+.pat-group-top{background:var(--green-dim);border:1px solid rgba(42,122,58,0.15)}
+.pat-group-bot{background:var(--red-dim);border:1px solid rgba(192,57,43,0.15)}
+.pat-group-label{font-size:10px;font-weight:700;margin-bottom:10px;letter-spacing:0.04em}
+.pat-group-top .pat-group-label{color:var(--green)}
+.pat-group-bot .pat-group-label{color:var(--red)}
+.pat-stat-row{display:flex;justify-content:space-between;margin-bottom:6px;font-size:11px}
+.pat-stat-key{color:var(--text2)}.pat-stat-val{font-weight:600;color:var(--text)}
+.pat-pbar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.pat-pbar-label{font-size:11px;color:var(--text2);width:80px;flex-shrink:0;font-weight:500}
+.pat-pbar-track{flex:1;background:var(--surface2);border-radius:2px;height:5px;overflow:hidden}
+.pat-pbar-fill{height:100%;border-radius:2px;transition:width 0.6s}
+.pat-pbar-val{font-size:11px;color:var(--text);width:45px;text-align:right;font-weight:600}
+.pat-scatter{position:relative;height:150px;border:1px solid var(--border);border-radius:6px;background:var(--surface2);overflow:hidden}
+.pat-dot{position:absolute;width:9px;height:9px;border-radius:50%;transform:translate(-50%,-50%);cursor:default}
+.adam-sort-bar{display:flex;align-items:center;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.adam-sort-btn{font-size:11px;font-weight:600;padding:5px 12px;border-radius:20px;border:1px solid var(--border2);background:var(--surface);color:var(--text2);cursor:pointer;transition:all 0.15s;font-family:'DM Sans',sans-serif}
+.adam-sort-btn:hover{border-color:var(--coral);color:var(--coral)}
+.adam-sort-btn.active{background:var(--coral);border-color:var(--coral);color:#fff}
 .adam-summary-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:16px}
 .adam-cell{background:var(--surface);padding:14px 16px}
-.adam-cell-label{font-size:9px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px}
-.adam-cell-value{font-family:'Instrument Serif',serif;font-size:24px;color:var(--text);letter-spacing:-0.02em}
-.adam-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
-.adam-header>div{flex:1;min-width:120px}
-.adam-wrap{overflow-x:auto}
-.adam-table{width:100%;border-collapse:collapse;font-size:12px}
-.adam-table th{padding:9px 13px;border-bottom:1px solid var(--border2);text-align:left;font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;cursor:pointer;white-space:nowrap;font-weight:600;user-select:none}
-.adam-table th:hover{color:var(--coral)}
-.adam-table th.sorted{color:var(--coral)}
-.adam-table td{padding:11px 13px;border-bottom:1px solid var(--border);vertical-align:middle}
-.adam-table tr:hover td{background:var(--surface2)}
-.adam-pill{display:inline-flex;align-items:center;border-radius:4px;padding:2px 8px;font-size:10px;font-weight:600;white-space:nowrap}
-.adam-pill.good{background:var(--green-dim);color:var(--green)}
-.adam-pill.warn{background:rgba(200,122,0,0.1);color:var(--amber)}
-.adam-pill.bad{background:var(--red-dim);color:var(--red)}
-.adam-pill.neutral{background:var(--surface2);color:var(--text2)}
-.adam-note{font-size:11px;color:var(--text3);margin-top:14px;line-height:1.6;padding:12px 16px;background:var(--surface2);border-radius:var(--r);border-left:3px solid var(--coral)}
-
+.adam-cell-label{font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px}
+.adam-cell-value{font-family:'Instrument Serif',serif;font-size:24px;color:var(--text)}
+.adam-filters{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.adam-filters>div{flex:1;min-width:120px}
 .adam-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;margin-bottom:10px;display:flex;gap:16px;align-items:flex-start;transition:border-color 0.15s}
 .adam-card:hover{border-color:var(--border2)}
 .adam-donut-wrap{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:4px;width:64px}
-.adam-donut{width:56px;height:56px}
-.adam-donut-lbl{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;text-align:center;font-weight:600}
+.adam-donut-lbl{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;text-align:center;font-weight:700}
 .adam-card-main{flex:1;min-width:0}
 .adam-card-top{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap}
 .adam-card-title{font-size:13px;font-weight:600;color:var(--text)}
 .adam-card-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .adam-card-metric{background:var(--surface2);border-radius:8px;padding:10px 12px}
-.adam-cml{font-size:9px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px}
+.adam-cml{font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px}
 .adam-cmv{font-size:18px;font-weight:600;color:var(--text);letter-spacing:-0.02em;line-height:1}
 .adam-cms{font-size:10px;color:var(--text3);margin-top:3px}
-.adam-sort-bar{display:flex;align-items:center;gap:6px;margin-bottom:14px;flex-wrap:wrap}
-.adam-sort-btn{font-size:11px;font-weight:600;padding:5px 12px;border-radius:20px;border:1px solid var(--border2);background:var(--surface);color:var(--text2);cursor:pointer;transition:all 0.15s;font-family:'DM Sans',sans-serif}
-.adam-sort-btn:hover{border-color:var(--coral);color:var(--coral)}
-.adam-sort-btn.active{background:var(--coral);border-color:var(--coral);color:#fff}
-.pat-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
-.pat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px}
-.pat-card.full{grid-column:span 2}
-.pat-title{font-size:9px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:16px}
-.pat-compare{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.pat-group{padding:12px;border-radius:8px}
-.pat-group-top{background:var(--green-dim);border:1px solid rgba(42,122,58,0.15)}
-.pat-group-bot{background:var(--red-dim);border:1px solid rgba(192,57,43,0.15)}
-.pat-group-label{font-size:10px;font-weight:600;margin-bottom:10px;letter-spacing:0.04em}
-.pat-group-top .pat-group-label{color:var(--green)}
-.pat-group-bot .pat-group-label{color:var(--red)}
-.pat-stat-row{display:flex;justify-content:space-between;margin-bottom:6px;font-size:11px}
-.pat-stat-key{color:var(--text2)}
-.pat-stat-val{font-weight:600;color:var(--text)}
-.pat-pbar-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-.pat-pbar-label{font-size:11px;color:var(--text2);width:80px;flex-shrink:0;font-weight:500}
-.pat-pbar-track{flex:1;background:var(--surface2);border-radius:2px;height:5px;overflow:hidden;display:flex;gap:2px}
-.pat-pbar-fill{height:100%;border-radius:1px;transition:width 0.6s}
-.pat-pbar-val{font-size:11px;color:var(--text);width:50px;text-align:right;font-weight:600}
-.pat-scatter{position:relative;height:160px;border:1px solid var(--border);border-radius:6px;background:var(--surface2)}
-.pat-scatter-dot{position:absolute;width:8px;height:8px;border-radius:50%;transform:translate(-50%,-50%);cursor:default;transition:transform 0.15s}
-.pat-scatter-dot:hover{transform:translate(-50%,-50%) scale(1.5)}
-.pat-dist-bars{display:flex;align-items:flex-end;gap:3px;height:80px;margin-top:8px}
-.pat-dist-bar{flex:1;border-radius:2px 2px 0 0;background:var(--coral-dim);border:1px solid var(--coral);transition:height 0.4s}
-.pat-dist-labels{display:flex;gap:3px;margin-top:4px}
-.pat-dist-label{flex:1;font-size:9px;color:var(--text3);text-align:center}
+.adam-note{font-size:11px;color:var(--text3);margin-top:14px;line-height:1.6;padding:12px 16px;background:var(--surface2);border-radius:var(--r);border-left:3px solid var(--coral)}
+.adam-pill{display:inline-flex;border-radius:4px;padding:2px 8px;font-size:10px;font-weight:700}
+.adam-pill.strong{background:var(--green-dim);color:var(--green)}
+.adam-pill.mid{background:var(--amber-dim);color:var(--amber)}
+.adam-pill.weak{background:var(--red-dim);color:var(--red)}
 ::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
 @keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
@@ -222,7 +171,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
       <div class="empty-title">No data yet</div>
       <div class="empty-sub">Select an account and click Run Analysis</div>
     </div>
-    <div id="dashboard" style="display:none;">
+    <div id="dashboard" style="display:none">
       <div class="metrics-strip" id="metrics-grid"></div>
       <div class="tab-bar">
         <button class="tab-btn active" onclick="switchTab('posts',this)">Top Posts</button>
@@ -236,329 +185,447 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
   </div>
 </div>
 <script>
-const SPROUT_TOKEN='NTI4OTg1fDE3NzgxNzc4Nzd8ZTU0YTk4ZGMtOWI0OS00MjUxLThjOTAtZDYzNmFiMTNlNmM4';
-let customerId='',allProfiles=[],selectedProfiles=[],adamSortKey='score',adamSortDir='desc',adamRows=[];
-function setStatus(msg,state){document.getElementById('status-text').textContent=msg;document.getElementById('status-dot').className='status-dot '+(state||'loading');}
-function fmtNum(n){n=Number(n)||0;if(n>=1000000)return(n/1000000).toFixed(1)+'M';if(n>=1000)return(n/1000).toFixed(1)+'K';return Math.round(n).toLocaleString();}
-function netColor(n){const m={instagram:'#e8720a',fb_instagram_account:'#e8720a',facebook:'#2a5ab4',linkedin:'#2a5ab4'};return m[(n||'').toLowerCase()]||'#b8987a';}
-function guidToNet(g){if(!g)return'unknown';if(g.startsWith('igmed:'))return'instagram';if(g.startsWith('p:'))return'facebook';if(g.startsWith('li:'))return'linkedin';if(g.startsWith('yt:'))return'youtube';return'unknown';}
-function guidToUrl(g){if(!g)return null;if(g.startsWith('p:')){const parts=g.slice(2).split('_');return parts.length===2?'https://www.facebook.com/'+parts[0]+'/posts/'+parts[1]:null;}return null;}
-async function sproutGet(path){const r=await fetch('/api/sprout?path='+encodeURIComponent(path),{headers:{'x-sprout-token':SPROUT_TOKEN}});if(!r.ok){const t=await r.text();throw new Error(r.status+': '+t.slice(0,200));}return r.json();}
-async function sproutPost(path,body){const r=await fetch('/api/sprout?path='+encodeURIComponent(path),{method:'POST',headers:{'Content-Type':'application/json','x-sprout-token':SPROUT_TOKEN},body:JSON.stringify(body)});if(!r.ok){const t=await r.text();throw new Error(r.status+': '+t.slice(0,200));}return r.json();}
+var SPROUT_TOKEN='NTI4OTg1fDE3NzgxNzc4Nzd8ZTU0YTk4ZGMtOWI0OS00MjUxLThjOTAtZDYzNmFiMTNlNmM4';
+var customerId='',allProfiles=[],selectedProfiles=[],adamSortKey='score',adamSortDir='desc',adamRows=[];
+
+function setStatus(msg,state){
+  document.getElementById('status-text').textContent=msg;
+  document.getElementById('status-dot').className='status-dot '+(state||'loading');
+}
+
+function fmtNum(n){
+  n=Number(n)||0;
+  if(n>=1000000)return(n/1000000).toFixed(1)+'M';
+  if(n>=1000)return(n/1000).toFixed(1)+'K';
+  return Math.round(n).toLocaleString();
+}
+
+function pct(r){return(r*100).toFixed(2)+'%'}
+
+function netColor(n){
+  var m={instagram:'#e8720a',fb_instagram_account:'#e8720a',facebook:'#2a5ab4',linkedin:'#2a5ab4'};
+  return m[(n||'').toLowerCase()]||'#b8987a';
+}
+
+function guidToNet(g){
+  if(!g)return'unknown';
+  if(g.indexOf('igmed:')===0)return'instagram';
+  if(g.indexOf('p:')===0)return'facebook';
+  if(g.indexOf('li:')===0)return'linkedin';
+  return'unknown';
+}
+
+function guidToUrl(g){
+  if(!g)return null;
+  if(g.indexOf('p:')===0){
+    var parts=g.slice(2).split('_');
+    if(parts.length===2)return'https://www.facebook.com/'+parts[0]+'/posts/'+parts[1];
+  }
+  return null;
+}
+
+function sproutGet(path){
+  return fetch('/api/sprout?path='+encodeURIComponent(path),{headers:{'x-sprout-token':SPROUT_TOKEN}})
+    .then(function(r){if(!r.ok)throw new Error(r.status);return r.json();});
+}
+
+function sproutPost(path,body){
+  return fetch('/api/sprout?path='+encodeURIComponent(path),{
+    method:'POST',
+    headers:{'Content-Type':'application/json','x-sprout-token':SPROUT_TOKEN},
+    body:JSON.stringify(body)
+  }).then(function(r){if(!r.ok)return r.text().then(function(t){throw new Error(r.status+': '+t.slice(0,200));});return r.json();});
+}
+
 function renderSidebar(){
-  const netLabel={instagram:'IG',fb_instagram_account:'IG',facebook:'FB',linkedin:'LI',youtube:'YT',tiktok:'TK'};
-  const EXCLUDED=['twitter','fb_twitter_account','linkedin','youtube'];
-  const profiles=allProfiles.filter(p=>!EXCLUDED.includes((p.network_type||'').toLowerCase()));
-  const groups={};
-  profiles.forEach(p=>{const key=p.name||p.handle||'Unknown';if(!groups[key])groups[key]=[];groups[key].push(p);});
-  window._profileGroups=groups;window._allFilteredProfiles=profiles;window._netLabel=netLabel;
+  var netLabel={instagram:'IG',fb_instagram_account:'IG',facebook:'FB',linkedin:'LI',youtube:'YT',tiktok:'TK'};
+  var EXCLUDED=['twitter','fb_twitter_account','linkedin','youtube'];
+  var profiles=allProfiles.filter(function(p){return EXCLUDED.indexOf((p.network_type||'').toLowerCase())===-1;});
+  var groups={};
+  profiles.forEach(function(p){var key=p.name||p.handle||'Unknown';if(!groups[key])groups[key]=[];groups[key].push(p);});
+  window._groups=groups;window._filtered=profiles;window._netLabel=netLabel;
   selectedProfiles=[];
-  const accountNames=Object.keys(groups);
-  let opts='<option value="">-- Select account --</option><option value="all">All accounts</option>';
-  accountNames.forEach(name=>{
-    const profs=groups[name];
-    if(profs.length===1){opts+='<option value="grp:'+name+'">'+name+'</option>';}
-    else{
+  var names=Object.keys(groups);
+  var opts='<option value="">-- Select account --</option><option value="all">All accounts</option>';
+  names.forEach(function(name){
+    var profs=groups[name];
+    if(profs.length===1){
+      opts+='<option value="grp:'+name+'">'+name+'</option>';
+    } else {
       opts+='<optgroup label="'+name+'">';
       opts+='<option value="grp:'+name+'">'+name+' - All</option>';
-      profs.forEach(p=>{const net=(p.network_type||'').toLowerCase();opts+='<option value="pid:'+p.customer_profile_id+'">'+name+' - '+(netLabel[net]||net)+'</option>';});
+      profs.forEach(function(p){
+        var net=(p.network_type||'').toLowerCase();
+        opts+='<option value="pid:'+p.customer_profile_id+'">'+name+' - '+(netLabel[net]||net)+'</option>';
+      });
       opts+='</optgroup>';
     }
   });
   document.getElementById('account-select').innerHTML=opts;
 }
+
 function selectAccount(val){
-  const netLabel=window._netLabel||{};
-  const allFiltered=window._allFilteredProfiles||[];
-  let selected=[];
+  var netLabel=window._netLabel||{};
+  var allFiltered=window._filtered||[];
+  var selected=[];
   if(val==='all'){selected=allFiltered;}
-  else if(val.startsWith('grp:')){selected=(window._profileGroups||{})[val.slice(4)]||[];}
-  else if(val.startsWith('pid:')){const id=parseInt(val.slice(4));selected=allFiltered.filter(p=>p.customer_profile_id===id);}
-  selectedProfiles=selected.map(p=>p.customer_profile_id);
-  document.getElementById('profile-items').innerHTML=selected.map(p=>{
-    const net=(p.network_type||'').toLowerCase();
-    return '<div class="profile-item active"><div class="profile-icon" style="background:'+netColor(net)+'18;color:'+netColor(net)+';">'+(netLabel[net]||'--')+'</div><div><div class="profile-name">'+(p.name||'Profile')+'</div><div class="profile-network">'+net+'</div></div></div>';
-  }).join('');
+  else if(val.indexOf('grp:')===0){selected=(window._groups||{})[val.slice(4)]||[];}
+  else if(val.indexOf('pid:')===0){var id=parseInt(val.slice(4));selected=allFiltered.filter(function(p){return p.customer_profile_id===id;});}
+  selectedProfiles=selected.map(function(p){return p.customer_profile_id;});
+  var html='';
+  selected.forEach(function(p){
+    var net=(p.network_type||'').toLowerCase();
+    var label=netLabel[net]||'--';
+    var color=netColor(net);
+    html+='<div class="profile-item active">';
+    html+='<div class="profile-icon" style="background:'+color+'18;color:'+color+'">'+label+'</div>';
+    html+='<div><div class="profile-name">'+(p.name||'Profile')+'</div>';
+    html+='<div class="profile-network">'+net+'</div></div></div>';
+  });
+  document.getElementById('profile-items').innerHTML=html;
 }
-function getDateRange(days){const end=new Date(),start=new Date();start.setDate(start.getDate()-parseInt(days));const fmt=d=>d.toISOString().split('T')[0];return{start:fmt(start),end:fmt(end)};}
-async function runAnalysis(){
+
+function getDateRange(days){
+  var end=new Date(),start=new Date();
+  start.setDate(start.getDate()-parseInt(days));
+  function fmt(d){return d.toISOString().split('T')[0];}
+  return{start:fmt(start),end:fmt(end)};
+}
+
+function runAnalysis(){
   if(!selectedProfiles.length){alert('Please select an account first.');return;}
-  const btn=document.getElementById('run-btn');
+  var btn=document.getElementById('run-btn');
   btn.disabled=true;btn.textContent='Running...';
-  const days=document.getElementById('date-range').value;
-  const{start,end}=getDateRange(days);
-  try{
-    setStatus('Fetching analytics...','loading');
-    const postRes=await sproutPost('/v1/'+customerId+'/analytics/posts',{
-      filters:['customer_profile_id.eq('+selectedProfiles.join(',')+')', 'created_time.in('+start+'..'+end+')'],
-      metrics:['lifetime.impressions','lifetime.engagements','lifetime.reactions','lifetime.shares_count','lifetime.comments_count'],
-      page_size:100
-    });
-    const posts=postRes.data||[];
+  var days=document.getElementById('date-range').value;
+  var range=getDateRange(days);
+  setStatus('Fetching analytics...','loading');
+  sproutPost('/v1/'+customerId+'/analytics/posts',{
+    filters:['customer_profile_id.eq('+selectedProfiles.join(',')+')', 'created_time.in('+range.start+'..'+range.end+')'],
+    metrics:['lifetime.impressions','lifetime.engagements','lifetime.reactions','lifetime.shares_count','lifetime.comments_count'],
+    page_size:100
+  }).then(function(postRes){
+    var posts=postRes.data||[];
     setStatus('Analyzing '+posts.length+' posts...','loading');
-    renderMetrics(posts);renderPosts(posts);renderPatterns(posts);renderAdamTab(posts);
+    renderMetrics(posts);
+    renderPosts(posts);
+    renderPatterns(posts);
+    renderAdamTab(posts);
     document.getElementById('dashboard').style.display='block';
     document.getElementById('empty-state').style.display='none';
-    setStatus(posts.length+' posts &middot; '+days+' days','ok');
-  }catch(e){setStatus('Error: '+e.message,'error');}
-  finally{btn.disabled=false;btn.textContent='Run Analysis';}
+    setStatus(posts.length+' posts · '+days+' days','ok');
+  }).catch(function(e){
+    setStatus('Error: '+e.message,'error');
+  }).finally(function(){
+    btn.disabled=false;btn.textContent='Run Analysis';
+  });
 }
+
 function renderMetrics(posts){
-  const totalImp=posts.reduce((s,p)=>s+(p.metrics?.['lifetime.impressions']||0),0);
-  const totalEng=posts.reduce((s,p)=>s+(p.metrics?.['lifetime.engagements']||0),0);
-  const avgEng=posts.length?Math.round(totalEng/posts.length):0;
-  const avgER=totalImp>0?((totalEng/totalImp)*100).toFixed(2):0;
-  document.getElementById('metrics-grid').innerHTML=[
-    ['Impressions',fmtNum(totalImp),''],
-    ['Engagements',fmtNum(totalEng),''],
-    ['Avg Eng/Post',fmtNum(avgEng),''],
-    ['Eng Rate',avgER+'%',''],
-    ['Posts',posts.length,'']
-  ].map(([l,v,d])=>'<div class="metric-cell"><div class="metric-cell-label">'+l+'</div><div class="metric-cell-value">'+v+'</div></div>').join('');
+  var totalImp=0,totalEng=0;
+  posts.forEach(function(p){totalImp+=(p.metrics&&p.metrics['lifetime.impressions'])||0;totalEng+=(p.metrics&&p.metrics['lifetime.engagements'])||0;});
+  var avgEng=posts.length?Math.round(totalEng/posts.length):0;
+  var avgER=totalImp>0?((totalEng/totalImp)*100).toFixed(2):0;
+  var cells=[['Impressions',fmtNum(totalImp)],['Engagements',fmtNum(totalEng)],['Avg Eng/Post',fmtNum(avgEng)],['Eng Rate',avgER+'%'],['Posts',posts.length]];
+  var html='';
+  cells.forEach(function(c){html+='<div class="metric-cell"><div class="metric-cell-label">'+c[0]+'</div><div class="metric-cell-value">'+c[1]+'</div></div>';});
+  document.getElementById('metrics-grid').innerHTML=html;
 }
+
 function renderPosts(posts){
-  if(!posts.length){document.getElementById('tab-posts').innerHTML='<div class="empty-state" style="height:200px"><div class="empty-title">No posts found</div></div>';return;}
-  const sorted=[...posts].sort((a,b)=>(b.metrics?.['lifetime.engagements']||0)-(a.metrics?.['lifetime.engagements']||0));
-  const median=sorted[Math.floor(sorted.length/2)]?.metrics?.['lifetime.engagements']||0;
-  document.getElementById('tab-posts').innerHTML='<div class="posts-list">'+sorted.slice(0,20).map((p,i)=>{
-    const eng=p.metrics?.['lifetime.engagements']||0,imp=p.metrics?.['lifetime.impressions']||0;
-    const er=imp>0?((eng/imp)*100).toFixed(2):'0.00';
-    const verdict=eng>median*1.5?'strong':eng<median*0.5?'weak':'mid';
-    const vLabel=verdict==='strong'?'Top Performer':verdict==='weak'?'Underperformer':'Average';
-    const net=guidToNet(p.guid);const url=guidToUrl(p.guid);
-    return '<div class="post-card">'+
-      '<div class="post-top"><span class="net-badge net-'+net+'">'+net+'</span>'+
-      '<span class="verdict-badge verdict-'+verdict+'">'+vLabel+'</span>'+
-      (url?'<a href="'+url+'" target="_blank" class="post-link">View post &rarr;</a>':'')+
-      '<span class="post-rank">#'+(i+1)+'</span></div>'+
-      '<div class="post-stats">'+
-      '<div class="stat">Impressions <span>'+fmtNum(imp)+'</span></div>'+
-      '<div class="stat">Engagements <span>'+fmtNum(eng)+'</span></div>'+
-      '<div class="stat">Reactions <span>'+fmtNum(p.metrics?.['lifetime.reactions']||0)+'</span></div>'+
-      '<div class="stat">Comments <span>'+fmtNum(p.metrics?.['lifetime.comments_count']||0)+'</span></div>'+
-      '<div class="stat">Shares <span>'+fmtNum(p.metrics?.['lifetime.shares_count']||0)+'</span></div>'+
-      '<div class="stat hl">Eng rate <span>'+er+'%</span></div>'+
-      '</div></div>';
-  }).join('')+'</div>';
+  var tab=document.getElementById('tab-posts');
+  if(!posts.length){tab.innerHTML='<div class="empty-state" style="height:200px"><div class="empty-title">No posts found</div></div>';return;}
+  var sorted=posts.slice().sort(function(a,b){return((b.metrics&&b.metrics['lifetime.engagements'])||0)-((a.metrics&&a.metrics['lifetime.engagements'])||0);});
+  var median=(sorted[Math.floor(sorted.length/2)]&&sorted[Math.floor(sorted.length/2)].metrics&&sorted[Math.floor(sorted.length/2)].metrics['lifetime.engagements'])||0;
+  var html='<div class="posts-list">';
+  sorted.slice(0,20).forEach(function(p,i){
+    var eng=(p.metrics&&p.metrics['lifetime.engagements'])||0;
+    var imp=(p.metrics&&p.metrics['lifetime.impressions'])||0;
+    var er=imp>0?((eng/imp)*100).toFixed(2):'0.00';
+    var verdict=eng>median*1.5?'strong':eng<median*0.5?'weak':'mid';
+    var vLabel=verdict==='strong'?'Top Performer':verdict==='weak'?'Underperformer':'Average';
+    var net=guidToNet(p.guid);
+    var url=guidToUrl(p.guid);
+    html+='<div class="post-card">';
+    html+='<div class="post-top">';
+    html+='<span class="net-badge net-'+net+'">'+net+'</span>';
+    html+='<span class="verdict-badge verdict-'+verdict+'">'+vLabel+'</span>';
+    if(url)html+='<a href="'+url+'" target="_blank" class="post-link">View post &rarr;</a>';
+    html+='<span class="post-rank">#'+(i+1)+'</span>';
+    html+='</div>';
+    html+='<div class="post-stats">';
+    html+='<div class="stat">Impressions <span>'+fmtNum(imp)+'</span></div>';
+    html+='<div class="stat">Engagements <span>'+fmtNum(eng)+'</span></div>';
+    html+='<div class="stat">Reactions <span>'+fmtNum((p.metrics&&p.metrics['lifetime.reactions'])||0)+'</span></div>';
+    html+='<div class="stat">Comments <span>'+fmtNum((p.metrics&&p.metrics['lifetime.comments_count'])||0)+'</span></div>';
+    html+='<div class="stat">Shares <span>'+fmtNum((p.metrics&&p.metrics['lifetime.shares_count'])||0)+'</span></div>';
+    html+='<div class="stat hl">ER <span>'+er+'%</span></div>';
+    html+='</div></div>';
+  });
+  html+='</div>';
+  tab.innerHTML=html;
 }
+
 function renderPatterns(posts){
   if(!posts.length)return;
-  const sorted=[...posts].sort((a,b)=>(b.metrics?.['lifetime.engagements']||0)-(a.metrics?.['lifetime.engagements']||0));
-  const cutoff=Math.max(1,Math.floor(sorted.length*0.25));
-  const top=sorted.slice(0,cutoff), bot=sorted.slice(-cutoff);
-  const avg=(arr,fn)=>arr.length?arr.reduce((s,p)=>s+(fn(p)||0),0)/arr.length:0;
-  const m=k=>p=>p.metrics?.[k]||0;
-  const topEng=avg(top,m('lifetime.engagements')), botEng=avg(bot,m('lifetime.engagements'));
-  const topImp=avg(top,m('lifetime.impressions')), botImp=avg(bot,m('lifetime.impressions'));
-  const topER=topImp>0?(topEng/topImp*100).toFixed(2):0;
-  const botER=botImp>0?(botEng/botImp*100).toFixed(2):0;
-  const topShares=avg(top,m('lifetime.shares_count')), botShares=avg(bot,m('lifetime.shares_count'));
-  const topComments=avg(top,m('lifetime.comments_count')), botComments=avg(bot,m('lifetime.comments_count'));
-  const topReactions=avg(top,m('lifetime.reactions')), botReactions=avg(bot,m('lifetime.reactions'));
+  var m=function(k){return function(p){return(p.metrics&&p.metrics[k])||0;};};
+  var sorted=posts.slice().sort(function(a,b){return m('lifetime.engagements')(b)-m('lifetime.engagements')(a);});
+  var cut=Math.max(1,Math.floor(sorted.length*0.25));
+  var top=sorted.slice(0,cut),bot=sorted.slice(-cut);
+  function avg(arr,fn){return arr.length?arr.reduce(function(s,p){return s+fn(p);},0)/arr.length:0;}
+  var tEng=avg(top,m('lifetime.engagements')),bEng=avg(bot,m('lifetime.engagements'));
+  var tImp=avg(top,m('lifetime.impressions')),bImp=avg(bot,m('lifetime.impressions'));
+  var tER=tImp>0?(tEng/tImp*100).toFixed(2):0,bER=bImp>0?(bEng/bImp*100).toFixed(2):0;
+  var tShares=avg(top,m('lifetime.shares_count')),bShares=avg(bot,m('lifetime.shares_count'));
+  var tComments=avg(top,m('lifetime.comments_count')),bComments=avg(bot,m('lifetime.comments_count'));
+  var tReactions=avg(top,m('lifetime.reactions')),bReactions=avg(bot,m('lifetime.reactions'));
 
-  const byNet={};
-  posts.forEach(p=>{
-    const net=guidToNet(p.guid);
-    const eng=m('lifetime.engagements')(p),imp=m('lifetime.impressions')(p);
-    if(!byNet[net])byNet[net]={t:0,imp:0,reactions:0,shares:0,comments:0,c:0};
-    byNet[net].t+=eng;byNet[net].imp+=imp;
-    byNet[net].reactions+=m('lifetime.reactions')(p);
-    byNet[net].shares+=m('lifetime.shares_count')(p);
-    byNet[net].comments+=m('lifetime.comments_count')(p);
-    byNet[net].c++;
+  var byNet={};
+  posts.forEach(function(p){
+    var net=guidToNet(p.guid);
+    if(!byNet[net])byNet[net]={t:0,imp:0,r:0,s:0,c:0,n:0};
+    byNet[net].t+=m('lifetime.engagements')(p);
+    byNet[net].imp+=m('lifetime.impressions')(p);
+    byNet[net].r+=m('lifetime.reactions')(p);
+    byNet[net].s+=m('lifetime.shares_count')(p);
+    byNet[net].c+=m('lifetime.comments_count')(p);
+    byNet[net].n++;
   });
-  const netEntries=Object.entries(byNet).sort((a,b)=>(b[1].t/b[1].c)-(a[1].t/a[1].c));
-  const maxReact=Math.max(...netEntries.map(([,d])=>d.c>0?d.reactions/d.c:0),1);
-  const maxShare=Math.max(...netEntries.map(([,d])=>d.c>0?d.shares/d.c:0),1);
-  const maxComment=Math.max(...netEntries.map(([,d])=>d.c>0?d.comments/d.c:0),1);
+  var netEntries=Object.keys(byNet).map(function(k){return[k,byNet[k]];}).sort(function(a,b){return(b[1].t/b[1].n)-(a[1].t/a[1].n);});
+  var maxR=Math.max.apply(null,netEntries.map(function(e){return e[1].n>0?e[1].r/e[1].n:0;}).concat([1]));
+  var maxS=Math.max.apply(null,netEntries.map(function(e){return e[1].n>0?e[1].s/e[1].n:0;}).concat([1]));
+  var maxC=Math.max.apply(null,netEntries.map(function(e){return e[1].n>0?e[1].c/e[1].n:0;}).concat([1]));
 
-  const engList=sorted.map(p=>m('lifetime.engagements')(p));
-  const maxE=Math.max(...engList,1);
-  const buckets=5;
-  const dist=Array(buckets).fill(0);
-  engList.forEach(e=>dist[Math.min(buckets-1,Math.floor((e/maxE)*buckets))]++);
-  const maxDist=Math.max(...dist,1);
+  var engList=posts.map(m('lifetime.engagements'));
+  var maxE=Math.max.apply(null,engList.concat([1]));
+  var dist=[0,0,0,0,0];
+  engList.forEach(function(e){dist[Math.min(4,Math.floor((e/maxE)*5))]++;});
+  var maxDist=Math.max.apply(null,dist.concat([1]));
 
-  const shareList=sorted.map(p=>m('lifetime.shares_count')(p));
-  const likeList=sorted.map(p=>m('lifetime.reactions')(p));
-  const maxS=Math.max(...shareList,1), maxL=Math.max(...likeList,1);
+  var shareList=posts.map(m('lifetime.shares_count'));
+  var likeList=posts.map(m('lifetime.reactions'));
+  var maxSc=Math.max.apply(null,shareList.concat([1]));
+  var maxLc=Math.max.apply(null,likeList.concat([1]));
+  var topEngVal=avg(top,m('lifetime.engagements'));
+  var botEngVal=avg(bot,m('lifetime.engagements'));
 
-  const scatterDots=sorted.slice(0,20).map((p,i)=>{
-    const s=m('lifetime.shares_count')(p), l=m('lifetime.reactions')(p);
-    const x=Math.round((s/maxS)*88)+6, y=Math.round(100-(l/maxL)*88)+6;
-    const e=m('lifetime.engagements')(p);
-    const c=e>topEng?'var(--green)':e<botEng?'var(--red)':'var(--amber)';
-    return '<div class="pat-scatter-dot" title="Post #'+(i+1)+'" style="left:'+x+'%;top:'+y+'%;background:'+c+';border:2px solid '+c.replace(')','-dim)').replace('var(--','var(--')+'"></div>';
-  }).join('');
+  var tab=document.getElementById('tab-patterns');
+  tab.innerHTML='';
 
-  document.getElementById('tab-patterns').innerHTML=
-    '<div class="pat-grid">'+
-    '<div class="pat-card"><div class="pat-title">Top 25% vs Bottom 25% of posts</div>'+
-      '<div class="pat-compare">'+
-        '<div class="pat-group pat-group-top"><div class="pat-group-label">Top '+cutoff+' posts</div>'+
-          '<div class="pat-stat-row"><span class="pat-stat-key">Avg eng</span><span class="pat-stat-val">'+fmtNum(Math.round(topEng))+'</span></div>'+
-          '<div class="pat-stat-row"><span class="pat-stat-key">Avg reach</span><span class="pat-stat-val">'+fmtNum(Math.round(topImp))+'</span></div>'+
-          '<div class="pat-stat-row"><span class="pat-stat-key">Eng rate</span><span class="pat-stat-val">'+topER+'%</span></div>'+
-          '<div class="pat-stat-row"><span class="pat-stat-key">Avg shares</span><span class="pat-stat-val">'+fmtNum(Math.round(topShares))+'</span></div>'+
-          '<div class="pat-stat-row"><span class="pat-stat-key">Avg comments</span><span class="pat-stat-val">'+fmtNum(Math.round(topComments))+'</span></div>'+
-        '</div>'+
-        '<div class="pat-group pat-group-bot"><div class="pat-group-label">Bottom '+cutoff+' posts</div>'+
-          '<div class="pat-stat-row"><span class="pat-stat-key">Avg eng</span><span class="pat-stat-val">'+fmtNum(Math.round(botEng))+'</span></div>'+
-          '<div class="pat-stat-row"><span class="pat-stat-key">Avg reach</span><span class="pat-stat-val">'+fmtNum(Math.round(botImp))+'</span></div>'+
-          '<div class="pat-stat-row"><span class="pat-stat-key">Eng rate</span><span class="pat-stat-val">'+botER+'%</span></div>'+
-          '<div class="pat-stat-row"><span class="pat-stat-key">Avg shares</span><span class="pat-stat-val">'+fmtNum(Math.round(botShares))+'</span></div>'+
-          '<div class="pat-stat-row"><span class="pat-stat-key">Avg comments</span><span class="pat-stat-val">'+fmtNum(Math.round(botComments))+'</span></div>'+
-        '</div>'+
-      '</div>'+
-    '</div>'+
-    '<div class="pat-card"><div class="pat-title">Platform breakdown - reactions vs shares vs comments</div>'+
-      netEntries.map(([net,d])=>{
-        const avgR=d.c>0?Math.round(d.reactions/d.c):0;
-        const avgS=d.c>0?Math.round(d.shares/d.c):0;
-        const avgC=d.c>0?Math.round(d.comments/d.c):0;
-        const rPct=Math.round((avgR/maxReact)*100), sPct=Math.round((avgS/maxShare)*100), cPct=Math.round((avgC/maxComment)*100);
-        return '<div style="margin-bottom:14px"><div style="font-size:11px;font-weight:600;color:var(--text);margin-bottom:8px;display:flex;align-items:center;gap:6px"><div style="width:8px;height:8px;border-radius:50%;background:'+netColor(net)+'"></div>'+net+' <span style="font-size:10px;color:var(--text3);font-weight:400">('+d.c+' posts)</span></div>'+
-          '<div class="pat-pbar-row"><div class="pat-pbar-label">Reactions</div><div class="pat-pbar-track"><div class="pat-pbar-fill" style="width:'+rPct+'%;background:var(--coral)"></div></div><div class="pat-pbar-val">'+fmtNum(avgR)+'</div></div>'+
-          '<div class="pat-pbar-row"><div class="pat-pbar-label">Shares</div><div class="pat-pbar-track"><div class="pat-pbar-fill" style="width:'+sPct+'%;background:var(--green)"></div></div><div class="pat-pbar-val">'+fmtNum(avgS)+'</div></div>'+
-          '<div class="pat-pbar-row" style="margin-bottom:0"><div class="pat-pbar-label">Comments</div><div class="pat-pbar-track"><div class="pat-pbar-fill" style="width:'+cPct+'%;background:var(--amber)"></div></div><div class="pat-pbar-val">'+fmtNum(avgC)+'</div></div>'+
-          '</div>';
-      }).join('')+
-    '</div>'+
-    '<div class="pat-card"><div class="pat-title">Engagement distribution - how consistent is your performance?</div>'+
-      '<div style="display:flex;align-items:flex-end;gap:4px;height:80px">'+
-        dist.map((v,i)=>'<div style="flex:1;border-radius:3px 3px 0 0;background:var(--coral);opacity:'+(0.4+i*0.15)+';height:'+Math.round((v/maxDist)*100)+'%"></div>').join('')+
-      '</div>'+
-      '<div style="display:flex;gap:4px;margin-top:6px">'+
-        ['Low','','Mid','','High'].map(l=>'<div style="flex:1;font-size:9px;color:var(--text3);text-align:center">'+l+'</div>').join('')+
-      '</div>'+
-      '<div style="margin-top:12px;font-size:11px;color:var(--text2)">'+
-        (dist[0]+dist[1]>dist[3]+dist[4]?'Most posts are underperforming. A few outliers are carrying your metrics.':dist[3]+dist[4]>dist[0]+dist[1]?'Strong consistent performance. Your content is reliably engaging.':'Mixed distribution. Some consistency but also high variance.')+
-      '</div>'+
-    '</div>'+
-    '<div class="pat-card"><div class="pat-title">Sends vs likes scatter - viral vs feel-good content</div>'+
-      '<div class="pat-scatter" style="margin-bottom:8px;">'+scatterDots+
-        '<div style="position:absolute;bottom:4px;left:0;right:0;text-align:center;font-size:9px;color:var(--text3)">Sends &rarr;</div>'+
-        '<div style="position:absolute;top:0;bottom:0;left:4px;display:flex;align-items:center;font-size:9px;color:var(--text3);writing-mode:vertical-rl;transform:rotate(180deg)">Likes &uarr;</div>'+
-      '</div>'+
-      '<div style="display:flex;gap:14px;font-size:10px;color:var(--text3)">'+
-        '<span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block"></span>Top 25%</span>'+
-        '<span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:50%;background:var(--amber);display:inline-block"></span>Average</span>'+
-        '<span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:50%;background:var(--red);display:inline-block"></span>Bottom 25%</span>'+
-      '</div>'+
-    '</div>'+
-    '</div>';
+  var grid=document.createElement('div');
+  grid.className='pat-grid';
+
+  // Panel 1: Top vs Bottom
+  var p1=document.createElement('div');p1.className='pat-card';
+  var rows1=[['Avg engagement',fmtNum(Math.round(tEng)),fmtNum(Math.round(bEng))],['Avg reach',fmtNum(Math.round(tImp)),fmtNum(Math.round(bImp))],['Eng rate',tER+'%',bER+'%'],['Avg shares',fmtNum(Math.round(tShares)),fmtNum(Math.round(bShares))],['Avg comments',fmtNum(Math.round(tComments)),fmtNum(Math.round(bComments))],['Avg reactions',fmtNum(Math.round(tReactions)),fmtNum(Math.round(bReactions))]];
+  var h1='<div class="pat-title">Top '+cut+' posts vs bottom '+cut+' posts</div><div class="pat-compare">';
+  h1+='<div class="pat-group pat-group-top"><div class="pat-group-label">Top performers</div>';
+  rows1.forEach(function(r){h1+='<div class="pat-stat-row"><span class="pat-stat-key">'+r[0]+'</span><span class="pat-stat-val">'+r[1]+'</span></div>';});
+  h1+='</div><div class="pat-group pat-group-bot"><div class="pat-group-label">Underperformers</div>';
+  rows1.forEach(function(r){h1+='<div class="pat-stat-row"><span class="pat-stat-key">'+r[0]+'</span><span class="pat-stat-val">'+r[2]+'</span></div>';});
+  h1+='</div></div>';
+  p1.innerHTML=h1;
+
+  // Panel 2: Platform breakdown
+  var p2=document.createElement('div');p2.className='pat-card';
+  var h2='<div class="pat-title">Platform breakdown - reactions, shares, comments</div>';
+  netEntries.forEach(function(entry){
+    var net=entry[0],d=entry[1];
+    var avgR=d.n>0?Math.round(d.r/d.n):0,avgS=d.n>0?Math.round(d.s/d.n):0,avgC=d.n>0?Math.round(d.c/d.n):0;
+    var rp=Math.round((avgR/maxR)*100),sp=Math.round((avgS/maxS)*100),cp=Math.round((avgC/maxC)*100);
+    h2+='<div style="margin-bottom:14px"><div style="font-size:11px;font-weight:600;color:var(--text);margin-bottom:8px;display:flex;align-items:center;gap:6px">';
+    h2+='<div style="width:8px;height:8px;border-radius:50%;background:'+netColor(net)+'"></div>'+net;
+    h2+='<span style="font-size:10px;color:var(--text3);font-weight:400">('+d.n+' posts)</span></div>';
+    h2+='<div class="pat-pbar-row"><div class="pat-pbar-label">Reactions</div><div class="pat-pbar-track"><div class="pat-pbar-fill" style="width:'+rp+'%;background:var(--coral)"></div></div><div class="pat-pbar-val">'+fmtNum(avgR)+'</div></div>';
+    h2+='<div class="pat-pbar-row"><div class="pat-pbar-label">Shares</div><div class="pat-pbar-track"><div class="pat-pbar-fill" style="width:'+sp+'%;background:var(--green)"></div></div><div class="pat-pbar-val">'+fmtNum(avgS)+'</div></div>';
+    h2+='<div class="pat-pbar-row"><div class="pat-pbar-label">Comments</div><div class="pat-pbar-track"><div class="pat-pbar-fill" style="width:'+cp+'%;background:var(--amber)"></div></div><div class="pat-pbar-val">'+fmtNum(avgC)+'</div></div>';
+    h2+='</div>';
+  });
+  p2.innerHTML=h2;
+
+  // Panel 3: Distribution
+  var p3=document.createElement('div');p3.className='pat-card';
+  var distMsg=dist[0]+dist[1]>dist[3]+dist[4]?'Most posts underperform. A few outliers carry your metrics.':dist[3]+dist[4]>dist[0]+dist[1]?'Strong consistent performance. Content is reliably engaging.':'Mixed results. High variance in performance.';
+  var h3='<div class="pat-title">Engagement distribution - how consistent are you?</div>';
+  h3+='<div style="display:flex;align-items:flex-end;gap:4px;height:80px">';
+  dist.forEach(function(v,i){h3+='<div style="flex:1;border-radius:3px 3px 0 0;background:var(--coral);opacity:'+(0.35+i*0.16)+';height:'+Math.round((v/maxDist)*100)+'%"></div>';});
+  h3+='</div><div style="display:flex;gap:4px;margin-top:6px">';
+  ['Low','','Mid','','High'].forEach(function(l){h3+='<div style="flex:1;font-size:9px;color:var(--text3);text-align:center">'+l+'</div>';});
+  h3+='</div><div style="margin-top:12px;font-size:11px;color:var(--text2)">'+distMsg+'</div>';
+  p3.innerHTML=h3;
+
+  // Panel 4: Scatter
+  var p4=document.createElement('div');p4.className='pat-card';
+  var h4='<div class="pat-title">Sends vs likes - viral content vs feel-good content</div>';
+  h4+='<div class="pat-scatter" id="scatter-wrap"></div>';
+  h4+='<div style="display:flex;gap:14px;font-size:10px;color:var(--text3);margin-top:8px">';
+  h4+='<span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block"></span>Top 25%</span>';
+  h4+='<span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:50%;background:var(--amber);display:inline-block"></span>Average</span>';
+  h4+='<span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:50%;background:var(--red);display:inline-block"></span>Bottom 25%</span>';
+  h4+='<span style="margin-left:auto;font-style:italic">x=shares, y=likes</span></div>';
+  p4.innerHTML=h4;
+
+  grid.appendChild(p1);grid.appendChild(p2);grid.appendChild(p3);grid.appendChild(p4);
+  tab.appendChild(grid);
+
+  // Add scatter dots after DOM is ready
+  setTimeout(function(){
+    var wrap=document.getElementById('scatter-wrap');
+    if(!wrap)return;
+    var ww=wrap.offsetWidth||300,wh=wrap.offsetHeight||150;
+    sorted.slice(0,25).forEach(function(p,i){
+      var s=m('lifetime.shares_count')(p),l=m('lifetime.reactions')(p);
+      var eng=m('lifetime.engagements')(p);
+      var x=Math.round((s/maxSc)*0.88*100+6),y=Math.round((1-(l/maxLc)*0.88)*100-6);
+      var color=eng>topEngVal*0.8?'var(--green)':eng<botEngVal*1.2?'var(--red)':'var(--amber)';
+      var dot=document.createElement('div');
+      dot.className='pat-dot';
+      dot.title='Post #'+(i+1)+' - S:'+fmtNum(s)+' L:'+fmtNum(l);
+      dot.style.cssText='left:'+x+'%;top:'+y+'%;background:'+color+';border:2px solid '+color+';opacity:0.85';
+      wrap.appendChild(dot);
+    });
+    var xl=document.createElement('div');xl.style.cssText='position:absolute;bottom:4px;left:0;right:0;text-align:center;font-size:9px;color:var(--text3)';xl.textContent='Sends →';wrap.appendChild(xl);
+    var yl=document.createElement('div');yl.style.cssText='position:absolute;top:0;bottom:0;left:4px;display:flex;align-items:center;font-size:9px;color:var(--text3);writing-mode:vertical-rl;transform:rotate(180deg)';yl.textContent='Likes ↑';wrap.appendChild(yl);
+  },50);
 }
+
 function renderAdamTab(posts){
-  const igPosts=posts.filter(p=>p.guid&&(p.guid.startsWith('igmed:')||p.guid.startsWith('igm:')));
-  adamRows=igPosts.map((p,i)=>{
-    const reach=p.metrics?.['lifetime.impressions']||0;
-    const sends=p.metrics?.['lifetime.shares_count']||0;
-    const likes=p.metrics?.['lifetime.reactions']||0;
-    const watchTime=p.metrics?.['lifetime.video_view_time_per_view']||0;
-    const sendRate=reach>0?sends/reach:0,likeRate=reach>0?likes/reach:0;
-    const score=(sendRate*1000)+(likeRate*250)+(watchTime?Math.min(watchTime,60)/60:0);
-    return{idx:i+1,guid:p.guid,reach,sends,sendRate,likes,likeRate,watchTime,score};
-  }).filter(r=>r.reach>0);
-  const tab=document.getElementById('tab-adam');tab.innerHTML='';
-  if(!adamRows.length){tab.innerHTML='<div class="empty-state" style="height:200px"><div class="empty-title">No Instagram posts</div><div class="empty-sub">Select an Instagram profile</div></div>';return;}
-  const summary=document.createElement('div');summary.className='adam-summary-strip';summary.id='adam-summary';tab.appendChild(summary);
-  const toolbar=document.createElement('div');toolbar.className='adam-header';
-  toolbar.innerHTML='<div><select class="ctrl-select" id="adam-type-filter" style="margin-bottom:0"><option value="">All types</option><option value="video">Video / Reel</option><option value="photo">Photo / Static</option></select></div>'+
-    '<div><input class="ctrl-select" id="adam-min-reach" type="number" placeholder="Min reach..." style="margin-bottom:0;padding:7px 10px;"></div>';
-  tab.appendChild(toolbar);
-  const sortBar=document.createElement('div');sortBar.className='adam-sort-bar';
-  sortBar.innerHTML='<span style="font-size:11px;color:var(--text3);font-weight:600;">Sort by:</span>'+
-    [['score','Signal Score'],['sendRate','Sends/Reach'],['likeRate','Likes/Reach'],['reach','Reach'],['watchTime','Watch Time']].map(([key,label])=>
-      '<button class="adam-sort-btn'+(key===adamSortKey?' active':'')+'" onclick="adamSort(''+key+'')">'+label+'</button>'
-    ).join('');
+  var igPosts=posts.filter(function(p){return p.guid&&(p.guid.indexOf('igmed:')===0||p.guid.indexOf('igm:')===0);});
+  adamRows=igPosts.map(function(p,i){
+    var reach=(p.metrics&&p.metrics['lifetime.impressions'])||0;
+    var sends=(p.metrics&&p.metrics['lifetime.shares_count'])||0;
+    var likes=(p.metrics&&p.metrics['lifetime.reactions'])||0;
+    var watchTime=(p.metrics&&p.metrics['lifetime.video_view_time_per_view'])||0;
+    var sendRate=reach>0?sends/reach:0,likeRate=reach>0?likes/reach:0;
+    var score=(sendRate*1000)+(likeRate*250)+(watchTime?Math.min(watchTime,60)/60:0);
+    return{idx:i+1,guid:p.guid,reach:reach,sends:sends,sendRate:sendRate,likes:likes,likeRate:likeRate,watchTime:watchTime,score:score};
+  }).filter(function(r){return r.reach>0;});
+
+  var tab=document.getElementById('tab-adam');
+  tab.innerHTML='';
+
+  if(!adamRows.length){
+    tab.innerHTML='<div class="empty-state" style="height:200px"><div class="empty-title">No Instagram posts</div><div class="empty-sub">Select an Instagram profile</div></div>';
+    return;
+  }
+
+  // Summary strip
+  var strip=document.createElement('div');strip.className='adam-summary-strip';strip.id='adam-summary';tab.appendChild(strip);
+  renderAdamSummary();
+
+  // Sort buttons
+  var sortBar=document.createElement('div');sortBar.className='adam-sort-bar';
+  var sortKeys=[['score','Signal Score'],['sendRate','Sends/Reach'],['likeRate','Likes/Reach'],['reach','Reach'],['watchTime','Watch Time']];
+  sortKeys.forEach(function(sk){
+    var btn=document.createElement('button');
+    btn.className='adam-sort-btn'+(sk[0]===adamSortKey?' active':'');
+    btn.textContent=sk[1];
+    btn.dataset.key=sk[0];
+    btn.onclick=function(){adamSort(sk[0]);};
+    sortBar.appendChild(btn);
+  });
   tab.appendChild(sortBar);
-  const cards=document.createElement('div');cards.id='adam-cards';tab.appendChild(cards);
-  const note=document.createElement('div');note.className='adam-note';
+
+  // Filters
+  var filters=document.createElement('div');filters.className='adam-filters';
+  filters.innerHTML='<div><select class="ctrl-select" id="adam-type" style="margin-bottom:0"><option value="">All types</option><option value="video">Video/Reel</option><option value="photo">Photo/Static</option></select></div>'+
+    '<div><input class="ctrl-select" id="adam-min-reach" type="number" placeholder="Min reach..." style="margin-bottom:0;padding:7px 10px"></div>';
+  tab.appendChild(filters);
+
+  // Cards container
+  var cards=document.createElement('div');cards.id='adam-cards';tab.appendChild(cards);
+
+  // Note
+  var note=document.createElement('div');note.className='adam-note';
   note.textContent='Signal Score: sends/reach x1000 + likes/reach x250 + watch time contribution. Based on Adam Mosseri stated Instagram distribution signals.';
   tab.appendChild(note);
-  document.getElementById('adam-type-filter').addEventListener('change',renderAdamTable);
-  document.getElementById('adam-min-reach').addEventListener('input',renderAdamTable);
-  renderAdamSummary();renderAdamTable();
+
+  document.getElementById('adam-type').addEventListener('change',renderAdamCards);
+  document.getElementById('adam-min-reach').addEventListener('input',renderAdamCards);
+  renderAdamCards();
 }
+
 function renderAdamSummary(){
-  const el=document.getElementById('adam-summary');if(!el)return;
-  const avg=arr=>arr.length?arr.reduce((a,b)=>a+b,0)/arr.length:0;
-  const avgSend=avg(adamRows.map(r=>r.sendRate)),avgLike=avg(adamRows.map(r=>r.likeRate));
-  const watchRows=adamRows.filter(r=>r.watchTime>0),avgWatch=avg(watchRows.map(r=>r.watchTime));
-  el.innerHTML=[['IG Posts',adamRows.length],['Avg Sends/Reach',(avgSend*100).toFixed(2)+'%'],['Avg Likes/Reach',(avgLike*100).toFixed(2)+'%'],['Avg Watch Time',watchRows.length?timeFmt(avgWatch):'--']]
-    .map(([l,v])=>'<div class="adam-cell"><div class="adam-cell-label">'+l+'</div><div class="adam-cell-value">'+v+'</div></div>').join('');
+  var el=document.getElementById('adam-summary');if(!el)return;
+  function avg(arr,fn){return arr.length?arr.reduce(function(s,r){return s+fn(r);},0)/arr.length:0;}
+  var avgS=avg(adamRows,function(r){return r.sendRate;}),avgL=avg(adamRows,function(r){return r.likeRate;});
+  var wRows=adamRows.filter(function(r){return r.watchTime>0;}),avgW=avg(wRows,function(r){return r.watchTime;});
+  var cells=[['IG Posts',adamRows.length],['Avg Sends/Reach',pct(avgS)],['Avg Likes/Reach',pct(avgL)],['Avg Watch Time',wRows.length?timeFmt(avgW):'--']];
+  var html='';
+  cells.forEach(function(c){html+='<div class="adam-cell"><div class="adam-cell-label">'+c[0]+'</div><div class="adam-cell-value">'+c[1]+'</div></div>';});
+  el.innerHTML=html;
 }
-function timeFmt(s){if(!s||s<=0)return'--';if(s<60)return s.toFixed(1)+'s';const m=Math.floor(s/60),sec=Math.round(s%60);return m+':'+(sec<10?'0':'')+sec;}
+
+function timeFmt(s){if(!s||s<=0)return'--';if(s<60)return s.toFixed(1)+'s';var m=Math.floor(s/60),sec=Math.round(s%60);return m+':'+(sec<10?'0':'')+sec;}
+
 function adamSort(key){
   if(adamSortKey===key)adamSortDir=adamSortDir==='asc'?'desc':'asc';
   else{adamSortKey=key;adamSortDir='desc';}
-  document.querySelectorAll('.adam-sort-btn').forEach(btn=>{
-    btn.classList.toggle('active',btn.textContent.toLowerCase().includes(key==='score'?'signal':key==='sendRate'?'sends':key==='likeRate'?'likes':key==='watchTime'?'watch':key));
-  });
-  renderAdamTable();
+  document.querySelectorAll('.adam-sort-btn').forEach(function(btn){btn.classList.toggle('active',btn.dataset.key===key);});
+  renderAdamCards();
 }
-function renderAdamTable(){
+
+function renderAdamCards(){
   var container=document.getElementById('adam-cards');if(!container)return;
-  var minReach=parseFloat(document.getElementById('adam-min-reach')&&document.getElementById('adam-min-reach').value||0)||0;
-  var typeFilter=document.getElementById('adam-type-filter')&&document.getElementById('adam-type-filter').value||'';
-  var data=adamRows.filter(function(r){return r.reach>=minReach});
-  if(typeFilter==='video')data=data.filter(function(r){return r.watchTime>0});
-  if(typeFilter==='photo')data=data.filter(function(r){return r.watchTime===0});
-  data=data.slice().sort(function(a,b){return adamSortDir==='asc'?a[adamSortKey]-b[adamSortKey]:b[adamSortKey]-a[adamSortKey]});
+  var minReach=parseFloat((document.getElementById('adam-min-reach')&&document.getElementById('adam-min-reach').value)||0)||0;
+  var typeFilter=(document.getElementById('adam-type')&&document.getElementById('adam-type').value)||'';
+  var data=adamRows.filter(function(r){return r.reach>=minReach;});
+  if(typeFilter==='video')data=data.filter(function(r){return r.watchTime>0;});
+  if(typeFilter==='photo')data=data.filter(function(r){return r.watchTime===0;});
+  data=data.slice().sort(function(a,b){return adamSortDir==='asc'?a[adamSortKey]-b[adamSortKey]:b[adamSortKey]-a[adamSortKey];});
   if(!data.length){container.innerHTML='<div style="text-align:center;padding:32px;color:var(--text3)">No posts match filters</div>';return;}
-  var maxScore=Math.max.apply(null,data.map(function(r){return r.score}).concat([1]));
+  var maxScore=Math.max.apply(null,data.map(function(r){return r.score;}).concat([1]));
   container.innerHTML='';
   data.forEach(function(r,i){
-    var url=guidToUrl(r.guid);
     var verdict=r.score>maxScore*0.75?'strong':r.score>maxScore*0.4?'mid':'weak';
     var vLabel=verdict==='strong'?'Top signal':verdict==='weak'?'Low signal':'Average';
-    var dashLen=138, filled=Math.round((r.score/maxScore)*dashLen);
+    var dashLen=138,filled=Math.round((r.score/maxScore)*dashLen);
     var scoreColor=verdict==='strong'?'var(--coral)':verdict==='weak'?'var(--text3)':'var(--amber)';
     var srColor=r.sendRate>=0.01?'var(--green)':r.sendRate>=0.004?'var(--amber)':'var(--red)';
     var lrColor=r.likeRate>=0.04?'var(--green)':r.likeRate>=0.02?'var(--amber)':'var(--red)';
-    var pct=function(v){return(v*100).toFixed(2)+'%'};
-    var card=document.createElement('div');
-    card.className='adam-card';
-    card.innerHTML=
-      '<div class="adam-donut-wrap">'+
-        '<svg class="adam-donut" viewBox="0 0 56 56">'+
-          '<circle cx="28" cy="28" r="22" fill="none" stroke="var(--surface2)" stroke-width="6"/>'+
-          '<circle cx="28" cy="28" r="22" fill="none" stroke="'+scoreColor+'" stroke-width="6" stroke-dasharray="'+filled+' '+(dashLen-filled)+'" stroke-dashoffset="34" stroke-linecap="round"/>'+
-          '<text x="28" y="32" text-anchor="middle" font-size="11" font-weight="700" fill="'+scoreColor+'">'+r.score.toFixed(1)+'</text>'+
-        '</svg>'+
-        '<div class="adam-donut-lbl">signal</div>'+
-      '</div>'+
-      '<div class="adam-card-main">'+
-        '<div class="adam-card-top">'+
-          '<span class="adam-card-title">#'+(i+1)+' Post #'+r.idx+'</span>'+
-          '<span class="adam-pill '+verdict+'">'+vLabel+'</span>'+
-          (url ? '<a href="'+url+'" target="_blank" class="post-link">View</a>' : '')+
-          '<span style="font-size:10px;color:var(--text3);margin-left:auto">'+r.guid.slice(0,22)+'...</span>'+
-        '</div>'+
-        '<div class="adam-card-metrics">'+
-          '<div class="adam-card-metric"><div class="adam-cml">Reach</div><div class="adam-cmv">'+fmtNum(r.reach)+'</div><div class="adam-cms">impressions</div></div>'+
-          '<div class="adam-card-metric"><div class="adam-cml">Sends / reach</div><div class="adam-cmv" style="color:'+srColor+'">'+pct(r.sendRate)+'</div><div class="adam-cms">'+fmtNum(r.sends)+' sends</div></div>'+
-          '<div class="adam-card-metric"><div class="adam-cml">Likes / reach</div><div class="adam-cmv" style="color:'+lrColor+'">'+pct(r.likeRate)+'</div><div class="adam-cms">'+fmtNum(r.likes)+' likes</div></div>'+
-        '</div>'+
-      '</div>';
+    var card=document.createElement('div');card.className='adam-card';
+    var url=guidToUrl(r.guid);
+    var inner='<div class="adam-donut-wrap">';
+    inner+='<svg width="56" height="56" viewBox="0 0 56 56">';
+    inner+='<circle cx="28" cy="28" r="22" fill="none" stroke="var(--surface2)" stroke-width="6"/>';
+    inner+='<circle cx="28" cy="28" r="22" fill="none" stroke="'+scoreColor+'" stroke-width="6" stroke-dasharray="'+filled+' '+(dashLen-filled)+'" stroke-dashoffset="34" stroke-linecap="round"/>';
+    inner+='<text x="28" y="32" text-anchor="middle" font-size="11" font-weight="700" fill="'+scoreColor+'">'+r.score.toFixed(1)+'</text>';
+    inner+='</svg><div class="adam-donut-lbl">signal</div></div>';
+    inner+='<div class="adam-card-main">';
+    inner+='<div class="adam-card-top">';
+    inner+='<span class="adam-card-title">#'+(i+1)+' Post #'+r.idx+'</span>';
+    inner+='<span class="adam-pill '+verdict+'">'+vLabel+'</span>';
+    if(url)inner+='<a href="'+url+'" target="_blank" class="post-link">View &rarr;</a>';
+    inner+='<span style="font-size:10px;color:var(--text3);margin-left:auto">'+r.guid.slice(0,22)+'...</span>';
+    inner+='</div>';
+    inner+='<div class="adam-card-metrics">';
+    inner+='<div class="adam-card-metric"><div class="adam-cml">Reach</div><div class="adam-cmv">'+fmtNum(r.reach)+'</div><div class="adam-cms">impressions</div></div>';
+    inner+='<div class="adam-card-metric"><div class="adam-cml">Sends / reach</div><div class="adam-cmv" style="color:'+srColor+'">'+pct(r.sendRate)+'</div><div class="adam-cms">'+fmtNum(r.sends)+' sends</div></div>';
+    inner+='<div class="adam-card-metric"><div class="adam-cml">Likes / reach</div><div class="adam-cmv" style="color:'+lrColor+'">'+pct(r.likeRate)+'</div><div class="adam-cms">'+fmtNum(r.likes)+' likes</div></div>';
+    inner+='</div></div>';
+    card.innerHTML=inner;
     container.appendChild(card);
   });
 }
+
 function switchTab(name,btn){
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
-  btn.classList.add('active');document.getElementById('tab-'+name).classList.add('active');
+  document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});
+  document.querySelectorAll('.tab-pane').forEach(function(p){p.classList.remove('active');});
+  btn.classList.add('active');
+  document.getElementById('tab-'+name).classList.add('active');
 }
-document.addEventListener('DOMContentLoaded',async()=>{
+
+document.addEventListener('DOMContentLoaded',function(){
   setStatus('Loading profiles...','loading');
-  try{
-    const cd=await sproutGet('/v1/metadata/client');
+  sproutGet('/v1/metadata/client').then(function(cd){
     customerId=(cd.data&&cd.data[0])?String(cd.data[0].customer_id):'';
-    const pd=await sproutGet('/v1/'+customerId+'/metadata/customer');
+    return sproutGet('/v1/'+customerId+'/metadata/customer');
+  }).then(function(pd){
     allProfiles=pd.data||[];
     renderSidebar();
     setStatus(allProfiles.length+' profiles loaded','ok');
-  }catch(e){setStatus('Connection error','error');}
+  }).catch(function(e){
+    setStatus('Connection error: '+e.message,'error');
+  });
 });
 </script>
 </body>
