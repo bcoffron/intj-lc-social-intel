@@ -123,6 +123,11 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 .adam-pill.strong{background:var(--green-dim);color:var(--green)}
 .adam-pill.mid{background:var(--amber-dim);color:var(--amber)}
 .adam-pill.weak{background:var(--red-dim);color:var(--red)}
+.tooltip-wrap{position:relative;display:inline-flex;align-items:center;gap:4px;cursor:default}
+.tooltip-icon{width:14px;height:14px;border-radius:50%;background:var(--surface2);border:1px solid var(--border2);display:inline-flex;align-items:center;justify-content:center;font-size:9px;color:var(--text3);font-weight:700;flex-shrink:0;font-family:'DM Sans',sans-serif}
+.tooltip-box{display:none;position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:var(--text);color:var(--bg);font-size:11px;line-height:1.5;padding:10px 13px;border-radius:8px;width:260px;z-index:200;font-family:'DM Sans',sans-serif;font-weight:400}
+.tooltip-box::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--text)}
+.tooltip-wrap:hover .tooltip-box{display:block}
 ::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
 @keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
@@ -301,7 +306,7 @@ function runAnalysis(){
   setStatus('Fetching analytics...','loading');
   sproutPost('/v1/'+customerId+'/analytics/posts',{
     filters:['customer_profile_id.eq('+selectedProfiles.join(',')+')', 'created_time.in('+range.start+'..'+range.end+')'],
-    metrics:['lifetime.impressions','lifetime.engagements','lifetime.reactions','lifetime.shares_count','lifetime.comments_count'],
+    metrics:['lifetime.impressions','lifetime.engagements','lifetime.reactions','lifetime.shares_count','lifetime.comments_count','lifetime.video_view_time_per_view','lifetime.video_views'],
     page_size:100
   }).then(function(postRes){
     var posts=postRes.data||[];
@@ -494,7 +499,7 @@ function renderAdamTab(posts){
     var reach=(p.metrics&&p.metrics['lifetime.impressions'])||0;
     var sends=(p.metrics&&p.metrics['lifetime.shares_count'])||0;
     var likes=(p.metrics&&p.metrics['lifetime.reactions'])||0;
-    var watchTime=(p.metrics&&p.metrics['lifetime.video_view_time_per_view'])||0;
+    var watchTime=(p.metrics&&(p.metrics['lifetime.video_view_time_per_view']||p.metrics['lifetime.video_views']))||0;
     var sendRate=reach>0?sends/reach:0,likeRate=reach>0?likes/reach:0;
     var score=(sendRate*1000)+(likeRate*250)+(watchTime?Math.min(watchTime,60)/60:0);
     return{idx:i+1,guid:p.guid,reach:reach,sends:sends,sendRate:sendRate,likes:likes,likeRate:likeRate,watchTime:watchTime,score:score};
@@ -514,7 +519,7 @@ function renderAdamTab(posts){
 
   // Sort buttons
   var sortBar=document.createElement('div');sortBar.className='adam-sort-bar';
-  var sortKeys=[['score','Signal Score'],['sendRate','Sends/Reach'],['likeRate','Likes/Reach'],['reach','Reach'],['watchTime','Watch Time']];
+  var sortKeys=[['score','Signal Score ℹ'],['sendRate','Sends/Reach'],['likeRate','Likes/Reach'],['reach','Reach'],['watchTime','Watch Time']];
   sortKeys.forEach(function(sk){
     var btn=document.createElement('button');
     btn.className='adam-sort-btn'+(sk[0]===adamSortKey?' active':'');
@@ -536,7 +541,7 @@ function renderAdamTab(posts){
 
   // Note
   var note=document.createElement('div');note.className='adam-note';
-  note.textContent='Signal Score: sends/reach x1000 + likes/reach x250 + watch time contribution. Based on Adam Mosseri stated Instagram distribution signals.';
+  note.innerHTML='<strong>Signal Score</strong> — a weighted formula based on what Adam Mosseri has said drives Instagram distribution: <strong>Sends/reach x1000</strong> (DMs are Instagram\'s strongest signal), <strong>Likes/reach x250</strong> (secondary engagement signal), plus a small watch time bonus for video. A score of 30+ means strong distribution potential. Under 10 means people like it but aren\'t sharing it — Instagram won\'t push it far.';
   tab.appendChild(note);
 
   document.getElementById('adam-type').addEventListener('change',renderAdamCards);
