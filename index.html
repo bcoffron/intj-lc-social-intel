@@ -537,12 +537,13 @@ function renderAdamTab(posts){
   tab.appendChild(filters);
 
   // Cards container
+  tab.appendChild(infoBar);
   var cards=document.createElement('div');cards.id='adam-cards';tab.appendChild(cards);
 
   // Note
-  var note=document.createElement('div');note.className='adam-note';
-  note.innerHTML='<strong>Signal Score</strong> — a weighted formula based on what Adam Mosseri has said drives Instagram distribution: <strong>Sends/reach x1000</strong> (DMs are the strongest distribution signal), <strong>Likes/reach x250</strong> (engagement signal), plus a <strong>watch time bonus up to 50pts</strong> for video posts (Reels with 60s+ avg watch time get full bonus). Stories are excluded. A score of 30+ means strong distribution potential. Under 10 means low shareability.';
-  tab.appendChild(note);
+  var infoBar=document.createElement('div');
+  infoBar.style.cssText='font-size:11px;color:var(--text3);padding:10px 14px;background:var(--surface2);border-radius:var(--r);border-left:3px solid var(--coral);margin-bottom:14px';
+  infoBar.innerHTML='<strong style="color:var(--text2)">Signal Score</strong> = Sends/reach ×1000 + Likes/reach ×250 + Watch time bonus (up to 50pts for 60s+ avg). Stories excluded. <strong style="color:var(--coral)">30+</strong> = strong distribution. <strong style="color:var(--amber)">10–30</strong> = average. <strong style="color:var(--red)">Under 10</strong> = low shareability.';
 
   document.getElementById('adam-type').addEventListener('change',renderAdamCards);
   document.getElementById('adam-min-reach').addEventListener('input',renderAdamCards);
