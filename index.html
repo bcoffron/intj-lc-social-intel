@@ -7,644 +7,401 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#fdf6ee;--surface:#fff9f2;--surface2:#f0e8dc;--surface3:#e8ddd0;
-  --border:#e8ddd0;--border2:#d4c4b0;
-  --text:#2d1e0f;--text2:#7a5c3e;--text3:#b8987a;
-  --coral:#e8720a;--coral-dim:rgba(232,114,10,0.1);--coral-bright:#f08030;
-  --green:#2a7a3a;--green-dim:rgba(42,122,58,0.12);
-  --red:#c0392b;--red-dim:rgba(192,57,43,0.1);
-  --amber:#c87a00;--amber-dim:rgba(200,122,0,0.1);
-  --blue:#2a5ab4;--r:10px;
-}
+:root{--bg:#fdf6ee;--sur:#fff9f2;--sur2:#f0e8dc;--bor:#e8ddd0;--bor2:#d4c4b0;--tx:#2d1e0f;--tx2:#7a5c3e;--tx3:#b8987a;--co:#e8720a;--cod:rgba(232,114,10,0.1);--gr:#2a7a3a;--grd:rgba(42,122,58,0.12);--re:#c0392b;--red:rgba(192,57,43,0.1);--am:#c87a00;--amd:rgba(200,122,0,0.1);--bl:#2a5ab4;--r:10px}
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;min-height:100vh;line-height:1.6}
-.header{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(253,246,238,0.96);backdrop-filter:blur(12px);z-index:100}
-.header-brand{display:flex;align-items:center;gap:12px}
-.logo{width:34px;height:34px;background:var(--text);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Instrument Serif',serif;font-size:15px;font-style:italic;color:var(--coral);flex-shrink:0}
-.brand-name{font-family:'Instrument Serif',serif;font-size:18px;color:var(--text);line-height:1}
-.brand-sub{font-size:10px;color:var(--text3);letter-spacing:0.06em;text-transform:uppercase;margin-top:1px}
-.status-pill{display:flex;align-items:center;gap:6px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:5px 13px;font-size:10px;color:var(--text2);font-weight:500}
-.status-dot{width:5px;height:5px;border-radius:50%;background:var(--text3)}
-.status-dot.ok{background:var(--green)}
-.status-dot.loading{background:var(--coral);animation:pulse 1.2s ease-in-out infinite}
-.status-dot.error{background:var(--red)}
+body{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;font-size:13px;min-height:100vh;line-height:1.6}
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;border-bottom:1px solid var(--bor);position:sticky;top:0;background:rgba(253,246,238,0.96);backdrop-filter:blur(12px);z-index:100}
+.hbrand{display:flex;align-items:center;gap:12px}
+.logo{width:34px;height:34px;background:var(--tx);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Instrument Serif',serif;font-size:15px;font-style:italic;color:var(--co);flex-shrink:0}
+.bname{font-family:'Instrument Serif',serif;font-size:18px;color:var(--tx);line-height:1}
+.bsub{font-size:10px;color:var(--tx3);letter-spacing:0.06em;text-transform:uppercase;margin-top:1px}
+.spill{display:flex;align-items:center;gap:6px;background:var(--sur2);border:1px solid var(--bor);border-radius:20px;padding:5px 13px;font-size:10px;color:var(--tx2);font-weight:500}
+.sdot{width:5px;height:5px;border-radius:50%;background:var(--tx3)}
+.sdot.ok{background:var(--gr)}
+.sdot.loading{background:var(--co);animation:pulse 1.2s ease-in-out infinite}
+.sdot.error{background:var(--re)}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
-.app-layout{display:flex;min-height:calc(100vh - 57px)}
-.sidebar{width:220px;flex-shrink:0;border-right:1px solid var(--border);padding:22px 0;position:sticky;top:57px;height:calc(100vh - 57px);overflow-y:auto;background:var(--surface)}
-.sidebar-section{margin-bottom:26px}
-.sidebar-label{font-size:9px;font-weight:700;color:var(--text3);letter-spacing:0.12em;text-transform:uppercase;padding:0 18px;margin-bottom:8px}
-.sidebar-content{padding:0 14px}
-.profile-item{display:flex;align-items:center;gap:9px;padding:6px 18px;border-left:2px solid transparent}
-.profile-item.active{background:var(--coral-dim);border-left-color:var(--coral)}
-.profile-icon{width:24px;height:24px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
-.profile-name{font-size:12px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500}
-.profile-network{font-size:10px;color:var(--text3)}
-.ctrl-select{width:100%;background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);padding:8px 10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;outline:none;cursor:pointer;margin-bottom:8px}
-.ctrl-select:focus{border-color:var(--coral)}
-.run-btn{width:100%;background:var(--text);color:var(--bg);border:none;border-radius:var(--r);padding:11px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.15s}
-.run-btn:hover{background:var(--coral);color:#fff}
-.run-btn:disabled{opacity:0.35;cursor:not-allowed}
-.content{flex:1;padding:26px 32px;min-width:0}
-.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;height:60vh;text-align:center}
-.empty-title{font-family:'Instrument Serif',serif;font-size:32px;color:var(--text2);margin-bottom:8px;font-style:italic}
-.empty-sub{font-size:12px;color:var(--text3)}
-.metrics-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:24px}
-.metric-cell{background:var(--surface);padding:16px 18px}
-.metric-cell-label{font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px}
-.metric-cell-value{font-family:'Instrument Serif',serif;font-size:28px;color:var(--text);line-height:1}
-.tab-bar{display:flex;margin-bottom:22px;border-bottom:1px solid var(--border)}
-.tab-btn{padding:9px 20px;border:none;background:none;color:var(--text3);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.15s}
-.tab-btn:hover{color:var(--text2)}
-.tab-btn.active{color:var(--coral);border-bottom-color:var(--coral);font-weight:600}
-.tab-pane{display:none}.tab-pane.active{display:block}
-.posts-list{display:flex;flex-direction:column;gap:10px}
-.post-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;transition:border-color 0.15s}
-.post-card:hover{border-color:var(--border2)}
-.post-top{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
-.net-badge{font-size:9px;font-weight:700;padding:3px 8px;border-radius:4px;letter-spacing:0.05em;text-transform:uppercase}
-.net-instagram,.net-fb_instagram_account{background:var(--coral-dim);color:var(--coral)}
-.net-facebook{background:rgba(42,90,180,0.1);color:var(--blue)}
-.net-unknown{background:var(--surface2);color:var(--text3)}
-.verdict-badge{font-size:9px;font-weight:700;padding:3px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:0.05em}
-.verdict-strong{background:var(--green-dim);color:var(--green)}
-.verdict-mid{background:var(--amber-dim);color:var(--amber)}
-.verdict-weak{background:var(--red-dim);color:var(--red)}
-.post-link{font-size:11px;color:var(--coral);text-decoration:none;font-weight:500}
-.post-link:hover{opacity:0.7}
-.post-rank{font-size:11px;color:var(--text3);margin-left:auto}
-.post-stats{display:flex;gap:18px;flex-wrap:wrap}
-.stat{font-size:11px;color:var(--text3)}.stat span{color:var(--text);font-weight:600}
-.stat.hl span{color:var(--coral)}
-.pat-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
-.pat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px}
-.pat-card.full{grid-column:span 2}
-.pat-title{font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:16px}
-.pat-compare{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.pat-group{padding:12px;border-radius:8px}
-.pat-group-top{background:var(--green-dim);border:1px solid rgba(42,122,58,0.15)}
-.pat-group-bot{background:var(--red-dim);border:1px solid rgba(192,57,43,0.15)}
-.pat-group-label{font-size:10px;font-weight:700;margin-bottom:10px;letter-spacing:0.04em}
-.pat-group-top .pat-group-label{color:var(--green)}
-.pat-group-bot .pat-group-label{color:var(--red)}
-.pat-stat-row{display:flex;justify-content:space-between;margin-bottom:6px;font-size:11px}
-.pat-stat-key{color:var(--text2)}.pat-stat-val{font-weight:600;color:var(--text)}
-.pat-pbar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
-.pat-pbar-label{font-size:11px;color:var(--text2);width:80px;flex-shrink:0;font-weight:500}
-.pat-pbar-track{flex:1;background:var(--surface2);border-radius:2px;height:5px;overflow:hidden}
-.pat-pbar-fill{height:100%;border-radius:2px;transition:width 0.6s}
-.pat-pbar-val{font-size:11px;color:var(--text);width:45px;text-align:right;font-weight:600}
-.pat-scatter{position:relative;height:150px;border:1px solid var(--border);border-radius:6px;background:var(--surface2);overflow:hidden}
-.pat-dot{position:absolute;width:9px;height:9px;border-radius:50%;transform:translate(-50%,-50%);cursor:default}
-.adam-sort-bar{display:flex;align-items:center;gap:6px;margin-bottom:14px;flex-wrap:wrap}
-.adam-sort-btn{font-size:11px;font-weight:600;padding:5px 12px;border-radius:20px;border:1px solid var(--border2);background:var(--surface);color:var(--text2);cursor:pointer;transition:all 0.15s;font-family:'DM Sans',sans-serif}
-.adam-sort-btn:hover{border-color:var(--coral);color:var(--coral)}
-.adam-sort-btn.active{background:var(--coral);border-color:var(--coral);color:#fff}
-.adam-summary-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:16px}
-.adam-cell{background:var(--surface);padding:14px 16px}
-.adam-cell-label{font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px}
-.adam-cell-value{font-family:'Instrument Serif',serif;font-size:24px;color:var(--text)}
-.adam-filters{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
-.adam-filters>div{flex:1;min-width:120px}
-.adam-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;margin-bottom:10px;display:flex;gap:16px;align-items:flex-start;transition:border-color 0.15s}
-.adam-card:hover{border-color:var(--border2)}
-.adam-donut-wrap{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:4px;width:64px}
-.adam-donut-lbl{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;text-align:center;font-weight:700}
-.adam-card-main{flex:1;min-width:0}
-.adam-card-top{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap}
-.adam-card-title{font-size:13px;font-weight:600;color:var(--text)}
-.adam-card-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.adam-card-metric{background:var(--surface2);border-radius:8px;padding:10px 12px}
-.adam-cml{font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px}
-.adam-cmv{font-size:18px;font-weight:600;color:var(--text);letter-spacing:-0.02em;line-height:1}
-.adam-cms{font-size:10px;color:var(--text3);margin-top:3px}
-.adam-note{font-size:11px;color:var(--text3);margin-top:14px;line-height:1.6;padding:12px 16px;background:var(--surface2);border-radius:var(--r);border-left:3px solid var(--coral)}
-.adam-pill{display:inline-flex;border-radius:4px;padding:2px 8px;font-size:10px;font-weight:700}
-.adam-pill.strong{background:var(--green-dim);color:var(--green)}
-.adam-pill.mid{background:var(--amber-dim);color:var(--amber)}
-.adam-pill.weak{background:var(--red-dim);color:var(--red)}
-.tooltip-wrap{position:relative;display:inline-flex;align-items:center;gap:4px;cursor:default}
-.tooltip-icon{width:14px;height:14px;border-radius:50%;background:var(--surface2);border:1px solid var(--border2);display:inline-flex;align-items:center;justify-content:center;font-size:9px;color:var(--text3);font-weight:700;flex-shrink:0;font-family:'DM Sans',sans-serif}
-.tooltip-box{display:none;position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:var(--text);color:var(--bg);font-size:11px;line-height:1.5;padding:10px 13px;border-radius:8px;width:260px;z-index:200;font-family:'DM Sans',sans-serif;font-weight:400}
-.tooltip-box::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--text)}
-.tooltip-wrap:hover .tooltip-box{display:block}
+.layout{display:flex;min-height:calc(100vh - 57px)}
+.sb{width:220px;flex-shrink:0;border-right:1px solid var(--bor);padding:22px 0;position:sticky;top:57px;height:calc(100vh - 57px);overflow-y:auto;background:var(--sur)}
+.sbl{font-size:9px;font-weight:700;color:var(--tx3);letter-spacing:0.12em;text-transform:uppercase;padding:0 18px;margin-bottom:8px}
+.sbc{padding:0 14px}
+.pit{display:flex;align-items:center;gap:9px;padding:6px 18px;border-left:2px solid transparent}
+.pit.on{background:var(--cod);border-left-color:var(--co)}
+.pico{width:24px;height:24px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
+.pnm{font-size:12px;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500}
+.pnt{font-size:10px;color:var(--tx3)}
+.sel{width:100%;background:var(--sur);border:1px solid var(--bor2);border-radius:var(--r);padding:8px 10px;color:var(--tx);font-family:'DM Sans',sans-serif;font-size:12px;outline:none;cursor:pointer;margin-bottom:8px}
+.sel:focus{border-color:var(--co)}
+.rbtn{width:100%;background:var(--tx);color:var(--bg);border:none;border-radius:var(--r);padding:11px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.15s}
+.rbtn:hover{background:var(--co);color:#fff}
+.rbtn:disabled{opacity:0.35;cursor:not-allowed}
+.con{flex:1;padding:26px 32px;min-width:0}
+.emp{display:flex;flex-direction:column;align-items:center;justify-content:center;height:60vh;text-align:center}
+.etit{font-family:'Instrument Serif',serif;font-size:32px;color:var(--tx2);margin-bottom:8px;font-style:italic}
+.esub{font-size:12px;color:var(--tx3)}
+.mstrip{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--bor);border:1px solid var(--bor);border-radius:var(--r);overflow:hidden;margin-bottom:24px}
+.mc{background:var(--sur);padding:16px 18px}
+.mcl{font-size:9px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px}
+.mcv{font-family:'Instrument Serif',serif;font-size:28px;color:var(--tx);line-height:1}
+.tbr{display:flex;margin-bottom:22px;border-bottom:1px solid var(--bor)}
+.tb{padding:9px 20px;border:none;background:none;color:var(--tx3);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.15s}
+.tb:hover{color:var(--tx2)}
+.tb.on{color:var(--co);border-bottom-color:var(--co);font-weight:600}
+.tp{display:none}.tp.on{display:block}
+.plist{display:flex;flex-direction:column;gap:10px}
+.pcard{background:var(--sur);border:1px solid var(--bor);border-radius:var(--r);padding:16px 18px;transition:border-color 0.15s}
+.pcard:hover{border-color:var(--bor2)}
+.ptop{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.nb{font-size:9px;font-weight:700;padding:3px 8px;border-radius:4px;letter-spacing:0.05em;text-transform:uppercase}
+.nb-instagram,.nb-fb_instagram_account{background:var(--cod);color:var(--co)}
+.nb-facebook{background:rgba(42,90,180,0.1);color:var(--bl)}
+.nb-unknown{background:var(--sur2);color:var(--tx3)}
+.vb{font-size:9px;font-weight:700;padding:3px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:0.05em}
+.vb-strong{background:var(--grd);color:var(--gr)}
+.vb-mid{background:var(--amd);color:var(--am)}
+.vb-weak{background:var(--red);color:var(--re)}
+.vlink{font-size:11px;color:var(--co);text-decoration:none;font-weight:500}
+.vlink:hover{opacity:0.7}
+.prk{font-size:11px;color:var(--tx3);margin-left:auto}
+.pstats{display:flex;gap:18px;flex-wrap:wrap}
+.st{font-size:11px;color:var(--tx3)}.st span{color:var(--tx);font-weight:600}
+.st.hl span{color:var(--co)}
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.pcrd{background:var(--sur);border:1px solid var(--bor);border-radius:var(--r);padding:18px}
+.ptit{font-size:9px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:16px}
+.pcmp{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pg{padding:12px;border-radius:8px}
+.pg-t{background:var(--grd);border:1px solid rgba(42,122,58,0.15)}
+.pg-b{background:var(--red);border:1px solid rgba(192,57,43,0.15)}
+.pglbl{font-size:10px;font-weight:700;margin-bottom:10px;letter-spacing:0.04em}
+.pg-t .pglbl{color:var(--gr)}.pg-b .pglbl{color:var(--re)}
+.psr{display:flex;justify-content:space-between;margin-bottom:6px;font-size:11px}
+.psk{color:var(--tx2)}.psv{font-weight:600;color:var(--tx)}
+.pbr{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.pbl{font-size:11px;color:var(--tx2);width:80px;flex-shrink:0;font-weight:500}
+.pbt{flex:1;background:var(--sur2);border-radius:2px;height:5px;overflow:hidden}
+.pbf{height:100%;border-radius:2px;transition:width 0.6s}
+.pbv{font-size:11px;color:var(--tx);width:45px;text-align:right;font-weight:600}
+.psc{position:relative;height:150px;border:1px solid var(--bor);border-radius:6px;background:var(--sur2);overflow:hidden}
+.pdot{position:absolute;width:9px;height:9px;border-radius:50%;transform:translate(-50%,-50%)}
+.astrip{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--bor);border:1px solid var(--bor);border-radius:var(--r);overflow:hidden;margin-bottom:14px}
+.ac{background:var(--sur);padding:14px 16px}
+.acl{font-size:9px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px}
+.acv{font-family:'Instrument Serif',serif;font-size:22px;color:var(--tx)}
+.asbr{display:flex;align-items:center;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+.asbt{font-size:11px;font-weight:600;padding:5px 12px;border-radius:20px;border:1px solid var(--bor2);background:var(--sur);color:var(--tx2);cursor:pointer;transition:all 0.15s;font-family:'DM Sans',sans-serif}
+.asbt:hover{border-color:var(--co);color:var(--co)}
+.asbt.on{background:var(--co);border-color:var(--co);color:#fff}
+.aflt{display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.aflt>div{flex:1;min-width:120px}
+.anote{font-size:11px;color:var(--tx3);margin-bottom:14px;line-height:1.6;padding:10px 14px;background:var(--sur2);border-radius:var(--r);border-left:3px solid var(--co)}
+.acrd{background:var(--sur);border:1px solid var(--bor);border-radius:var(--r);padding:16px 18px;margin-bottom:10px;display:flex;gap:16px;align-items:flex-start;transition:border-color 0.15s}
+.acrd:hover{border-color:var(--bor2)}
+.adw{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:4px;width:64px}
+.adl{font-size:9px;color:var(--tx3);text-transform:uppercase;letter-spacing:0.08em;text-align:center;font-weight:700}
+.acm{flex:1;min-width:0}
+.act{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.actt{font-size:13px;font-weight:600;color:var(--tx)}
+.acmg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.acmi{background:var(--sur2);border-radius:8px;padding:10px 12px}
+.acmil{font-size:9px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px}
+.acmiv{font-size:18px;font-weight:600;color:var(--tx);letter-spacing:-0.02em;line-height:1}
+.acmis{font-size:10px;color:var(--tx3);margin-top:3px}
+.apill{display:inline-flex;border-radius:4px;padding:2px 8px;font-size:10px;font-weight:700}
+.apill.strong{background:var(--grd);color:var(--gr)}
+.apill.mid{background:var(--amd);color:var(--am)}
+.apill.weak{background:var(--red);color:var(--re)}
 ::-webkit-scrollbar{width:4px;height:4px}
-::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
-@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-#dashboard>*{animation:fadeUp 0.25s ease forwards}
+::-webkit-scrollbar-thumb{background:var(--bor2);border-radius:2px}
 @media(max-width:680px){
-  .app-layout{flex-direction:column}
-  .sidebar{width:100%;height:auto;position:static;border-right:none;border-bottom:1px solid var(--border);padding:12px 0;display:grid;grid-template-columns:1fr 1fr;gap:0}
-  .sidebar-section{margin-bottom:0}
-  .sidebar-content{padding:0 12px}
-  .sidebar-label{padding:0 12px}
-  .profile-item{padding:5px 12px}
-  .content{padding:14px 16px}
-  .metrics-strip{grid-template-columns:repeat(3,1fr)}
-  .metric-cell{padding:10px 12px}
-  .metric-cell-value{font-size:20px}
-  .tab-bar{overflow-x:auto;white-space:nowrap}
-  .tab-btn{padding:8px 12px;font-size:12px}
-  .pat-grid{grid-template-columns:1fr}
-  .pat-card.full{grid-column:span 1}
-  .adam-card{flex-direction:column;gap:10px}
-  .adam-donut-wrap{flex-direction:row;width:100%;justify-content:flex-start;align-items:center;gap:12px}
-  .adam-card-metrics{grid-template-columns:repeat(3,1fr)}
-  .adam-card-metric{padding:8px 10px}
-  .adam-cmv{font-size:15px}
-  .adam-filters{flex-direction:column;gap:6px}
-  .adam-sort-bar{gap:4px}
-  .adam-sort-btn{font-size:10px;padding:4px 9px}
-  .header{padding:10px 16px}
-  .brand-name{font-size:15px}
-  .logo{width:30px;height:30px;font-size:13px}
-  .post-stats{gap:10px}
-  .stat{font-size:11px}
-  .empty-title{font-size:24px}
+  .layout{flex-direction:column}
+  .sb{width:100%;height:auto;position:static;border-right:none;border-bottom:1px solid var(--bor);padding:12px 0;display:grid;grid-template-columns:1fr 1fr}
+  .con{padding:14px 16px}
+  .mstrip{grid-template-columns:repeat(3,1fr)}
+  .mc{padding:10px 12px}.mcv{font-size:20px}
+  .tbr{overflow-x:auto;white-space:nowrap}
+  .tb{padding:8px 12px;font-size:12px}
+  .pgrid{grid-template-columns:1fr}
+  .acrd{flex-direction:column;gap:10px}
+  .adw{flex-direction:row;width:100%;justify-content:flex-start;gap:12px}
+  .acmg{grid-template-columns:repeat(3,1fr)}
+  .aflt{flex-direction:column}
+  .asbr{gap:4px}
+  .asbt{font-size:10px;padding:4px 9px}
+  .hdr{padding:10px 16px}
+  .bname{font-size:15px}
+  .pstats{gap:10px}
 }
 </style>
 </head>
 <body>
-<div class="header">
-  <div class="header-brand">
+<div class="hdr">
+  <div class="hbrand">
     <div class="logo">LC</div>
-    <div>
-      <div class="brand-name">Social Intel</div>
-      <div class="brand-sub">Life.Church &middot; Pattern Engine</div>
-    </div>
+    <div><div class="bname">Social Intel</div><div class="bsub">Life.Church &middot; Pattern Engine</div></div>
   </div>
-  <div class="status-pill">
-    <div class="status-dot" id="status-dot"></div>
-    <span id="status-text">Initializing</span>
-  </div>
+  <div class="spill"><div class="sdot" id="sdot"></div><span id="stxt">Initializing</span></div>
 </div>
-<div class="app-layout">
-  <div class="sidebar">
-    <div class="sidebar-section">
-      <div class="sidebar-label">Account</div>
-      <div class="sidebar-content">
-        <select class="ctrl-select" id="account-select" onchange="selectAccount(this.value)">
-          <option value="">-- Select account --</option>
-        </select>
-        <div id="profile-items"></div>
+<div class="layout">
+  <div class="sb">
+    <div style="margin-bottom:26px">
+      <div class="sbl" style="padding:0 18px;margin-bottom:8px">Account</div>
+      <div class="sbc">
+        <select class="sel" id="acsel" onchange="selAcc(this.value)"><option value="">-- Select account --</option></select>
+        <div id="pitems"></div>
       </div>
     </div>
-    <div class="sidebar-section">
-      <div class="sidebar-label">Date Range</div>
-      <div class="sidebar-content">
-        <select class="ctrl-select" id="date-range">
-          <option value="30">Last 30 days</option>
-          <option value="60">Last 60 days</option>
-          <option value="90">Last 90 days</option>
-        </select>
-        <button class="run-btn" id="run-btn" onclick="runAnalysis()">Run Analysis</button>
+    <div>
+      <div class="sbl" style="padding:0 18px;margin-bottom:8px">Date Range</div>
+      <div class="sbc">
+        <select class="sel" id="drange"><option value="30">Last 30 days</option><option value="60">Last 60 days</option><option value="90">Last 90 days</option></select>
+        <button class="rbtn" id="rbtn" onclick="runAnal()">Run Analysis</button>
       </div>
     </div>
   </div>
-  <div class="content">
-    <div id="empty-state" class="empty-state">
-      <div class="empty-title">No data yet</div>
-      <div class="empty-sub">Select an account and click Run Analysis</div>
-    </div>
-    <div id="dashboard" style="display:none">
-      <div class="metrics-strip" id="metrics-grid"></div>
-      <div class="tab-bar">
-        <button class="tab-btn active" onclick="switchTab('posts',this)">Top Posts</button>
-        <button class="tab-btn" onclick="switchTab('patterns',this)">Patterns</button>
-        <button class="tab-btn" onclick="switchTab('adam',this)">Adam Metrics</button>
+  <div class="con">
+    <div id="emp" class="emp"><div class="etit">No data yet</div><div class="esub">Select an account and click Run Analysis</div></div>
+    <div id="dash" style="display:none">
+      <div class="mstrip" id="mgrid"></div>
+      <div class="tbr">
+        <button class="tb on" onclick="swTab('posts',this)">Top Posts</button>
+        <button class="tb" onclick="swTab('patterns',this)">Patterns</button>
+        <button class="tb" onclick="swTab('adam',this)">Adam Metrics</button>
       </div>
-      <div id="tab-posts" class="tab-pane active"></div>
-      <div id="tab-patterns" class="tab-pane"></div>
-      <div id="tab-adam" class="tab-pane"></div>
+      <div id="tp-posts" class="tp on"></div>
+      <div id="tp-patterns" class="tp"></div>
+      <div id="tp-adam" class="tp"></div>
     </div>
   </div>
 </div>
 <script>
-var SPROUT_TOKEN='NTI4OTg1fDE3NzgxNzc4Nzd8ZTU0YTk4ZGMtOWI0OS00MjUxLThjOTAtZDYzNmFiMTNlNmM4';
-var customerId='',allProfiles=[],selectedProfiles=[],adamSortKey='score',adamSortDir='desc',adamRows=[];
-
-function setStatus(msg,state){
-  document.getElementById('status-text').textContent=msg;
-  document.getElementById('status-dot').className='status-dot '+(state||'loading');
-}
-
-function fmtNum(n){
-  n=Number(n)||0;
-  if(n>=1000000)return(n/1000000).toFixed(1)+'M';
-  if(n>=1000)return(n/1000).toFixed(1)+'K';
-  return Math.round(n).toLocaleString();
-}
-
-function pct(r){return(r*100).toFixed(2)+'%'}
-
-function netColor(n){
-  var m={instagram:'#e8720a',fb_instagram_account:'#e8720a',facebook:'#2a5ab4',linkedin:'#2a5ab4'};
-  return m[(n||'').toLowerCase()]||'#b8987a';
-}
-
-function guidToNet(g){
-  if(!g)return'unknown';
-  if(g.indexOf('igmed:')===0)return'instagram';
-  if(g.indexOf('p:')===0)return'facebook';
-  if(g.indexOf('li:')===0)return'linkedin';
-  return'unknown';
-}
-
-function guidToUrl(g){
-  if(!g)return null;
-  if(g.indexOf('p:')===0){
-    var parts=g.slice(2).split('_');
-    if(parts.length===2)return'https://www.facebook.com/'+parts[0]+'/posts/'+parts[1];
-  }
-  return null;
-}
-
-function sproutGet(path){
-  return fetch('/api/sprout?path='+encodeURIComponent(path),{headers:{'x-sprout-token':SPROUT_TOKEN}})
-    .then(function(r){if(!r.ok)throw new Error(r.status);return r.json();});
-}
-
-function sproutPost(path,body){
-  return fetch('/api/sprout?path='+encodeURIComponent(path),{
-    method:'POST',
-    headers:{'Content-Type':'application/json','x-sprout-token':SPROUT_TOKEN},
-    body:JSON.stringify(body)
-  }).then(function(r){if(!r.ok)return r.text().then(function(t){throw new Error(r.status+': '+t.slice(0,200));});return r.json();});
-}
-
-function renderSidebar(){
-  var netLabel={instagram:'IG',fb_instagram_account:'IG',facebook:'FB',linkedin:'LI',youtube:'YT',tiktok:'TK'};
-  var EXCLUDED=['twitter','fb_twitter_account','linkedin','youtube'];
-  var profiles=allProfiles.filter(function(p){return EXCLUDED.indexOf((p.network_type||'').toLowerCase())===-1;});
-  var groups={};
-  profiles.forEach(function(p){var key=p.name||p.handle||'Unknown';if(!groups[key])groups[key]=[];groups[key].push(p);});
-  window._groups=groups;window._filtered=profiles;window._netLabel=netLabel;
-  selectedProfiles=[];
-  var names=Object.keys(groups);
-  var opts='<option value="">-- Select account --</option><option value="all">All accounts</option>';
-  names.forEach(function(name){
-    var profs=groups[name];
-    if(profs.length===1){
-      opts+='<option value="grp:'+name+'">'+name+'</option>';
-    } else {
-      opts+='<optgroup label="'+name+'">';
-      opts+='<option value="grp:'+name+'">'+name+' - All</option>';
-      profs.forEach(function(p){
-        var net=(p.network_type||'').toLowerCase();
-        opts+='<option value="pid:'+p.customer_profile_id+'">'+name+' - '+(netLabel[net]||net)+'</option>';
-      });
-      opts+='</optgroup>';
-    }
+var TOK='NTI4OTg1fDE3NzgxNzc4Nzd8ZTU0YTk4ZGMtOWI0OS00MjUxLThjOTAtZDYzNmFiMTNlNmM4';
+var cid='',profs=[],selProfs=[],aKey='score',aDir='desc',aRows=[];
+function ss(m,s){document.getElementById('stxt').textContent=m;document.getElementById('sdot').className='sdot '+(s||'loading');}
+function fn(n){n=Number(n)||0;if(n>=1000000)return(n/1000000).toFixed(1)+'M';if(n>=1000)return(n/1000).toFixed(1)+'K';return Math.round(n).toLocaleString();}
+function pc(r){return(r*100).toFixed(2)+'%';}
+function nc(n){var m={instagram:'#e8720a',fb_instagram_account:'#e8720a',facebook:'#2a5ab4',linkedin:'#2a5ab4'};return m[(n||'').toLowerCase()]||'#b8987a';}
+function gnet(g){if(!g)return'unknown';if(g.indexOf('igmed:')===0)return'instagram';if(g.indexOf('p:')===0)return'facebook';if(g.indexOf('li:')===0)return'linkedin';return'unknown';}
+function gurl(g){if(!g)return null;if(g.indexOf('p:')===0){var p=g.slice(2).split('_');if(p.length===2)return'https://www.facebook.com/'+p[0]+'/posts/'+p[1];}return null;}
+function sget(path){return fetch('/api/sprout?path='+encodeURIComponent(path),{headers:{'x-sprout-token':TOK}}).then(function(r){if(!r.ok)throw new Error(r.status);return r.json();});}
+function spost(path,body){return fetch('/api/sprout?path='+encodeURIComponent(path),{method:'POST',headers:{'Content-Type':'application/json','x-sprout-token':TOK},body:JSON.stringify(body)}).then(function(r){if(!r.ok)return r.text().then(function(t){throw new Error(r.status+': '+t.slice(0,100));});return r.json();});}
+function renderSB(){
+  var nl={instagram:'IG',fb_instagram_account:'IG',facebook:'FB',linkedin:'LI',youtube:'YT',tiktok:'TK'};
+  var EX=['twitter','fb_twitter_account','linkedin','youtube'];
+  var pp=profs.filter(function(p){return EX.indexOf((p.network_type||'').toLowerCase())===-1;});
+  var gr={};pp.forEach(function(p){var k=p.name||p.handle||'?';if(!gr[k])gr[k]=[];gr[k].push(p);});
+  window._gr=gr;window._pp=pp;window._nl=nl;selProfs=[];
+  var nms=Object.keys(gr),o='<option value="">-- Select account --</option><option value="all">All accounts</option>';
+  nms.forEach(function(n){
+    var ps=gr[n];
+    if(ps.length===1){o+='<option value="g:'+n+'">'+n+'</option>';}
+    else{o+='<optgroup label="'+n+'"><option value="g:'+n+'">'+n+' - All</option>';
+      ps.forEach(function(p){var nt=(p.network_type||'').toLowerCase();o+='<option value="p:'+p.customer_profile_id+'">'+n+' - '+(nl[nt]||nt)+'</option>';});
+      o+='</optgroup>';}
   });
-  document.getElementById('account-select').innerHTML=opts;
+  document.getElementById('acsel').innerHTML=o;
 }
-
-function selectAccount(val){
-  var netLabel=window._netLabel||{};
-  var allFiltered=window._filtered||[];
-  var selected=[];
-  if(val==='all'){selected=allFiltered;}
-  else if(val.indexOf('grp:')===0){selected=(window._groups||{})[val.slice(4)]||[];}
-  else if(val.indexOf('pid:')===0){var id=parseInt(val.slice(4));selected=allFiltered.filter(function(p){return p.customer_profile_id===id;});}
-  selectedProfiles=selected.map(function(p){return p.customer_profile_id;});
-  var html='';
-  selected.forEach(function(p){
-    var net=(p.network_type||'').toLowerCase();
-    var label=netLabel[net]||'--';
-    var color=netColor(net);
-    html+='<div class="profile-item active">';
-    html+='<div class="profile-icon" style="background:'+color+'18;color:'+color+'">'+label+'</div>';
-    html+='<div><div class="profile-name">'+(p.name||'Profile')+'</div>';
-    html+='<div class="profile-network">'+net+'</div></div></div>';
-  });
-  document.getElementById('profile-items').innerHTML=html;
+function selAcc(v){
+  var nl=window._nl||{},pp=window._pp||[],gr=window._gr||{},sel=[];
+  if(v==='all')sel=pp;
+  else if(v.indexOf('g:')===0)sel=gr[v.slice(2)]||[];
+  else if(v.indexOf('p:')===0){var id=parseInt(v.slice(2));sel=pp.filter(function(p){return p.customer_profile_id===id;});}
+  selProfs=sel.map(function(p){return p.customer_profile_id;});
+  var h='';sel.forEach(function(p){var nt=(p.network_type||'').toLowerCase(),c=nc(nt);h+='<div class="pit on"><div class="pico" style="background:'+c+'18;color:'+c+'">'+(nl[nt]||'--')+'</div><div><div class="pnm">'+(p.name||'?')+'</div><div class="pnt">'+nt+'</div></div></div>';});
+  document.getElementById('pitems').innerHTML=h;
 }
-
-function getDateRange(days){
-  var end=new Date(),start=new Date();
-  start.setDate(start.getDate()-parseInt(days));
-  function fmt(d){return d.toISOString().split('T')[0];}
-  return{start:fmt(start),end:fmt(end)};
-}
-
-function runAnalysis(){
-  if(!selectedProfiles.length){alert('Please select an account first.');return;}
-  var btn=document.getElementById('run-btn');
-  btn.disabled=true;btn.textContent='Running...';
-  var days=document.getElementById('date-range').value;
-  var range=getDateRange(days);
-  setStatus('Fetching analytics...','loading');
-  sproutPost('/v1/'+customerId+'/analytics/posts',{
-    filters:['customer_profile_id.eq('+selectedProfiles.join(',')+')', 'created_time.in('+range.start+'..'+range.end+')'],
-    metrics:['lifetime.impressions','lifetime.engagements','lifetime.reactions','lifetime.shares_count','lifetime.comments_count','lifetime.video_view_time_per_view','lifetime.video_views'],
+function gdr(d){var e=new Date(),s=new Date();s.setDate(s.getDate()-parseInt(d));function f(x){return x.toISOString().split('T')[0];}return{s:f(s),e:f(e)};}
+function runAnal(){
+  if(!selProfs.length){alert('Please select an account first.');return;}
+  var btn=document.getElementById('rbtn');btn.disabled=true;btn.textContent='Running...';
+  var d=document.getElementById('drange').value,r=gdr(d);
+  ss('Fetching analytics...','loading');
+  spost('/v1/'+cid+'/analytics/posts',{
+    filters:['customer_profile_id.eq('+selProfs.join(',')+')', 'created_time.in('+r.s+'..'+r.e+')'],
+    metrics:['lifetime.impressions','lifetime.engagements','lifetime.reactions','lifetime.shares_count','lifetime.comments_count','lifetime.video_view_time_per_view'],
     page_size:100
-  }).then(function(postRes){
-    var posts=postRes.data||[];
-    setStatus('Analyzing '+posts.length+' posts...','loading');
-    renderMetrics(posts);
-    renderPosts(posts);
-    renderPatterns(posts);
-    renderAdamTab(posts);
-    document.getElementById('dashboard').style.display='block';
-    document.getElementById('empty-state').style.display='none';
-    setStatus(posts.length+' posts · '+days+' days','ok');
-  }).catch(function(e){
-    setStatus('Error: '+e.message,'error');
-  }).finally(function(){
-    btn.disabled=false;btn.textContent='Run Analysis';
-  });
+  }).then(function(res){
+    var posts=res.data||[];
+    ss('Analyzing '+posts.length+' posts...','loading');
+    rendM(posts);rendP(posts);rendPat(posts);rendA(posts);
+    document.getElementById('dash').style.display='block';
+    document.getElementById('emp').style.display='none';
+    ss(posts.length+' posts · '+d+' days','ok');
+  }).catch(function(e){ss('Error: '+e.message,'error');})
+  .finally(function(){btn.disabled=false;btn.textContent='Run Analysis';});
 }
-
-function renderMetrics(posts){
-  var totalImp=0,totalEng=0;
-  posts.forEach(function(p){totalImp+=(p.metrics&&p.metrics['lifetime.impressions'])||0;totalEng+=(p.metrics&&p.metrics['lifetime.engagements'])||0;});
-  var avgEng=posts.length?Math.round(totalEng/posts.length):0;
-  var avgER=totalImp>0?((totalEng/totalImp)*100).toFixed(2):0;
-  var cells=[['Impressions',fmtNum(totalImp)],['Engagements',fmtNum(totalEng)],['Avg Eng/Post',fmtNum(avgEng)],['Eng Rate',avgER+'%'],['Posts',posts.length]];
-  var html='';
-  cells.forEach(function(c){html+='<div class="metric-cell"><div class="metric-cell-label">'+c[0]+'</div><div class="metric-cell-value">'+c[1]+'</div></div>';});
-  document.getElementById('metrics-grid').innerHTML=html;
+function rendM(posts){
+  var ti=0,te=0;posts.forEach(function(p){ti+=(p.metrics&&p.metrics['lifetime.impressions'])||0;te+=(p.metrics&&p.metrics['lifetime.engagements'])||0;});
+  var ae=posts.length?Math.round(te/posts.length):0,er=ti>0?((te/ti)*100).toFixed(2):0;
+  var c=[['Impressions',fn(ti)],['Engagements',fn(te)],['Avg Eng/Post',fn(ae)],['Eng Rate',er+'%'],['Posts',posts.length]];
+  document.getElementById('mgrid').innerHTML=c.map(function(x){return'<div class="mc"><div class="mcl">'+x[0]+'</div><div class="mcv">'+x[1]+'</div></div>';}).join('');
 }
-
-function renderPosts(posts){
-  var tab=document.getElementById('tab-posts');
-  if(!posts.length){tab.innerHTML='<div class="empty-state" style="height:200px"><div class="empty-title">No posts found</div></div>';return;}
-  var sorted=posts.slice().sort(function(a,b){return((b.metrics&&b.metrics['lifetime.engagements'])||0)-((a.metrics&&a.metrics['lifetime.engagements'])||0);});
-  var median=(sorted[Math.floor(sorted.length/2)]&&sorted[Math.floor(sorted.length/2)].metrics&&sorted[Math.floor(sorted.length/2)].metrics['lifetime.engagements'])||0;
-  var html='<div class="posts-list">';
-  sorted.slice(0,20).forEach(function(p,i){
-    var eng=(p.metrics&&p.metrics['lifetime.engagements'])||0;
-    var imp=(p.metrics&&p.metrics['lifetime.impressions'])||0;
+function rendP(posts){
+  var tab=document.getElementById('tp-posts');
+  if(!posts.length){tab.innerHTML='<div class="emp" style="height:200px"><div class="etit">No posts</div></div>';return;}
+  var s=posts.slice().sort(function(a,b){return((b.metrics&&b.metrics['lifetime.engagements'])||0)-((a.metrics&&a.metrics['lifetime.engagements'])||0);});
+  var med=(s[Math.floor(s.length/2)]&&s[Math.floor(s.length/2)].metrics&&s[Math.floor(s.length/2)].metrics['lifetime.engagements'])||0;
+  var h='<div class="plist">';
+  s.slice(0,20).forEach(function(p,i){
+    var eng=(p.metrics&&p.metrics['lifetime.engagements'])||0,imp=(p.metrics&&p.metrics['lifetime.impressions'])||0;
     var er=imp>0?((eng/imp)*100).toFixed(2):'0.00';
-    var verdict=eng>median*1.5?'strong':eng<median*0.5?'weak':'mid';
-    var vLabel=verdict==='strong'?'Top Performer':verdict==='weak'?'Underperformer':'Average';
-    var net=guidToNet(p.guid);
-    var url=guidToUrl(p.guid);
-    html+='<div class="post-card">';
-    html+='<div class="post-top">';
-    html+='<span class="net-badge net-'+net+'">'+net+'</span>';
-    html+='<span class="verdict-badge verdict-'+verdict+'">'+vLabel+'</span>';
-    if(url)html+='<a href="'+url+'" target="_blank" class="post-link">View post &rarr;</a>';
-    html+='<span class="post-rank">#'+(i+1)+'</span>';
-    html+='</div>';
-    html+='<div class="post-stats">';
-    html+='<div class="stat">Impressions <span>'+fmtNum(imp)+'</span></div>';
-    html+='<div class="stat">Engagements <span>'+fmtNum(eng)+'</span></div>';
-    html+='<div class="stat">Reactions <span>'+fmtNum((p.metrics&&p.metrics['lifetime.reactions'])||0)+'</span></div>';
-    html+='<div class="stat">Comments <span>'+fmtNum((p.metrics&&p.metrics['lifetime.comments_count'])||0)+'</span></div>';
-    html+='<div class="stat">Shares <span>'+fmtNum((p.metrics&&p.metrics['lifetime.shares_count'])||0)+'</span></div>';
-    html+='<div class="stat hl">ER <span>'+er+'%</span></div>';
-    html+='</div></div>';
+    var v=eng>med*1.5?'strong':eng<med*0.5?'weak':'mid';
+    var vl=v==='strong'?'Top':v==='weak'?'Low':'Avg';
+    var net=gnet(p.guid),url=gurl(p.guid);
+    h+='<div class="pcard"><div class="ptop">';
+    h+='<span class="nb nb-'+net+'">'+net+'</span>';
+    h+='<span class="vb vb-'+v+'">'+vl+'</span>';
+    if(url)h+='<a href="'+url+'" target="_blank" class="vlink">View &rarr;</a>';
+    h+='<span class="prk">#'+(i+1)+'</span></div>';
+    h+='<div class="pstats">';
+    h+='<div class="st">IMP <span>'+fn(imp)+'</span></div>';
+    h+='<div class="st">ENG <span>'+fn(eng)+'</span></div>';
+    h+='<div class="st">REACT <span>'+fn((p.metrics&&p.metrics['lifetime.reactions'])||0)+'</span></div>';
+    h+='<div class="st">CMT <span>'+fn((p.metrics&&p.metrics['lifetime.comments_count'])||0)+'</span></div>';
+    h+='<div class="st">SHARE <span>'+fn((p.metrics&&p.metrics['lifetime.shares_count'])||0)+'</span></div>';
+    h+='<div class="st hl">ER <span>'+er+'%</span></div>';
+    h+='</div></div>';
   });
-  html+='</div>';
-  tab.innerHTML=html;
+  h+='</div>';tab.innerHTML=h;
 }
-
-function renderPatterns(posts){
+function rendPat(posts){
   if(!posts.length)return;
-  var m=function(k){return function(p){return(p.metrics&&p.metrics[k])||0;};};
-  var sorted=posts.slice().sort(function(a,b){return m('lifetime.engagements')(b)-m('lifetime.engagements')(a);});
-  var cut=Math.max(1,Math.floor(sorted.length*0.25));
-  var top=sorted.slice(0,cut),bot=sorted.slice(-cut);
-  function avg(arr,fn){return arr.length?arr.reduce(function(s,p){return s+fn(p);},0)/arr.length:0;}
-  var tEng=avg(top,m('lifetime.engagements')),bEng=avg(bot,m('lifetime.engagements'));
-  var tImp=avg(top,m('lifetime.impressions')),bImp=avg(bot,m('lifetime.impressions'));
-  var tER=tImp>0?(tEng/tImp*100).toFixed(2):0,bER=bImp>0?(bEng/bImp*100).toFixed(2):0;
-  var tShares=avg(top,m('lifetime.shares_count')),bShares=avg(bot,m('lifetime.shares_count'));
-  var tComments=avg(top,m('lifetime.comments_count')),bComments=avg(bot,m('lifetime.comments_count'));
-  var tReactions=avg(top,m('lifetime.reactions')),bReactions=avg(bot,m('lifetime.reactions'));
-
-  var byNet={};
+  function mg(k){return function(p){return(p.metrics&&p.metrics[k])||0;};}
+  var s=posts.slice().sort(function(a,b){return mg('lifetime.engagements')(b)-mg('lifetime.engagements')(a);});
+  var cut=Math.max(1,Math.floor(s.length*0.25)),top=s.slice(0,cut),bot=s.slice(-cut);
+  function av(arr,fn){return arr.length?arr.reduce(function(x,p){return x+fn(p);},0)/arr.length:0;}
+  var tE=av(top,mg('lifetime.engagements')),bE=av(bot,mg('lifetime.engagements'));
+  var tI=av(top,mg('lifetime.impressions')),bI=av(bot,mg('lifetime.impressions'));
+  var tER=tI>0?(tE/tI*100).toFixed(2):0,bER=bI>0?(bE/bI*100).toFixed(2):0;
+  var tS=av(top,mg('lifetime.shares_count')),bS=av(bot,mg('lifetime.shares_count'));
+  var tC=av(top,mg('lifetime.comments_count')),bC=av(bot,mg('lifetime.comments_count'));
+  var tR=av(top,mg('lifetime.reactions')),bR=av(bot,mg('lifetime.reactions'));
+  var bn={};
   posts.forEach(function(p){
-    var net=guidToNet(p.guid);
-    if(!byNet[net])byNet[net]={t:0,imp:0,r:0,s:0,c:0,n:0};
-    byNet[net].t+=m('lifetime.engagements')(p);
-    byNet[net].imp+=m('lifetime.impressions')(p);
-    byNet[net].r+=m('lifetime.reactions')(p);
-    byNet[net].s+=m('lifetime.shares_count')(p);
-    byNet[net].c+=m('lifetime.comments_count')(p);
-    byNet[net].n++;
+    var n=gnet(p.guid);
+    if(!bn[n])bn[n]={t:0,i:0,r:0,s:0,c:0,n:0};
+    bn[n].t+=mg('lifetime.engagements')(p);bn[n].i+=mg('lifetime.impressions')(p);
+    bn[n].r+=mg('lifetime.reactions')(p);bn[n].s+=mg('lifetime.shares_count')(p);
+    bn[n].c+=mg('lifetime.comments_count')(p);bn[n].n++;
   });
-  var netEntries=Object.keys(byNet).map(function(k){return[k,byNet[k]];}).sort(function(a,b){return(b[1].t/b[1].n)-(a[1].t/a[1].n);});
-  var maxR=Math.max.apply(null,netEntries.map(function(e){return e[1].n>0?e[1].r/e[1].n:0;}).concat([1]));
-  var maxS=Math.max.apply(null,netEntries.map(function(e){return e[1].n>0?e[1].s/e[1].n:0;}).concat([1]));
-  var maxC=Math.max.apply(null,netEntries.map(function(e){return e[1].n>0?e[1].c/e[1].n:0;}).concat([1]));
-
-  var engList=posts.map(m('lifetime.engagements'));
-  var maxE=Math.max.apply(null,engList.concat([1]));
-  var dist=[0,0,0,0,0];
-  engList.forEach(function(e){dist[Math.min(4,Math.floor((e/maxE)*5))]++;});
-  var maxDist=Math.max.apply(null,dist.concat([1]));
-
-  var shareList=posts.map(m('lifetime.shares_count'));
-  var likeList=posts.map(m('lifetime.reactions'));
-  var maxSc=Math.max.apply(null,shareList.concat([1]));
-  var maxLc=Math.max.apply(null,likeList.concat([1]));
-  var topEngVal=avg(top,m('lifetime.engagements'));
-  var botEngVal=avg(bot,m('lifetime.engagements'));
-
-  var tab=document.getElementById('tab-patterns');
-  tab.innerHTML='';
-
-  var grid=document.createElement('div');
-  grid.className='pat-grid';
-
-  // Panel 1: Top vs Bottom
-  var p1=document.createElement('div');p1.className='pat-card';
-  var rows1=[['Avg engagement',fmtNum(Math.round(tEng)),fmtNum(Math.round(bEng))],['Avg reach',fmtNum(Math.round(tImp)),fmtNum(Math.round(bImp))],['Eng rate',tER+'%',bER+'%'],['Avg shares',fmtNum(Math.round(tShares)),fmtNum(Math.round(bShares))],['Avg comments',fmtNum(Math.round(tComments)),fmtNum(Math.round(bComments))],['Avg reactions',fmtNum(Math.round(tReactions)),fmtNum(Math.round(bReactions))]];
-  var h1='<div class="pat-title">Top '+cut+' posts vs bottom '+cut+' posts</div><div class="pat-compare">';
-  h1+='<div class="pat-group pat-group-top"><div class="pat-group-label">Top performers</div>';
-  rows1.forEach(function(r){h1+='<div class="pat-stat-row"><span class="pat-stat-key">'+r[0]+'</span><span class="pat-stat-val">'+r[1]+'</span></div>';});
-  h1+='</div><div class="pat-group pat-group-bot"><div class="pat-group-label">Underperformers</div>';
-  rows1.forEach(function(r){h1+='<div class="pat-stat-row"><span class="pat-stat-key">'+r[0]+'</span><span class="pat-stat-val">'+r[2]+'</span></div>';});
-  h1+='</div></div>';
-  p1.innerHTML=h1;
-
-  // Panel 2: Platform breakdown
-  var p2=document.createElement('div');p2.className='pat-card';
-  var h2='<div class="pat-title">Platform breakdown - reactions, shares, comments</div>';
-  netEntries.forEach(function(entry){
-    var net=entry[0],d=entry[1];
-    var avgR=d.n>0?Math.round(d.r/d.n):0,avgS=d.n>0?Math.round(d.s/d.n):0,avgC=d.n>0?Math.round(d.c/d.n):0;
-    var rp=Math.round((avgR/maxR)*100),sp=Math.round((avgS/maxS)*100),cp=Math.round((avgC/maxC)*100);
-    h2+='<div style="margin-bottom:14px"><div style="font-size:11px;font-weight:600;color:var(--text);margin-bottom:8px;display:flex;align-items:center;gap:6px">';
-    h2+='<div style="width:8px;height:8px;border-radius:50%;background:'+netColor(net)+'"></div>'+net;
-    h2+='<span style="font-size:10px;color:var(--text3);font-weight:400">('+d.n+' posts)</span></div>';
-    h2+='<div class="pat-pbar-row"><div class="pat-pbar-label">Reactions</div><div class="pat-pbar-track"><div class="pat-pbar-fill" style="width:'+rp+'%;background:var(--coral)"></div></div><div class="pat-pbar-val">'+fmtNum(avgR)+'</div></div>';
-    h2+='<div class="pat-pbar-row"><div class="pat-pbar-label">Shares</div><div class="pat-pbar-track"><div class="pat-pbar-fill" style="width:'+sp+'%;background:var(--green)"></div></div><div class="pat-pbar-val">'+fmtNum(avgS)+'</div></div>';
-    h2+='<div class="pat-pbar-row"><div class="pat-pbar-label">Comments</div><div class="pat-pbar-track"><div class="pat-pbar-fill" style="width:'+cp+'%;background:var(--amber)"></div></div><div class="pat-pbar-val">'+fmtNum(avgC)+'</div></div>';
-    h2+='</div>';
+  var ne=Object.keys(bn).map(function(k){return[k,bn[k]];}).sort(function(a,b){return(b[1].t/b[1].n)-(a[1].t/a[1].n);});
+  var mR=Math.max.apply(null,ne.map(function(e){return e[1].n>0?e[1].r/e[1].n:0;}).concat([1]));
+  var mS=Math.max.apply(null,ne.map(function(e){return e[1].n>0?e[1].s/e[1].n:0;}).concat([1]));
+  var mC=Math.max.apply(null,ne.map(function(e){return e[1].n>0?e[1].c/e[1].n:0;}).concat([1]));
+  var el=posts.map(mg('lifetime.engagements')),mE=Math.max.apply(null,el.concat([1]));
+  var dist=[0,0,0,0,0];el.forEach(function(e){dist[Math.min(4,Math.floor((e/mE)*5))]++;});
+  var mD=Math.max.apply(null,dist.concat([1]));
+  var sl=posts.map(mg('lifetime.shares_count')),ll=posts.map(mg('lifetime.reactions'));
+  var mSc=Math.max.apply(null,sl.concat([1])),mLc=Math.max.apply(null,ll.concat([1]));
+  var tEv=av(top,mg('lifetime.engagements')),bEv=av(bot,mg('lifetime.engagements'));
+  var dm=dist[0]+dist[1]>dist[3]+dist[4]?'Most posts underperform. A few outliers carry your metrics.':dist[3]+dist[4]>dist[0]+dist[1]?'Strong consistent performance. Content reliably engaging.':'Mixed results with high variance.';
+  var rows=[['Avg engagement',fn(Math.round(tE)),fn(Math.round(bE))],['Avg reach',fn(Math.round(tI)),fn(Math.round(bI))],['Eng rate',tER+'%',bER+'%'],['Avg shares',fn(Math.round(tS)),fn(Math.round(bS))],['Avg comments',fn(Math.round(tC)),fn(Math.round(bC))],['Avg reactions',fn(Math.round(tR)),fn(Math.round(bR))]];
+  var p1='<div class="pcrd"><div class="ptit">Top '+cut+' vs bottom '+cut+' posts</div><div class="pcmp"><div class="pg pg-t"><div class="pglbl">Top performers</div>';
+  rows.forEach(function(r){p1+='<div class="psr"><span class="psk">'+r[0]+'</span><span class="psv">'+r[1]+'</span></div>';});
+  p1+='</div><div class="pg pg-b"><div class="pglbl">Underperformers</div>';
+  rows.forEach(function(r){p1+='<div class="psr"><span class="psk">'+r[0]+'</span><span class="psv">'+r[2]+'</span></div>';});
+  p1+='</div></div></div>';
+  var p2='<div class="pcrd"><div class="ptit">Platform breakdown</div>';
+  ne.forEach(function(e){
+    var n=e[0],d=e[1],aR=d.n>0?Math.round(d.r/d.n):0,aS=d.n>0?Math.round(d.s/d.n):0,aC=d.n>0?Math.round(d.c/d.n):0;
+    var rp=Math.round((aR/mR)*100),sp=Math.round((aS/mS)*100),cp=Math.round((aC/mC)*100);
+    p2+='<div style="margin-bottom:14px"><div style="font-size:11px;font-weight:600;color:var(--tx);margin-bottom:8px;display:flex;align-items:center;gap:6px"><div style="width:8px;height:8px;border-radius:50%;background:'+nc(n)+'"></div>'+n+'<span style="font-size:10px;color:var(--tx3);font-weight:400">('+d.n+' posts)</span></div>';
+    p2+='<div class="pbr"><div class="pbl">Reactions</div><div class="pbt"><div class="pbf" style="width:'+rp+'%;background:var(--co)"></div></div><div class="pbv">'+fn(aR)+'</div></div>';
+    p2+='<div class="pbr"><div class="pbl">Shares</div><div class="pbt"><div class="pbf" style="width:'+sp+'%;background:var(--gr)"></div></div><div class="pbv">'+fn(aS)+'</div></div>';
+    p2+='<div class="pbr"><div class="pbl">Comments</div><div class="pbt"><div class="pbf" style="width:'+cp+'%;background:var(--am)"></div></div><div class="pbv">'+fn(aC)+'</div></div></div>';
   });
-  p2.innerHTML=h2;
-
-  // Panel 3: Distribution
-  var p3=document.createElement('div');p3.className='pat-card';
-  var distMsg=dist[0]+dist[1]>dist[3]+dist[4]?'Most posts underperform. A few outliers carry your metrics.':dist[3]+dist[4]>dist[0]+dist[1]?'Strong consistent performance. Content is reliably engaging.':'Mixed results. High variance in performance.';
-  var h3='<div class="pat-title">Engagement distribution - how consistent are you?</div>';
-  h3+='<div style="display:flex;align-items:flex-end;gap:4px;height:80px">';
-  dist.forEach(function(v,i){h3+='<div style="flex:1;border-radius:3px 3px 0 0;background:var(--coral);opacity:'+(0.35+i*0.16)+';height:'+Math.round((v/maxDist)*100)+'%"></div>';});
-  h3+='</div><div style="display:flex;gap:4px;margin-top:6px">';
-  ['Low','','Mid','','High'].forEach(function(l){h3+='<div style="flex:1;font-size:9px;color:var(--text3);text-align:center">'+l+'</div>';});
-  h3+='</div><div style="margin-top:12px;font-size:11px;color:var(--text2)">'+distMsg+'</div>';
-  p3.innerHTML=h3;
-
-  // Panel 4: Scatter
-  var p4=document.createElement('div');p4.className='pat-card';
-  var h4='<div class="pat-title">Sends vs likes - viral content vs feel-good content</div>';
-  h4+='<div class="pat-scatter" id="scatter-wrap"></div>';
-  h4+='<div style="display:flex;gap:14px;font-size:10px;color:var(--text3);margin-top:8px">';
-  h4+='<span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block"></span>Top 25%</span>';
-  h4+='<span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:50%;background:var(--amber);display:inline-block"></span>Average</span>';
-  h4+='<span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:50%;background:var(--red);display:inline-block"></span>Bottom 25%</span>';
-  h4+='<span style="margin-left:auto;font-style:italic">x=shares, y=likes</span></div>';
-  p4.innerHTML=h4;
-
-  grid.appendChild(p1);grid.appendChild(p2);grid.appendChild(p3);grid.appendChild(p4);
-  tab.appendChild(grid);
-
-  // Build scatter using pure innerHTML - no DOM appendChild needed
-  setTimeout(function(){
-    var wrap=document.getElementById('scatter-wrap');
-    if(!wrap)return;
-    var dotsHtml='';
-    sorted.slice(0,25).forEach(function(p,i){
-      var s=m('lifetime.shares_count')(p),l=m('lifetime.reactions')(p);
-      var eng=m('lifetime.engagements')(p);
-      var x=Math.round((s/maxSc)*0.88*100+6),y=Math.round((1-(l/maxLc)*0.88)*100-6);
-      var color=eng>topEngVal*0.8?'var(--green)':eng<botEngVal*1.2?'var(--red)':'var(--amber)';
-      dotsHtml+='<div class="pat-dot" title="Post #'+(i+1)+'" style="left:'+x+'%;top:'+y+'%;background:'+color+';border:2px solid '+color+';opacity:0.85"></div>';
-    });
-    dotsHtml+='<div style="position:absolute;bottom:4px;left:0;right:0;text-align:center;font-size:9px;color:var(--text3)">Sends</div>';
-    dotsHtml+='<div style="position:absolute;top:4px;left:4px;font-size:9px;color:var(--text3)">Likes</div>';
-    wrap.innerHTML=dotsHtml;
-  },100);
-}
-
-function renderAdamTab(posts){
-  var igPosts=posts.filter(function(p){return p.guid&&p.guid.indexOf('igmed:')===0;});
-  adamRows=igPosts.map(function(p,i){
-    var reach=(p.metrics&&p.metrics['lifetime.impressions'])||0;
-    var sends=(p.metrics&&p.metrics['lifetime.shares_count'])||0;
-    var likes=(p.metrics&&p.metrics['lifetime.reactions'])||0;
-    var watchRaw=(p.metrics&&p.metrics['lifetime.video_view_time_per_view'])||0;
-    var watchTime=watchRaw>100?watchRaw/1000:watchRaw;
-    var sendRate=reach>0?sends/reach:0,likeRate=reach>0?likes/reach:0;
-    var score=(sendRate*1000)+(likeRate*250)+(watchTime>0?Math.min(watchTime,60)/60*50:0);
-    return{idx:i+1,guid:p.guid,reach:reach,sends:sends,sendRate:sendRate,likes:likes,likeRate:likeRate,watchTime:watchTime,score:score};
-  }).filter(function(r){return r.reach>0;});
-
-  var tab=document.getElementById('tab-adam');
-
-  if(!adamRows.length){
-    tab.innerHTML='<div class="empty-state" style="height:200px"><div class="empty-title">No Instagram posts</div><div class="empty-sub">Select an Instagram profile</div></div>';
-    return;
-  }
-
-  // Build entire tab as one innerHTML string - no createElement/appendChild
-  var sortKeys=[['score','Signal Score'],['sendRate','Sends/Reach'],['likeRate','Likes/Reach'],['reach','Reach'],['watchTime','Watch Time']];
-  var sortHtml='<div class="adam-sort-bar"><span style="font-size:11px;color:var(--text3);font-weight:600">Sort by:</span>';
-  sortKeys.forEach(function(sk){
-    sortHtml+='<button class="adam-sort-btn'+(sk[0]===adamSortKey?' active':'')+'" onclick="adamSort(''+sk[0]+'')">'+sk[1]+'</button>';
+  p2+='</div>';
+  var db='';dist.forEach(function(v,i){db+='<div style="flex:1;border-radius:3px 3px 0 0;background:var(--co);opacity:'+(0.35+i*0.16)+';height:'+Math.round((v/mD)*100)+'%"></div>';});
+  var p3='<div class="pcrd"><div class="ptit">Engagement distribution</div><div style="display:flex;align-items:flex-end;gap:4px;height:80px">'+db+'</div><div style="display:flex;gap:4px;margin-top:6px"><div style="flex:1;font-size:9px;color:var(--tx3);text-align:center">Low</div><div style="flex:1"></div><div style="flex:1;font-size:9px;color:var(--tx3);text-align:center">Mid</div><div style="flex:1"></div><div style="flex:1;font-size:9px;color:var(--tx3);text-align:center">High</div></div><div style="margin-top:12px;font-size:11px;color:var(--tx2)">'+dm+'</div></div>';
+  var dots='';s.slice(0,25).forEach(function(p,i){
+    var sv=mg('lifetime.shares_count')(p),lv=mg('lifetime.reactions')(p),ev=mg('lifetime.engagements')(p);
+    var x=Math.round((sv/mSc)*88+6),y=Math.round((1-(lv/mLc)*0.88)*100);
+    var col=ev>tEv*0.8?'var(--gr)':ev<bEv*1.2?'var(--re)':'var(--am)';
+    dots+='<div class="pdot" title="Post #'+(i+1)+'" style="left:'+x+'%;top:'+y+'%;background:'+col+';border:2px solid '+col+';opacity:0.85"></div>';
   });
-  sortHtml+='</div>';
-
-  var filtersHtml='<div class="adam-filters">'+
-    '<div><select class="ctrl-select" id="adam-type" style="margin-bottom:0" onchange="renderAdamCards()"><option value="">All types</option><option value="video">Video/Reel</option><option value="photo">Photo/Static</option></select></div>'+
-    '<div><input class="ctrl-select" id="adam-min-reach" type="number" placeholder="Min reach..." style="margin-bottom:0;padding:7px 10px" oninput="renderAdamCards()"></div>'+
-    '</div>';
-
-  var infoHtml='<div class="adam-note">Signal Score = Sends/reach x1000 + Likes/reach x250 + Watch time bonus up to 50pts for 60s avg. Stories excluded. 30+ strong, 10-30 average, under 10 low shareability.</div>';
-
-  var summaryHtml='<div class="adam-summary-strip" id="adam-summary"></div>';
-
-  tab.innerHTML=summaryHtml+sortHtml+filtersHtml+infoHtml+'<div id="adam-cards"></div>';
-
-  renderAdamSummary();
-  renderAdamCards();
+  var p4='<div class="pcrd"><div class="ptit">Sends vs likes scatter</div><div class="psc">'+dots+'<div style="position:absolute;bottom:4px;left:0;right:0;text-align:center;font-size:9px;color:var(--tx3)">Sends</div><div style="position:absolute;top:4px;left:4px;font-size:9px;color:var(--tx3)">Likes</div></div><div style="display:flex;gap:12px;font-size:10px;color:var(--tx3);margin-top:8px"><span style="display:flex;align-items:center;gap:4px"><span style="width:7px;height:7px;border-radius:50%;background:var(--gr);display:inline-block"></span>Top</span><span style="display:flex;align-items:center;gap:4px"><span style="width:7px;height:7px;border-radius:50%;background:var(--am);display:inline-block"></span>Avg</span><span style="display:flex;align-items:center;gap:4px"><span style="width:7px;height:7px;border-radius:50%;background:var(--re);display:inline-block"></span>Low</span></div></div>';
+  document.getElementById('tp-patterns').innerHTML='<div class="pgrid">'+p1+p2+p3+p4+'</div>';
 }
-
-function renderAdamSummary(){
-  var el=document.getElementById('adam-summary');if(!el)return;
-  function avg(arr,fn){return arr.length?arr.reduce(function(s,r){return s+fn(r);},0)/arr.length:0;}
-  var avgS=avg(adamRows,function(r){return r.sendRate;}),avgL=avg(adamRows,function(r){return r.likeRate;});
-  var wRows=adamRows.filter(function(r){return r.watchTime>0;}),avgW=avg(wRows,function(r){return r.watchTime;});
-  var cells=[['IG Posts',adamRows.length],['Avg Sends/Reach',pct(avgS)],['Avg Likes/Reach',pct(avgL)],['Avg Watch Time',wRows.length?timeFmt(avgW):'--']];
-  var html='';
-  cells.forEach(function(c){html+='<div class="adam-cell"><div class="adam-cell-label">'+c[0]+'</div><div class="adam-cell-value">'+c[1]+'</div></div>';});
-  el.innerHTML=html;
+function rendA(posts){
+  var ip=posts.filter(function(p){return p.guid&&p.guid.indexOf('igmed:')===0;});
+  aRows=ip.map(function(p,i){
+    var re=(p.metrics&&p.metrics['lifetime.impressions'])||0;
+    var se=(p.metrics&&p.metrics['lifetime.shares_count'])||0;
+    var li=(p.metrics&&p.metrics['lifetime.reactions'])||0;
+    var wr=(p.metrics&&p.metrics['lifetime.video_view_time_per_view'])||0;
+    var wt=wr>100?wr/1000:wr;
+    var sr=re>0?se/re:0,lr=re>0?li/re:0;
+    var sc=(sr*1000)+(lr*250)+(wt>0?Math.min(wt,60)/60*50:0);
+    return{i:i+1,g:p.guid,re:re,se:se,sr:sr,li:li,lr:lr,wt:wt,sc:sc};
+  }).filter(function(r){return r.re>0;});
+  var tab=document.getElementById('tp-adam');
+  if(!aRows.length){tab.innerHTML='<div class="emp" style="height:200px"><div class="etit">No IG posts</div><div class="esub">Select an Instagram profile</div></div>';return;}
+  var sum='<div class="astrip" id="asum"></div>';
+  var skeys=[['sc','Signal Score'],['sr','Sends/Reach'],['lr','Likes/Reach'],['re','Reach'],['wt','Watch Time']];
+  var sbh='<div class="asbr"><span style="font-size:11px;color:var(--tx3);font-weight:600">Sort:</span>';
+  skeys.forEach(function(k){sbh+='<button class="asbt'+(k[0]===aKey?' on':'')+'" onclick="asort(''+k[0]+'')">'+k[1]+'</button>';});
+  sbh+='</div>';
+  var flt='<div class="aflt"><div><select class="sel" id="atype" style="margin-bottom:0" onchange="rendAc()"><option value="">All types</option><option value="v">Video/Reel</option><option value="p">Photo</option></select></div><div><input class="sel" id="amin" type="number" placeholder="Min reach..." style="margin-bottom:0;padding:7px 10px" oninput="rendAc()"></div></div>';
+  var note='<div class="anote">Signal Score = Sends/reach x1000 + Likes/reach x250 + Watch time bonus up to 50pts. Stories excluded. 30+ strong, 10-30 avg, under 10 low.</div>';
+  tab.innerHTML=sum+sbh+flt+note+'<div id="acards"></div>';
+  rendAS();rendAc();
 }
-
-function timeFmt(s){if(!s||s<=0)return'--';if(s<60)return s.toFixed(1)+'s';var m=Math.floor(s/60),sec=Math.round(s%60);return m+':'+(sec<10?'0':'')+sec;}
-
-function adamSort(key){
-  if(adamSortKey===key)adamSortDir=adamSortDir==='asc'?'desc':'asc';
-  else{adamSortKey=key;adamSortDir='desc';}
-  document.querySelectorAll('.adam-sort-btn').forEach(function(btn){btn.classList.toggle('active',btn.dataset.key===key);});
-  renderAdamCards();
+function rendAS(){
+  var el=document.getElementById('asum');if(!el)return;
+  function av(arr,fn){return arr.length?arr.reduce(function(s,r){return s+fn(r);},0)/arr.length:0;}
+  var as=av(aRows,function(r){return r.sr;}),al=av(aRows,function(r){return r.lr;});
+  var wr=aRows.filter(function(r){return r.wt>0;}),aw=av(wr,function(r){return r.wt;});
+  el.innerHTML=[['IG Posts',aRows.length],['Avg Sends/Reach',pc(as)],['Avg Likes/Reach',pc(al)],['Avg Watch Time',wr.length?tf(aw):'--']].map(function(c){return'<div class="ac"><div class="acl">'+c[0]+'</div><div class="acv">'+c[1]+'</div></div>';}).join('');
 }
-
-function renderAdamCards(){
-  var container=document.getElementById('adam-cards');if(!container)return;
-  var minReach=parseFloat((document.getElementById('adam-min-reach')&&document.getElementById('adam-min-reach').value)||0)||0;
-  var typeFilter=(document.getElementById('adam-type')&&document.getElementById('adam-type').value)||'';
-  var data=adamRows.filter(function(r){return r.reach>=minReach;});
-  if(typeFilter==='video')data=data.filter(function(r){return r.watchTime>0;});
-  if(typeFilter==='photo')data=data.filter(function(r){return r.watchTime===0;});
-  data=data.slice().sort(function(a,b){return adamSortDir==='asc'?a[adamSortKey]-b[adamSortKey]:b[adamSortKey]-a[adamSortKey];});
-  if(!data.length){container.innerHTML='<div style="text-align:center;padding:32px;color:var(--text3)">No posts match filters</div>';return;}
-  var maxScore=Math.max.apply(null,data.map(function(r){return r.score;}).concat([1]));
-  var html='';
-  data.forEach(function(r,i){
-    var verdict=r.score>maxScore*0.75?'strong':r.score>maxScore*0.4?'mid':'weak';
-    var vLabel=verdict==='strong'?'Top signal':verdict==='weak'?'Low signal':'Average';
-    var dashLen=138,filled=Math.round((r.score/maxScore)*dashLen);
-    var scoreColor=verdict==='strong'?'var(--coral)':verdict==='weak'?'var(--text3)':'var(--amber)';
-    var srColor=r.sendRate>=0.01?'var(--green)':r.sendRate>=0.004?'var(--amber)':'var(--red)';
-    var lrColor=r.likeRate>=0.04?'var(--green)':r.likeRate>=0.02?'var(--amber)':'var(--red)';
-    var url=guidToUrl(r.guid);
-    var viewLink=url?'<a href="'+url+'" target="_blank" class="post-link">View</a>':'';
-    html+='<div class="adam-card">';
-    html+='<div class="adam-donut-wrap">';
-    html+='<svg width="56" height="56" viewBox="0 0 56 56">';
-    html+='<circle cx="28" cy="28" r="22" fill="none" stroke="var(--surface2)" stroke-width="6"/>';
-    html+='<circle cx="28" cy="28" r="22" fill="none" stroke="'+scoreColor+'" stroke-width="6" stroke-dasharray="'+filled+' '+(dashLen-filled)+'" stroke-dashoffset="34" stroke-linecap="round"/>';
-    html+='<text x="28" y="32" text-anchor="middle" font-size="11" font-weight="700" fill="'+scoreColor+'">'+r.score.toFixed(1)+'</text>';
-    html+='</svg><div class="adam-donut-lbl">signal</div></div>';
-    html+='<div class="adam-card-main">';
-    html+='<div class="adam-card-top">';
-    html+='<span class="adam-card-title">#'+(i+1)+' Post #'+r.idx+'</span>';
-    html+='<span class="adam-pill '+verdict+'">'+vLabel+'</span>';
-    html+=viewLink;
-    html+='<span style="font-size:10px;color:var(--text3);margin-left:auto">'+r.guid.slice(0,20)+'...</span>';
-    html+='</div>';
-    html+='<div class="adam-card-metrics">';
-    html+='<div class="adam-card-metric"><div class="adam-cml">Reach</div><div class="adam-cmv">'+fmtNum(r.reach)+'</div><div class="adam-cms">impressions</div></div>';
-    html+='<div class="adam-card-metric"><div class="adam-cml">Sends/reach</div><div class="adam-cmv" style="color:'+srColor+'">'+pct(r.sendRate)+'</div><div class="adam-cms">'+fmtNum(r.sends)+' sends</div></div>';
-    html+='<div class="adam-card-metric"><div class="adam-cml">Likes/reach</div><div class="adam-cmv" style="color:'+lrColor+'">'+pct(r.likeRate)+'</div><div class="adam-cms">'+fmtNum(r.likes)+' likes</div></div>';
-    html+='</div></div></div>';
+function tf(s){if(!s||s<=0)return'--';if(s<60)return s.toFixed(1)+'s';var m=Math.floor(s/60),x=Math.round(s%60);return m+':'+(x<10?'0':'')+x;}
+function asort(k){
+  if(aKey===k)aDir=aDir==='asc'?'desc':'asc';else{aKey=k;aDir='desc';}
+  document.querySelectorAll('.asbt').forEach(function(b){b.classList.toggle('on',b.getAttribute('onclick').indexOf("'"+k+"'")!==-1);});
+  rendAc();
+}
+function rendAc(){
+  var c=document.getElementById('acards');if(!c)return;
+  var mr=parseFloat((document.getElementById('amin')&&document.getElementById('amin').value)||0)||0;
+  var tf2=(document.getElementById('atype')&&document.getElementById('atype').value)||'';
+  var d=aRows.filter(function(r){return r.re>=mr;});
+  if(tf2==='v')d=d.filter(function(r){return r.wt>0;});
+  if(tf2==='p')d=d.filter(function(r){return r.wt===0;});
+  d=d.slice().sort(function(a,b){return aDir==='asc'?a[aKey]-b[aKey]:b[aKey]-a[aKey];});
+  if(!d.length){c.innerHTML='<div style="text-align:center;padding:32px;color:var(--tx3)">No posts match filters</div>';return;}
+  var mx=Math.max.apply(null,d.map(function(r){return r.sc;}).concat([1]));
+  var h='';
+  d.forEach(function(r,i){
+    var v=r.sc>mx*0.75?'strong':r.sc>mx*0.4?'mid':'weak';
+    var vl=v==='strong'?'Top signal':v==='weak'?'Low signal':'Average';
+    var dl=138,fi=Math.round((r.sc/mx)*dl);
+    var sc=v==='strong'?'var(--co)':v==='weak'?'var(--tx3)':'var(--am)';
+    var src=r.sr>=0.01?'var(--gr)':r.sr>=0.004?'var(--am)':'var(--re)';
+    var lrc=r.lr>=0.04?'var(--gr)':r.lr>=0.02?'var(--am)':'var(--re)';
+    var url=gurl(r.g);
+    h+='<div class="acrd">';
+    h+='<div class="adw"><svg width="56" height="56" viewBox="0 0 56 56"><circle cx="28" cy="28" r="22" fill="none" stroke="var(--sur2)" stroke-width="6"/><circle cx="28" cy="28" r="22" fill="none" stroke="'+sc+'" stroke-width="6" stroke-dasharray="'+fi+' '+(dl-fi)+'" stroke-dashoffset="34" stroke-linecap="round"/><text x="28" y="32" text-anchor="middle" font-size="11" font-weight="700" fill="'+sc+'">'+r.sc.toFixed(1)+'</text></svg><div class="adl">signal</div></div>';
+    h+='<div class="acm"><div class="act"><span class="actt">#'+(i+1)+' Post #'+r.i+'</span><span class="apill '+v+'">'+vl+'</span>'+(url?'<a href="'+url+'" target="_blank" class="vlink">View</a>':'')+'<span style="font-size:10px;color:var(--tx3);margin-left:auto">'+r.g.slice(0,20)+'...</span></div>';
+    h+='<div class="acmg">';
+    h+='<div class="acmi"><div class="acmil">Reach</div><div class="acmiv">'+fn(r.re)+'</div><div class="acmis">impressions</div></div>';
+    h+='<div class="acmi"><div class="acmil">Sends/reach</div><div class="acmiv" style="color:'+src+'">'+pc(r.sr)+'</div><div class="acmis">'+fn(r.se)+' sends</div></div>';
+    h+='<div class="acmi"><div class="acmil">Likes/reach</div><div class="acmiv" style="color:'+lrc+'">'+pc(r.lr)+'</div><div class="acmis">'+fn(r.li)+' likes</div></div>';
+    h+='</div></div></div>';
   });
-  container.innerHTML=html;
+  c.innerHTML=h;
 }
-
-function switchTab(name,btn){
-  document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});
-  document.querySelectorAll('.tab-pane').forEach(function(p){p.classList.remove('active');});
-  btn.classList.add('active');
-  document.getElementById('tab-'+name).classList.add('active');
+function swTab(n,b){
+  document.querySelectorAll('.tb').forEach(function(x){x.classList.remove('on');});
+  document.querySelectorAll('.tp').forEach(function(x){x.classList.remove('on');});
+  b.classList.add('on');document.getElementById('tp-'+n).classList.add('on');
 }
-
 document.addEventListener('DOMContentLoaded',function(){
-  setStatus('Loading profiles...','loading');
-  sproutGet('/v1/metadata/client').then(function(cd){
-    customerId=(cd.data&&cd.data[0])?String(cd.data[0].customer_id):'';
-    return sproutGet('/v1/'+customerId+'/metadata/customer');
-  }).then(function(pd){
-    allProfiles=pd.data||[];
-    renderSidebar();
-    setStatus(allProfiles.length+' profiles loaded','ok');
-  }).catch(function(e){
-    setStatus('Connection error: '+e.message,'error');
-  });
+  ss('Loading profiles...','loading');
+  sget('/v1/metadata/client').then(function(d){
+    cid=(d.data&&d.data[0])?String(d.data[0].customer_id):'';
+    return sget('/v1/'+cid+'/metadata/customer');
+  }).then(function(d){
+    profs=d.data||[];renderSB();ss(profs.length+' profiles loaded','ok');
+  }).catch(function(e){ss('Error: '+e.message,'error');});
 });
 </script>
 </body>
