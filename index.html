@@ -494,14 +494,14 @@ function renderPatterns(posts){
 }
 
 function renderAdamTab(posts){
-  var igPosts=posts.filter(function(p){return p.guid&&(p.guid.indexOf('igmed:')===0||p.guid.indexOf('igm:')===0);});
+  var igPosts=posts.filter(function(p){return p.guid&&p.guid.indexOf('igmed:')===0;});
   adamRows=igPosts.map(function(p,i){
     var reach=(p.metrics&&p.metrics['lifetime.impressions'])||0;
     var sends=(p.metrics&&p.metrics['lifetime.shares_count'])||0;
     var likes=(p.metrics&&p.metrics['lifetime.reactions'])||0;
-    var watchTime=(p.metrics&&(p.metrics['lifetime.video_view_time_per_view']||p.metrics['lifetime.video_views']))||0;
+    var watchRaw=(p.metrics&&p.metrics['lifetime.video_view_time_per_view'])||0; var watchTime=watchRaw>100?watchRaw/1000:watchRaw;
     var sendRate=reach>0?sends/reach:0,likeRate=reach>0?likes/reach:0;
-    var score=(sendRate*1000)+(likeRate*250)+(watchTime?Math.min(watchTime,60)/60:0);
+    var score=(sendRate*1000)+(likeRate*250)+(watchTime>0?Math.min(watchTime,60)/60*50:0);
     return{idx:i+1,guid:p.guid,reach:reach,sends:sends,sendRate:sendRate,likes:likes,likeRate:likeRate,watchTime:watchTime,score:score};
   }).filter(function(r){return r.reach>0;});
 
@@ -541,7 +541,7 @@ function renderAdamTab(posts){
 
   // Note
   var note=document.createElement('div');note.className='adam-note';
-  note.innerHTML='<strong>Signal Score</strong> — a weighted formula based on what Adam Mosseri has said drives Instagram distribution: <strong>Sends/reach x1000</strong> (DMs are Instagram\'s strongest signal), <strong>Likes/reach x250</strong> (secondary engagement signal), plus a small watch time bonus for video. A score of 30+ means strong distribution potential. Under 10 means people like it but aren\'t sharing it — Instagram won\'t push it far.';
+  note.innerHTML='<strong>Signal Score</strong> — a weighted formula based on what Adam Mosseri has said drives Instagram distribution: <strong>Sends/reach x1000</strong> (DMs are the strongest distribution signal), <strong>Likes/reach x250</strong> (engagement signal), plus a <strong>watch time bonus up to 50pts</strong> for video posts (Reels with 60s+ avg watch time get full bonus). Stories are excluded. A score of 30+ means strong distribution potential. Under 10 means low shareability.';
   tab.appendChild(note);
 
   document.getElementById('adam-type').addEventListener('change',renderAdamCards);
