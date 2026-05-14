@@ -572,8 +572,8 @@ function renderAdamTab(posts){
 
   // Note
   var infoBar=document.createElement('div');
-  infoBar.style.cssText='font-size:11px;color:var(--text3);padding:10px 14px;background:var(--surface2);border-radius:var(--r);border-left:3px solid var(--coral);margin-bottom:14px';
-  infoBar.innerHTML='<strong style="color:var(--text2)">Signal Score</strong> = Sends/reach ×1000 + Likes/reach ×250 + Watch time bonus (up to 50pts for 60s+ avg). Stories excluded. <strong style="color:var(--coral)">30+</strong> = strong distribution. <strong style="color:var(--amber)">10–30</strong> = average. <strong style="color:var(--red)">Under 10</strong> = low shareability.';
+  infoBar.className='adam-note';
+  infoBar.textContent='Signal Score = Sends/reach x1000 + Likes/reach x250 + Watch time bonus (up to 50pts for 60s+ avg). Stories excluded. 30+ = strong distribution. 10-30 = average. Under 10 = low shareability.';
 
   document.getElementById('adam-type').addEventListener('change',renderAdamCards);
   document.getElementById('adam-min-reach').addEventListener('input',renderAdamCards);
