@@ -132,6 +132,36 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
 @keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 #dashboard>*{animation:fadeUp 0.25s ease forwards}
+@media(max-width:680px){
+  .app-layout{flex-direction:column}
+  .sidebar{width:100%;height:auto;position:static;border-right:none;border-bottom:1px solid var(--border);padding:12px 0;display:grid;grid-template-columns:1fr 1fr;gap:0}
+  .sidebar-section{margin-bottom:0}
+  .sidebar-content{padding:0 12px}
+  .sidebar-label{padding:0 12px}
+  .profile-item{padding:5px 12px}
+  .content{padding:14px 16px}
+  .metrics-strip{grid-template-columns:repeat(3,1fr)}
+  .metric-cell{padding:10px 12px}
+  .metric-cell-value{font-size:20px}
+  .tab-bar{overflow-x:auto;white-space:nowrap}
+  .tab-btn{padding:8px 12px;font-size:12px}
+  .pat-grid{grid-template-columns:1fr}
+  .pat-card.full{grid-column:span 1}
+  .adam-card{flex-direction:column;gap:10px}
+  .adam-donut-wrap{flex-direction:row;width:100%;justify-content:flex-start;align-items:center;gap:12px}
+  .adam-card-metrics{grid-template-columns:repeat(3,1fr)}
+  .adam-card-metric{padding:8px 10px}
+  .adam-cmv{font-size:15px}
+  .adam-filters{flex-direction:column;gap:6px}
+  .adam-sort-bar{gap:4px}
+  .adam-sort-btn{font-size:10px;padding:4px 9px}
+  .header{padding:10px 16px}
+  .brand-name{font-size:15px}
+  .logo{width:30px;height:30px;font-size:13px}
+  .post-stats{gap:10px}
+  .stat{font-size:11px}
+  .empty-title{font-size:24px}
+}
 </style>
 </head>
 <body>
