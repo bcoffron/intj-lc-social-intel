@@ -179,7 +179,7 @@ body{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;font-
   </div>
 </div>
 <script>
-var TOK='NTI4OTg1fDE3Nzg4NjcyMzd8MzliZjg4MWUtMWY3Zi00OWQ3LTgzODgtYTYzMTIzNjMyYWY2';
+var TOK='NTI4OTg1fDE3Nzg4Njc3OTV8ZGY0MjNiZTktYjdiNS00ZDNmLTk1NDktMDhjMzQxMTVkM2Mx';
 var cid='',profs=[],selProfs=[],aKey='score',aDir='desc',aRows=[];
 function ss(m,s){document.getElementById('stxt').textContent=m;document.getElementById('sdot').className='sdot '+(s||'loading');}
 function chkTok(){var t=TOK;try{var d=atob(t);var parts=d.split('|');if(parts.length>=2){var exp=parseInt(parts[1]);var now=Math.floor(Date.now()/1000);var diff=exp-now;var days=Math.floor(diff/86400);var el=document.getElementById('tokwarn');if(!el)return;if(diff<=0){el.style.display='flex';el.className='tokwarn expired';el.innerHTML='<span>&#9888;</span> Sprout token EXPIRED. Profiles will not load. Generate a new token in Sprout Settings.';}else if(diff<259200){el.style.display='flex';el.className='tokwarn soon';el.innerHTML='<span>&#9888;</span> Sprout token expires in '+days+' day'+(days===1?'':\'s')+'. Generate a new token soon.';}else{el.style.display='none';}}}catch(e){}}
@@ -231,7 +231,7 @@ function runAnal(){
     rendM(posts);rendP(posts);rendPat(posts);rendA(posts);
     document.getElementById('dash').style.display='block';
     document.getElementById('emp').style.display='none';
-    ss(posts.length+' posts ÃÂÃÂ· '+d+' days','ok');
+    ss(posts.length+' posts ÃÂÃÂÃÂÃÂ· '+d+' days','ok');
   }).catch(function(e){ss('Error: '+e.message,'error');})
   .finally(function(){btn.disabled=false;btn.textContent='Run Analysis';});
 }
