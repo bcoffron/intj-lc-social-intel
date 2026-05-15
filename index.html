@@ -175,7 +175,7 @@ body{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;font-
   </div>
 </div>
 <script>
-var TOK='NTI4OTg1fDE3NzgxNzc4Nzd8ZTU0YTk4ZGMtOWI0OS00MjUxLThjOTAtZDYzNmFiMTNlNmM4';
+var TOK='NTI4OTg1fDE3Nzg4NjcyMzd8MzliZjg4MWUtMWY3Zi00OWQ3LTgzODgtYTYzMTIzNjMyYWY2';
 var cid='',profs=[],selProfs=[],aKey='score',aDir='desc',aRows=[];
 function ss(m,s){document.getElementById('stxt').textContent=m;document.getElementById('sdot').className='sdot '+(s||'loading');}
 function fn(n){n=Number(n)||0;if(n>=1000000)return(n/1000000).toFixed(1)+'M';if(n>=1000)return(n/1000).toFixed(1)+'K';return Math.round(n).toLocaleString();}
@@ -226,7 +226,7 @@ function runAnal(){
     rendM(posts);rendP(posts);rendPat(posts);rendA(posts);
     document.getElementById('dash').style.display='block';
     document.getElementById('emp').style.display='none';
-    ss(posts.length+' posts Â· '+d+' days','ok');
+    ss(posts.length+' posts ÃÂ· '+d+' days','ok');
   }).catch(function(e){ss('Error: '+e.message,'error');})
   .finally(function(){btn.disabled=false;btn.textContent='Run Analysis';});
 }
