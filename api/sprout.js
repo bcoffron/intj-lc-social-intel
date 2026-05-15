@@ -1,4 +1,4 @@
-// rebuilt-1778521952255
+// rebuilt-1778867304844
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
@@ -24,8 +24,15 @@ module.exports = async (req, res) => {
       return res.status(500).json({ error: e.message });
     }
   }
-  const token = req.headers['x-sprout-token'];
-  if (!token) return res.status(401).json({ error: 'Missing token' });
+  const rawToken = req.headers['x-sprout-token'];
+  if (!rawToken) return res.status(401).json({ error: 'Missing token' });
+  // Decode base64 token - Sprout returns tokens as base64 but API expects decoded value
+  let token = rawToken;
+  try {
+    const decoded = Buffer.from(rawToken, 'base64').toString('utf8');
+    // Only use decoded if it looks like a valid Sprout token (contains pipe chars)
+    if (decoded.indexOf('|') !== -1) token = decoded;
+  } catch(e) {}
   const url = 'https://api.sproutsocial.com' + path;
   try {
     const opts = { method: req.method, headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' } };
