@@ -226,7 +226,7 @@ function runAnal(){
     rendM(posts);rendP(posts);rendPat(posts);rendA(posts);
     document.getElementById('dash').style.display='block';
     document.getElementById('emp').style.display='none';
-    ss(posts.length+' posts · '+d+' days','ok');
+    ss(posts.length+' posts Â· '+d+' days','ok');
   }).catch(function(e){ss('Error: '+e.message,'error');})
   .finally(function(){btn.disabled=false;btn.textContent='Run Analysis';});
 }
@@ -395,11 +395,9 @@ function swTab(n,b){
   b.classList.add('on');document.getElementById('tp-'+n).classList.add('on');
 }
 document.addEventListener('DOMContentLoaded',function(){
+  cid='528985';
   ss('Loading profiles...','loading');
-  sget('/v1/metadata/client').then(function(d){
-    cid=(d.data&&d.data[0])?String(d.data[0].customer_id):'';
-    return sget('/v1/'+cid+'/metadata/customer');
-  }).then(function(d){
+  sget('/v1/'+cid+'/metadata/customer').then(function(d){
     profs=d.data||[];renderSB();ss(profs.length+' profiles loaded','ok');
   }).catch(function(e){ss('Error: '+e.message,'error');});
 });
