@@ -450,7 +450,10 @@ function cmCopyLast(){
 var l=window._cmLast;if(!l)return;
 var subj='Social Intel: '+l.q;
 var body='Question: '+l.q+'\n\nResult: '+l.r.value+'\nContext: '+l.r.sub+'\n\n'+(l.r.insight||'')+'\n\nvia LC Social Intel\nhttps://intj-lc-social-intel.vercel.app';
-window.open('mailto:?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(body),'_self');
+var msOutlook='ms-outlook://compose?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(body);
+var fallback='mailto:?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(body);
+var win=window.open(msOutlook,'_self');
+setTimeout(function(){window.open(fallback,'_self');},1500);
 }
 function cmTeamsLast(){
 var l=window._cmLast;if(!l)return;
