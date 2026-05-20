@@ -457,6 +457,17 @@ var l=window._cmLast;if(!l)return;
 var msg=l.q+': '+l.r.value+' ('+l.r.sub+'). '+(l.r.insight||'')+' via https://intj-lc-social-intel.vercel.app';
 window.open('https://teams.microsoft.com/l/chat/0/0?message='+encodeURIComponent(msg),'_blank');
 }
+
+document.addEventListener('DOMContentLoaded',function(){
+chkTok();
+ss('Loading profiles...','loading');
+sget('/v1/metadata/client').then(function(d){
+cid=d.data&&d.data[0]?String(d.data[0].customer_id):'528985';
+return sget('/v1/'+cid+'/metadata/customer');
+}).then(function(d){
+profs=d.data||[];renderSB();ss(profs.length+' profiles loaded','ok');
+}).catch(function(e){ss('Error: '+e.message,'error');});
+});
 </script>
 </body>
 </html>
