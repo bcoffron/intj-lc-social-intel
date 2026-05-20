@@ -410,7 +410,49 @@ function rendCm(){cmLoadLib();var el=document.getElementById('tp-custom');if(!el
 function cmSetQ(q){var el=document.getElementById('cmq');if(el){el.value=q;el.focus();}}
 function cmRun(){var q=(document.getElementById('cmq')||{}).value||'';q=q.trim();if(!q){alert('Enter a question.');return;}if(!selProfs.length){alert('Select an account first.');return;}var rel=document.getElementById('cmresult');if(!rel)return;rel.innerHTML='<div style="padding:14px 0;color:var(--tx3);font-size:12px">Analyzing...</div>';var days=parseInt((document.getElementById('drange')||{value:'30'}).value)||30;var end=new Date(),start=new Date();start.setDate(start.getDate()-days);function df(d){return d.toISOString().split('T')[0];}var pf='customer_profile_id.eq('+selProfs.join(',')+')';var tf='created_time.in('+df(start)+'..'+df(end)+')';spost('/v1/'+cid+'/analytics/posts',{filters:[pf,tf],metrics:['lifetime.impressions','lifetime.engagements','lifetime.reactions','lifetime.shares_count','lifetime.comments_count','lifetime.video_view_time_per_view'],page_size:200}).then(function(res){cmAnalyze(q,res.data||[],days);}).catch(function(e){rel.innerHTML='<div style="color:var(--re);font-size:12px">Error: '+e.message+'</div>';});}
 function cmAnalyze(q,posts,days){var rel=document.getElementById('cmresult');if(!rel)return;var metrics=posts.map(function(p){var m=p.metrics||{};return {guid:p.guid,created_time:p.created_time,imp:m['lifetime.impressions']||0,eng:m['lifetime.engagements']||0,react:m['lifetime.reactions']||0,shares:m['lifetime.shares_count']||0,comments:m['lifetime.comments_count']||0,wt_ms:m['lifetime.video_view_time_per_view']||0};});var prompt='You are a social media analytics assistant. User asked: "'+q+'"\n';prompt+='Data: '+metrics.length+' posts, last '+days+' days.\n';prompt+='Fields: guid (igmed:=IG feed, p:=FB, igst:=story), created_time (ISO), imp=impressions/reach, eng=engagements, react=reactions, shares, comments, wt_ms=watch time ms (divide by 1000 for seconds, 0 if not video).\n';prompt+='Dataset (JSON):\n'+JSON.stringify(metrics.slice(0,100))+'\n';prompt+='Rules: 1) Answer directly using this data. 2) For unavailable metrics (skip rate, saves, link clicks, story completion, profile visits) say so and suggest best proxy. 3) For time queries parse created_time: new Date(x).getDay() 0=Sun,1=Mon...6=Sat, getHours() for hour. 4) Watch time in seconds = wt_ms/1000. 5) Return ONLY a JSON object: {answerable:bool, steps:[{status:"ok"/"no"/"go",title:"...",detail:"..."}], value:"main answer", valueLabel:"short label", sub:"context", insight:"2-3 sentence insight", noDataReason:"if !answerable", proxyLabel:"best proxy if !answerable"}. No markdown, no extra text.';spost('/claude',{prompt:prompt}).then(function(r){var txt=r.text||'';var clean=txt.replace(/```json|```/g,'').trim();var parsed;try{parsed=JSON.parse(clean);}catch(e){parsed=null;}if(!parsed){rel.innerHTML='<div style="color:var(--re);font-size:12px">Parse error: '+txt.slice(0,200)+'</div>';return;}cmShowResult(q,parsed);}).catch(function(e){rel.innerHTML='<div style="color:var(--re);font-size:12px">Claude error: '+e.message+'</div>';});}
-function cmShowResult(q,r){var rel=document.getElementById('cmresult');if(!rel)return;var h='<div class="cmresult">';if(r.steps&&r.steps.length){r.steps.forEach(function(s){var cls=s.status==='ok'?'ok':s.status==='no'?'no':'go';var sym=s.status==='ok'?'&#10003;':s.status==='no'?'&#215;':'&bull;';h+='<div class="cmstep"><div class="cmstep-dot '+cls+'">'+sym+'</div>';h+='<div><div class="cmstep-title">'+s.title+'</div><div class="cmstep-sub">'+s.detail+'</div></div></div>';});}if(r.answerable&&r.value){h+='<div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--bor)">';h+='<div class="cmresult-q">'+q+'</div>';h+='<div class="cmresult-val">'+r.value+'</div>';h+='<div class="cmresult-sub">'+r.sub+'</div>';if(r.insight)h+='<div class="cminsight">'+r.insight+'</div>';var qs=JSON.stringify(q),vs=JSON.stringify(r.value),ss=JSON.stringify(r.sub),is_=JSON.stringify(r.insight||'');h+='<div class="cmactions">';h+='<button class="cmabtn primary" onclick="cmSave('+qs+','+vs+','+ss+','+is_+')">&#9733; Save</button>';h+='<button class="cmabtn" onclick="cmShareItem(-1)">&#8594; Copy</button>';h+='<button class="cmabtn" onclick="cmRun()">&#8635; Re-run</button>';h+='</div></div>';}else{h+='<div class="nodata-box"><span style="color:var(--re)">&#9888;</span><div style="font-size:11px;color:var(--tx2);margin-left:6px">'+( r.noDataReason||'Not available')+'</div></div>';if(r.proxyLabel)h+='<div class="proxy-box"><span style="color:var(--co)">&#8594;</span><div style="font-size:11px;color:var(--tx2);margin-left:6px">Best proxy: <strong>'+r.proxyLabel+'</strong> &mdash; <span style="color:var(--co);cursor:pointer;font-weight:600" onclick="cmSetQ(\''+r.proxyLabel+'\')">Ask this &rarr;</span></div></div>';}h+='</div>';rel.innerHTML=h;}
+function cmShowResult(q,r){
+window._cmLast={q:q,r:r};
+var rel=document.getElementById('cmresult');if(!rel)return;
+var h='<div class="cmresult">';
+if(r.steps&&r.steps.length){
+r.steps.forEach(function(s){
+var cls=s.status==='ok'?'ok':s.status==='no'?'no':'go';
+var sym=s.status==='ok'?'&#10003;':s.status==='no'?'&#215;':'&bull;';
+h+='<div class="cmstep"><div class="cmstep-dot '+cls+'">'+sym+'</div>';
+h+='<div><div class="cmstep-title">'+s.title+'</div><div class="cmstep-sub">'+s.detail+'</div></div></div>';
+});}
+if(r.answerable&&r.value){
+h+='<div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--bor)">';
+h+='<div class="cmresult-q">'+q+'</div>';
+h+='<div class="cmresult-val">'+r.value+'</div>';
+h+='<div class="cmresult-sub">'+r.sub+'</div>';
+if(r.insight)h+='<div class="cminsight">'+r.insight+'</div>';
+h+='<div class="cmactions">';
+h+='<button class="cmabtn primary" onclick="cmSaveLast()">&#9733; Save</button>';
+h+='<button class="cmabtn" onclick="cmCopyLast()">&#8594; Copy</button>';
+h+='<button class="cmabtn" onclick="cmRun()">&#8635; Re-run</button>';
+h+='</div></div>';
+}else{
+h+='<div class="nodata-box"><span style="color:var(--re)">&#9888;</span><div style="font-size:11px;color:var(--tx2);margin-left:6px">'+(r.noDataReason||'Not available')+'</div></div>';
+if(r.proxyLabel){
+h+='<div class="proxy-box"><span style="color:var(--co)">&#8594;</span><div style="font-size:11px;color:var(--tx2);margin-left:6px">Best proxy: <strong>'+r.proxyLabel+'</strong> &mdash; <span style="color:var(--co);cursor:pointer;font-weight:600" onclick="cmSetQ(\"'+ r.proxyLabel+'\")">Ask this &rarr;</span></div></div>';
+}
+}
+h+='</div>';
+rel.innerHTML=h;
+}
+function cmSaveLast(){
+var l=window._cmLast;if(!l)return;
+cmSave(l.q,l.r.value,l.r.sub,l.r.insight||'');
+alert('Saved to library!');
+}
+function cmCopyLast(){
+var l=window._cmLast;if(!l)return;
+var txt='LC Social Intel\n'+l.q+': '+l.r.value+'\n'+l.r.sub+'\n'+(l.r.insight||'')+'\nvia intj-lc-social-intel.vercel.app';
+if(navigator.clipboard){navigator.clipboard.writeText(txt).then(function(){alert('Copied to clipboard!');});}
+else{prompt('Copy this:',txt);}
+}
+
 document.addEventListener('DOMContentLoaded',function(){
 chkTok();
 ss('Loading profiles...','loading');
