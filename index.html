@@ -429,7 +429,7 @@ h+='<div class="cmresult-sub">'+r.sub+'</div>';
 if(r.insight)h+='<div class="cminsight">'+r.insight+'</div>';
 h+='<div class="cmactions">';
 h+='<button class="cmabtn primary" onclick="cmSaveLast()">&#9733; Save</button>';
-h+='<button class="cmabtn" onclick="cmCopyLast()">&#9993; Email</button>'+'<button class="cmabtn" onclick="cmTeamsLast()">&#128172; Teams</button>';
+h+='<button class="cmabtn" onclick="cmTeamsLast()">&#128172; Teams</button>'+'<button class="cmabtn" onclick="cmCopyLast()">&#10064; Copy</button>';
 h+='<button class="cmabtn" onclick="cmRun()">&#8635; Re-run</button>';
 h+='</div></div>';
 }else{
@@ -448,12 +448,10 @@ alert('Saved to library!');
 }
 function cmCopyLast(){
 var l=window._cmLast;if(!l)return;
-var subj='Social Intel: '+l.q;
-var body='Question: '+l.q+'\n\nResult: '+l.r.value+'\nContext: '+l.r.sub+'\n\n'+(l.r.insight||'')+'\n\nvia LC Social Intel\nhttps://intj-lc-social-intel.vercel.app';
-var msOutlook='ms-outlook://compose?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(body);
-var fallback='mailto:?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(body);
-var win=window.open(msOutlook,'_self');
-setTimeout(function(){window.open(fallback,'_self');},1500);
+var txt=l.q+': '+l.r.value+' ('+l.r.sub+'). '+(l.r.insight||'')+' via https://intj-lc-social-intel.vercel.app';
+if(navigator.clipboard){
+navigator.clipboard.writeText(txt).then(function(){alert('Copied to clipboard!');});
+}else{prompt('Copy this:',txt);}
 }
 function cmTeamsLast(){
 var l=window._cmLast;if(!l)return;
