@@ -429,7 +429,7 @@ h+='<div class="cmresult-sub">'+r.sub+'</div>';
 if(r.insight)h+='<div class="cminsight">'+r.insight+'</div>';
 h+='<div class="cmactions">';
 h+='<button class="cmabtn primary" onclick="cmSaveLast()">&#9733; Save</button>';
-h+='<button class="cmabtn" onclick="cmCopyLast()">&#9993; Email</button>';
+h+='<button class="cmabtn" onclick="cmCopyLast()">&#9993; Email</button>'+'<button class="cmabtn" onclick="cmTeamsLast()">&#128172; Teams</button>';
 h+='<button class="cmabtn" onclick="cmRun()">&#8635; Re-run</button>';
 h+='</div></div>';
 }else{
@@ -449,25 +449,14 @@ alert('Saved to library!');
 function cmCopyLast(){
 var l=window._cmLast;if(!l)return;
 var subj='Social Intel: '+l.q;
-var body='Question: '+l.q+'\n\n';
-body+='Result: '+l.r.value+'\n';
-body+='Context: '+l.r.sub+'\n\n';
-if(l.r.insight)body+=l.r.insight+'\n\n';
-body+='via LC Social Intel\nhttps://intj-lc-social-intel.vercel.app';
-var mailto='mailto:?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(body);
-window.location.href=mailto;
+var body='Question: '+l.q+'\n\nResult: '+l.r.value+'\nContext: '+l.r.sub+'\n\n'+(l.r.insight||'')+'\n\nvia LC Social Intel\nhttps://intj-lc-social-intel.vercel.app';
+window.open('mailto:?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(body),'_self');
 }
-
-document.addEventListener('DOMContentLoaded',function(){
-chkTok();
-ss('Loading profiles...','loading');
-sget('/v1/metadata/client').then(function(d){
-cid=d.data&&d.data[0]?String(d.data[0].customer_id):'528985';
-return sget('/v1/'+cid+'/metadata/customer');
-}).then(function(d){
-profs=d.data||[];renderSB();ss(profs.length+' profiles loaded','ok');
-}).catch(function(e){ss('Error: '+e.message,'error');});
-});
+function cmTeamsLast(){
+var l=window._cmLast;if(!l)return;
+var msg=l.q+': '+l.r.value+' ('+l.r.sub+'). '+(l.r.insight||'')+' via https://intj-lc-social-intel.vercel.app';
+window.open('https://teams.microsoft.com/l/chat/0/0?message='+encodeURIComponent(msg),'_blank');
+}
 </script>
 </body>
 </html>
