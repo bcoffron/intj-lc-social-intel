@@ -117,98 +117,72 @@ body{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;font-
 ::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-thumb{background:var(--bor2);border-radius:2px}
 @media(max-width:680px){
-  .layout{flex-direction:column}
-  .sb{width:100%;height:auto;position:static;border-right:none;border-bottom:1px solid var(--bor);padding:12px 0;display:grid;grid-template-columns:1fr 1fr}
-  .con{padding:14px 16px}
-  .mstrip{grid-template-columns:repeat(3,1fr)}
-  .mc{padding:10px 12px}.mcv{font-size:20px}
-  .tbr{overflow-x:auto;white-space:nowrap}
-  .tb{padding:8px 12px;font-size:12px}
-  .pgrid{grid-template-columns:1fr}
-  .acrd{flex-direction:column;gap:10px}
-  .adw{flex-direction:row;width:100%;justify-content:flex-start;gap:12px}
-  .acmg{grid-template-columns:repeat(3,1fr)}
-  .aflt{flex-direction:column}
-  .asbr{gap:4px}
-  .asbt{font-size:10px;padding:4px 9px}
-  .hdr{padding:10px 16px}
-  .bname{font-size:15px}
-  .pstats{gap:10px}
+.layout{flex-direction:column}
+.sb{width:100%;height:auto;position:static;border-right:none;border-bottom:1px solid var(--bor);padding:12px 0;display:grid;grid-template-columns:1fr 1fr}
+.con{padding:14px 16px}
+.mstrip{grid-template-columns:repeat(3,1fr)}
+.mc{padding:10px 12px}.mcv{font-size:20px}
+.tbr{overflow-x:auto;white-space:nowrap}
+.tb{padding:8px 12px;font-size:12px}
+.pgrid{grid-template-columns:1fr}
+.acrd{flex-direction:column;gap:10px}
+.adw{flex-direction:row;width:100%;justify-content:flex-start;gap:12px}
+.acmg{grid-template-columns:repeat(3,1fr)}
+.aflt{flex-direction:column}
+.asbr{gap:4px}
+.asbt{font-size:10px;padding:4px 9px}
+.hdr{padding:10px 16px}
+.bname{font-size:15px}
+.pstats{gap:10px}
 }
 </style>
 </head>
 <body>
 <div class="hdr">
-  <div class="hbrand">
-    <div class="logo">LC</div>
-    <div><div class="bname">Social Intel</div><div class="bsub">Life.Church &middot; Pattern Engine</div></div>
-  </div>
-  <div class="spill"><div class="sdot" id="sdot"></div><span id="stxt">Initializing</span></div>
+<div class="hbrand">
+<div class="logo">LC</div>
+<div><div class="bname">Social Intel</div><div class="bsub">Life.Church &middot; Pattern Engine</div></div>
+</div>
+<div class="spill"><div class="sdot" id="sdot"></div><span id="stxt">Initializing</span></div>
 </div>
 <div id="tokwarn" style="display:none" class="tokwarn"></div>
 <div class="layout">
-  <div class="sb">
-    <div style="margin-bottom:26px">
-      <div class="sbl" style="padding:0 18px;margin-bottom:8px">Account</div>
-      <div class="sbc">
-        <select class="sel" id="acsel" onchange="selAcc(this.value)"><option value="">-- Select account --</option></select>
-        <div id="pitems"></div>
-      </div>
-    </div>
-    <div>
-      <div class="sbl" style="padding:0 18px;margin-bottom:8px">Date Range</div>
-      <div class="sbc">
-        <select class="sel" id="drange"><option value="30">Last 30 days</option><option value="60">Last 60 days</option><option value="90">Last 90 days</option></select>
-        <button class="rbtn" id="rbtn" onclick="runAnal()">Run Analysis</button>
-      </div>
-    </div>
-  </div>
-  <div class="con">
-    <div id="emp" class="emp"><div class="etit">No data yet</div><div class="esub">Select an account and click Run Analysis</div></div>
-    <div id="dash" style="display:none">
-      <div class="mstrip" id="mgrid"></div>
-      <div class="tbr">
-        <button class="tb on" onclick="swTab('posts',this)">Top Posts</button>
-        <button class="tb" onclick="swTab('patterns',this)">Patterns</button>
-        <button class="tb" onclick="swTab('adam',this)">Adam Metrics</button>
-      </div>
-      <div id="tp-posts" class="tp on"></div>
-      <div id="tp-patterns" class="tp"></div>
-      <div id="tp-adam" class="tp"></div>
-    </div>
-  </div>
+<div class="sb">
+<div style="margin-bottom:26px">
+<div class="sbl" style="padding:0 18px;margin-bottom:8px">Account</div>
+<div class="sbc">
+<select class="sel" id="acsel" onchange="selAcc(this.value)"><option value="">-- Select account --</option></select>
+<div id="pitems"></div>
+</div>
+</div>
+<div>
+<div class="sbl" style="padding:0 18px;margin-bottom:8px">Date Range</div>
+<div class="sbc">
+<select class="sel" id="drange"><option value="30">Last 30 days</option><option value="60">Last 60 days</option><option value="90">Last 90 days</option></select>
+<button class="rbtn" id="rbtn" onclick="runAnal()">Run Analysis</button>
+</div>
+</div>
+</div>
+<div class="con">
+<div id="emp" class="emp"><div class="etit">No data yet</div><div class="esub">Select an account and click Run Analysis</div></div>
+<div id="dash" style="display:none">
+<div class="mstrip" id="mgrid"></div>
+<div class="tbr">
+<button class="tb on" onclick="swTab('posts',this)">Top Posts</button>
+<button class="tb" onclick="swTab('patterns',this)">Patterns</button>
+<button class="tb" onclick="swTab('adam',this)">Adam Metrics</button>
+</div>
+<div id="tp-posts" class="tp on"></div>
+<div id="tp-patterns" class="tp"></div>
+<div id="tp-adam" class="tp"></div>
+</div>
+</div>
 </div>
 <script>
 var TOK='NTI4OTg1fDE3Nzg4Njc3OTV8ZGY0MjNiZTktYjdiNS00ZDNmLTk1NDktMDhjMzQxMTVkM2Mx';
 var cid='',profs=[],selProfs=[],aKey='score',aDir='desc',aRows=[];
 function ss(m,s){document.getElementById('stxt').textContent=m;document.getElementById('sdot').className='sdot '+(s||'loading');}
-function chkTok(){
-var el=document.getElementById('tokwarn');
-if(!el)return;
-try{
-var d=atob(TOK);
-var parts=d.split('|');
-if(parts.length<2)return;
-var issued=parseInt(parts[1]);
-var expiry=issued+432000;
-var now=Math.floor(Date.now()/1000);
-var diff=expiry-now;
-var days=Math.floor(diff/86400);
-if(diff<=0){
-el.className='tokwarn expired';
-el.innerHTML='&#9888; Sprout token EXPIRED. Generate a new token.';
-}else if(diff<259200){
-el.className='tokwarn soon';
-var msg='&#9888; Sprout token expires in '+days+' day';
-if(days!==1)msg+='s';
-msg+='. Generate a new token soon.';
-el.innerHTML=msg;
-}else{
-el.className='tokwarn';
-}
-}catch(e){}
-}
-
+function chkTok(){try{var dec=atob(TOK);var parts=dec.split('|');if(parts.length>=2){var exp=parseInt(parts[1])+432000;var diff=exp-Math.floor(Date.now()/1000);var el=document.getElementById('tokwarn');if(!el)return;if(diff<=0){el.style.display='flex';el.className='tokwarn expired';el.innerHTML='&#9888; Sprout token EXPIRED. Generate a new token in Sprout Settings.';}else if(diff<259200){var days=Math.floor(diff/86400);var pl=days===1?'':'s';el.style.display='flex';el.className='tokwarn soon';el.innerHTML='&#9888; Sprout token expires in '+days+' day'+pl+'. Generate a new token soon.';}else{el.style.display='none';}}}catch(e){}}
 function fn(n){n=Number(n)||0;if(n>=1000000)return(n/1000000).toFixed(1)+'M';if(n>=1000)return(n/1000).toFixed(1)+'K';return Math.round(n).toLocaleString();}
 function pc(r){return(r*100).toFixed(2)+'%';}
 function nc(n){var m={instagram:'#e8720a',fb_instagram_account:'#e8720a',facebook:'#2a5ab4',linkedin:'#2a5ab4'};return m[(n||'').toLowerCase()]||'#b8987a';}
@@ -217,221 +191,221 @@ function gurl(g){if(!g)return null;if(g.indexOf('p:')===0){var p=g.slice(2).spli
 function sget(path){return fetch('/api/sprout?path='+encodeURIComponent(path),{headers:{'x-sprout-token':TOK}}).then(function(r){if(!r.ok)throw new Error(r.status);return r.json();});}
 function spost(path,body){return fetch('/api/sprout?path='+encodeURIComponent(path),{method:'POST',headers:{'Content-Type':'application/json','x-sprout-token':TOK},body:JSON.stringify(body)}).then(function(r){if(!r.ok)return r.text().then(function(t){throw new Error(r.status+': '+t.slice(0,100));});return r.json();});}
 function renderSB(){
-  var nl={instagram:'IG',fb_instagram_account:'IG',facebook:'FB',linkedin:'LI',youtube:'YT',tiktok:'TK'};
-  var EX=['twitter','fb_twitter_account','linkedin','youtube'];
-  var pp=profs.filter(function(p){return EX.indexOf((p.network_type||'').toLowerCase())===-1;});
-  var gr={};pp.forEach(function(p){var k=p.name||p.handle||'?';if(!gr[k])gr[k]=[];gr[k].push(p);});
-  window._gr=gr;window._pp=pp;window._nl=nl;selProfs=[];
-  var nms=Object.keys(gr),o='<option value="">-- Select account --</option><option value="all">All accounts</option>';
-  nms.forEach(function(n){
-    var ps=gr[n];
-    if(ps.length===1){o+='<option value="g:'+n+'">'+n+'</option>';}
-    else{o+='<optgroup label="'+n+'"><option value="g:'+n+'">'+n+' - All</option>';
-      ps.forEach(function(p){var nt=(p.network_type||'').toLowerCase();o+='<option value="p:'+p.customer_profile_id+'">'+n+' - '+(nl[nt]||nt)+'</option>';});
-      o+='</optgroup>';}
-  });
-  document.getElementById('acsel').innerHTML=o;
+var nl={instagram:'IG',fb_instagram_account:'IG',facebook:'FB',linkedin:'LI',youtube:'YT',tiktok:'TK'};
+var EX=['twitter','fb_twitter_account','linkedin','youtube'];
+var pp=profs.filter(function(p){return EX.indexOf((p.network_type||'').toLowerCase())===-1;});
+var gr={};pp.forEach(function(p){var k=p.name||p.handle||'?';if(!gr[k])gr[k]=[];gr[k].push(p);});
+window._gr=gr;window._pp=pp;window._nl=nl;selProfs=[];
+var nms=Object.keys(gr),o='<option value="">-- Select account --</option><option value="all">All accounts</option>';
+nms.forEach(function(n){
+var ps=gr[n];
+if(ps.length===1){o+='<option value="g:'+n+'">'+n+'</option>';}
+else{o+='<optgroup label="'+n+'"><option value="g:'+n+'">'+n+' - All</option>';
+ps.forEach(function(p){var nt=(p.network_type||'').toLowerCase();o+='<option value="p:'+p.customer_profile_id+'">'+n+' - '+(nl[nt]||nt)+'</option>';});
+o+='</optgroup>';}
+});
+document.getElementById('acsel').innerHTML=o;
 }
 function selAcc(v){
-  var nl=window._nl||{},pp=window._pp||[],gr=window._gr||{},sel=[];
-  if(v==='all')sel=pp;
-  else if(v.indexOf('g:')===0)sel=gr[v.slice(2)]||[];
-  else if(v.indexOf('p:')===0){var id=parseInt(v.slice(2));sel=pp.filter(function(p){return p.customer_profile_id===id;});}
-  selProfs=sel.map(function(p){return p.customer_profile_id;});
-  var h='';sel.forEach(function(p){var nt=(p.network_type||'').toLowerCase(),c=nc(nt);h+='<div class="pit on"><div class="pico" style="background:'+c+'18;color:'+c+'">'+(nl[nt]||'--')+'</div><div><div class="pnm">'+(p.name||'?')+'</div><div class="pnt">'+nt+'</div></div></div>';});
-  document.getElementById('pitems').innerHTML=h;
+var nl=window._nl||{},pp=window._pp||[],gr=window._gr||{},sel=[];
+if(v==='all')sel=pp;
+else if(v.indexOf('g:')===0)sel=gr[v.slice(2)]||[];
+else if(v.indexOf('p:')===0){var id=parseInt(v.slice(2));sel=pp.filter(function(p){return p.customer_profile_id===id;});}
+selProfs=sel.map(function(p){return p.customer_profile_id;});
+var h='';sel.forEach(function(p){var nt=(p.network_type||'').toLowerCase(),c=nc(nt);h+='<div class="pit on"><div class="pico" style="background:'+c+'18;color:'+c+'">'+(nl[nt]||'--')+'</div><div><div class="pnm">'+(p.name||'?')+'</div><div class="pnt">'+nt+'</div></div></div>';});
+document.getElementById('pitems').innerHTML=h;
 }
 function gdr(d){var e=new Date(),s=new Date();s.setDate(s.getDate()-parseInt(d));function f(x){return x.toISOString().split('T')[0];}return{s:f(s),e:f(e)};}
 function runAnal(){
-  if(!selProfs.length){alert('Please select an account first.');return;}
-  var btn=document.getElementById('rbtn');btn.disabled=true;btn.textContent='Running...';
-  var d=document.getElementById('drange').value,r=gdr(d);
-  ss('Fetching analytics...','loading');
-  spost('/v1/'+cid+'/analytics/posts',{
-    filters:['customer_profile_id.eq('+selProfs.join(',')+')', 'created_time.in('+r.s+'..'+r.e+')'],
-    metrics:['lifetime.impressions','lifetime.engagements','lifetime.reactions','lifetime.shares_count','lifetime.comments_count','lifetime.video_view_time_per_view'],
-    page_size:100
-  }).then(function(res){
-    var posts=res.data||[];
-    ss('Analyzing '+posts.length+' posts...','loading');
-    rendM(posts);rendP(posts);rendPat(posts);rendA(posts);
-    document.getElementById('dash').style.display='block';
-    document.getElementById('emp').style.display='none';
-    ss(posts.length+' posts ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ· '+d+' days','ok');
-  }).catch(function(e){ss('Error: '+e.message,'error');})
-  .finally(function(){btn.disabled=false;btn.textContent='Run Analysis';});
+if(!selProfs.length){alert('Please select an account first.');return;}
+var btn=document.getElementById('rbtn');btn.disabled=true;btn.textContent='Running...';
+var d=document.getElementById('drange').value,r=gdr(d);
+ss('Fetching analytics...','loading');
+spost('/v1/'+cid+'/analytics/posts',{
+filters:['customer_profile_id.eq('+selProfs.join(',')+')', 'created_time.in('+r.s+'..'+r.e+')'],
+metrics:['lifetime.impressions','lifetime.engagements','lifetime.reactions','lifetime.shares_count','lifetime.comments_count','lifetime.video_view_time_per_view'],
+page_size:100
+}).then(function(res){
+var posts=res.data||[];
+ss('Analyzing '+posts.length+' posts...','loading');
+rendM(posts);rendP(posts);rendPat(posts);rendA(posts);
+document.getElementById('dash').style.display='block';
+document.getElementById('emp').style.display='none';
+ss(posts.length+' posts | '+d+' days','ok');
+}).catch(function(e){ss('Error: '+e.message,'error');})
+.finally(function(){btn.disabled=false;btn.textContent='Run Analysis';});
 }
 function rendM(posts){
-  var ti=0,te=0;posts.forEach(function(p){ti+=(p.metrics&&p.metrics['lifetime.impressions'])||0;te+=(p.metrics&&p.metrics['lifetime.engagements'])||0;});
-  var ae=posts.length?Math.round(te/posts.length):0,er=ti>0?((te/ti)*100).toFixed(2):0;
-  var c=[['Impressions',fn(ti)],['Engagements',fn(te)],['Avg Eng/Post',fn(ae)],['Eng Rate',er+'%'],['Posts',posts.length]];
-  document.getElementById('mgrid').innerHTML=c.map(function(x){return'<div class="mc"><div class="mcl">'+x[0]+'</div><div class="mcv">'+x[1]+'</div></div>';}).join('');
+var ti=0,te=0;posts.forEach(function(p){ti+=(p.metrics&&p.metrics['lifetime.impressions'])||0;te+=(p.metrics&&p.metrics['lifetime.engagements'])||0;});
+var ae=posts.length?Math.round(te/posts.length):0,er=ti>0?((te/ti)*100).toFixed(2):0;
+var c=[['Impressions',fn(ti)],['Engagements',fn(te)],['Avg Eng/Post',fn(ae)],['Eng Rate',er+'%'],['Posts',posts.length]];
+document.getElementById('mgrid').innerHTML=c.map(function(x){return'<div class="mc"><div class="mcl">'+x[0]+'</div><div class="mcv">'+x[1]+'</div></div>';}).join('');
 }
 function rendP(posts){
-  var tab=document.getElementById('tp-posts');
-  if(!posts.length){tab.innerHTML='<div class="emp" style="height:200px"><div class="etit">No posts</div></div>';return;}
-  var s=posts.slice().sort(function(a,b){return((b.metrics&&b.metrics['lifetime.engagements'])||0)-((a.metrics&&a.metrics['lifetime.engagements'])||0);});
-  var med=(s[Math.floor(s.length/2)]&&s[Math.floor(s.length/2)].metrics&&s[Math.floor(s.length/2)].metrics['lifetime.engagements'])||0;
-  var h='<div class="plist">';
-  s.slice(0,20).forEach(function(p,i){
-    var eng=(p.metrics&&p.metrics['lifetime.engagements'])||0,imp=(p.metrics&&p.metrics['lifetime.impressions'])||0;
-    var er=imp>0?((eng/imp)*100).toFixed(2):'0.00';
-    var v=eng>med*1.5?'strong':eng<med*0.5?'weak':'mid';
-    var vl=v==='strong'?'Top':v==='weak'?'Low':'Avg';
-    var net=gnet(p.guid),url=gurl(p.guid);
-    h+='<div class="pcard"><div class="ptop">';
-    h+='<span class="nb nb-'+net+'">'+net+'</span>';
-    h+='<span class="vb vb-'+v+'">'+vl+'</span>';
-    if(url)h+='<a href="'+url+'" target="_blank" class="vlink">View &rarr;</a>';
-    h+='<span class="prk">#'+(i+1)+'</span></div>';
-    h+='<div class="pstats">';
-    h+='<div class="st">IMP <span>'+fn(imp)+'</span></div>';
-    h+='<div class="st">ENG <span>'+fn(eng)+'</span></div>';
-    h+='<div class="st">REACT <span>'+fn((p.metrics&&p.metrics['lifetime.reactions'])||0)+'</span></div>';
-    h+='<div class="st">CMT <span>'+fn((p.metrics&&p.metrics['lifetime.comments_count'])||0)+'</span></div>';
-    h+='<div class="st">SHARE <span>'+fn((p.metrics&&p.metrics['lifetime.shares_count'])||0)+'</span></div>';
-    h+='<div class="st hl">ER <span>'+er+'%</span></div>';
-    h+='</div></div>';
-  });
-  h+='</div>';tab.innerHTML=h;
+var tab=document.getElementById('tp-posts');
+if(!posts.length){tab.innerHTML='<div class="emp" style="height:200px"><div class="etit">No posts</div></div>';return;}
+var s=posts.slice().sort(function(a,b){return((b.metrics&&b.metrics['lifetime.engagements'])||0)-((a.metrics&&a.metrics['lifetime.engagements'])||0);});
+var med=(s[Math.floor(s.length/2)]&&s[Math.floor(s.length/2)].metrics&&s[Math.floor(s.length/2)].metrics['lifetime.engagements'])||0;
+var h='<div class="plist">';
+s.slice(0,20).forEach(function(p,i){
+var eng=(p.metrics&&p.metrics['lifetime.engagements'])||0,imp=(p.metrics&&p.metrics['lifetime.impressions'])||0;
+var er=imp>0?((eng/imp)*100).toFixed(2):'0.00';
+var v=eng>med*1.5?'strong':eng<med*0.5?'weak':'mid';
+var vl=v==='strong'?'Top':v==='weak'?'Low':'Avg';
+var net=gnet(p.guid),url=gurl(p.guid);
+h+='<div class="pcard"><div class="ptop">';
+h+='<span class="nb nb-'+net+'">'+net+'</span>';
+h+='<span class="vb vb-'+v+'">'+vl+'</span>';
+if(url)h+='<a href="'+url+'" target="_blank" class="vlink">View &rarr;</a>';
+h+='<span class="prk">#'+(i+1)+'</span></div>';
+h+='<div class="pstats">';
+h+='<div class="st">IMP <span>'+fn(imp)+'</span></div>';
+h+='<div class="st">ENG <span>'+fn(eng)+'</span></div>';
+h+='<div class="st">REACT <span>'+fn((p.metrics&&p.metrics['lifetime.reactions'])||0)+'</span></div>';
+h+='<div class="st">CMT <span>'+fn((p.metrics&&p.metrics['lifetime.comments_count'])||0)+'</span></div>';
+h+='<div class="st">SHARE <span>'+fn((p.metrics&&p.metrics['lifetime.shares_count'])||0)+'</span></div>';
+h+='<div class="st hl">ER <span>'+er+'%</span></div>';
+h+='</div></div>';
+});
+h+='</div>';tab.innerHTML=h;
 }
 function rendPat(posts){
-  if(!posts.length)return;
-  function mg(k){return function(p){return(p.metrics&&p.metrics[k])||0;};}
-  var s=posts.slice().sort(function(a,b){return mg('lifetime.engagements')(b)-mg('lifetime.engagements')(a);});
-  var cut=Math.max(1,Math.floor(s.length*0.25)),top=s.slice(0,cut),bot=s.slice(-cut);
-  function av(arr,fn){return arr.length?arr.reduce(function(x,p){return x+fn(p);},0)/arr.length:0;}
-  var tE=av(top,mg('lifetime.engagements')),bE=av(bot,mg('lifetime.engagements'));
-  var tI=av(top,mg('lifetime.impressions')),bI=av(bot,mg('lifetime.impressions'));
-  var tER=tI>0?(tE/tI*100).toFixed(2):0,bER=bI>0?(bE/bI*100).toFixed(2):0;
-  var tS=av(top,mg('lifetime.shares_count')),bS=av(bot,mg('lifetime.shares_count'));
-  var tC=av(top,mg('lifetime.comments_count')),bC=av(bot,mg('lifetime.comments_count'));
-  var tR=av(top,mg('lifetime.reactions')),bR=av(bot,mg('lifetime.reactions'));
-  var bn={};
-  posts.forEach(function(p){
-    var n=gnet(p.guid);
-    if(!bn[n])bn[n]={t:0,i:0,r:0,s:0,c:0,n:0};
-    bn[n].t+=mg('lifetime.engagements')(p);bn[n].i+=mg('lifetime.impressions')(p);
-    bn[n].r+=mg('lifetime.reactions')(p);bn[n].s+=mg('lifetime.shares_count')(p);
-    bn[n].c+=mg('lifetime.comments_count')(p);bn[n].n++;
-  });
-  var ne=Object.keys(bn).map(function(k){return[k,bn[k]];}).sort(function(a,b){return(b[1].t/b[1].n)-(a[1].t/a[1].n);});
-  var mR=Math.max.apply(null,ne.map(function(e){return e[1].n>0?e[1].r/e[1].n:0;}).concat([1]));
-  var mS=Math.max.apply(null,ne.map(function(e){return e[1].n>0?e[1].s/e[1].n:0;}).concat([1]));
-  var mC=Math.max.apply(null,ne.map(function(e){return e[1].n>0?e[1].c/e[1].n:0;}).concat([1]));
-  var el=posts.map(mg('lifetime.engagements')),mE=Math.max.apply(null,el.concat([1]));
-  var dist=[0,0,0,0,0];el.forEach(function(e){dist[Math.min(4,Math.floor((e/mE)*5))]++;});
-  var mD=Math.max.apply(null,dist.concat([1]));
-  var sl=posts.map(mg('lifetime.shares_count')),ll=posts.map(mg('lifetime.reactions'));
-  var mSc=Math.max.apply(null,sl.concat([1])),mLc=Math.max.apply(null,ll.concat([1]));
-  var tEv=av(top,mg('lifetime.engagements')),bEv=av(bot,mg('lifetime.engagements'));
-  var dm=dist[0]+dist[1]>dist[3]+dist[4]?'Most posts underperform. A few outliers carry your metrics.':dist[3]+dist[4]>dist[0]+dist[1]?'Strong consistent performance. Content reliably engaging.':'Mixed results with high variance.';
-  var rows=[['Avg engagement',fn(Math.round(tE)),fn(Math.round(bE))],['Avg reach',fn(Math.round(tI)),fn(Math.round(bI))],['Eng rate',tER+'%',bER+'%'],['Avg shares',fn(Math.round(tS)),fn(Math.round(bS))],['Avg comments',fn(Math.round(tC)),fn(Math.round(bC))],['Avg reactions',fn(Math.round(tR)),fn(Math.round(bR))]];
-  var p1='<div class="pcrd"><div class="ptit">Top '+cut+' vs bottom '+cut+' posts</div><div class="pcmp"><div class="pg pg-t"><div class="pglbl">Top performers</div>';
-  rows.forEach(function(r){p1+='<div class="psr"><span class="psk">'+r[0]+'</span><span class="psv">'+r[1]+'</span></div>';});
-  p1+='</div><div class="pg pg-b"><div class="pglbl">Underperformers</div>';
-  rows.forEach(function(r){p1+='<div class="psr"><span class="psk">'+r[0]+'</span><span class="psv">'+r[2]+'</span></div>';});
-  p1+='</div></div></div>';
-  var p2='<div class="pcrd"><div class="ptit">Platform breakdown</div>';
-  ne.forEach(function(e){
-    var n=e[0],d=e[1],aR=d.n>0?Math.round(d.r/d.n):0,aS=d.n>0?Math.round(d.s/d.n):0,aC=d.n>0?Math.round(d.c/d.n):0;
-    var rp=Math.round((aR/mR)*100),sp=Math.round((aS/mS)*100),cp=Math.round((aC/mC)*100);
-    p2+='<div style="margin-bottom:14px"><div style="font-size:11px;font-weight:600;color:var(--tx);margin-bottom:8px;display:flex;align-items:center;gap:6px"><div style="width:8px;height:8px;border-radius:50%;background:'+nc(n)+'"></div>'+n+'<span style="font-size:10px;color:var(--tx3);font-weight:400">('+d.n+' posts)</span></div>';
-    p2+='<div class="pbr"><div class="pbl">Reactions</div><div class="pbt"><div class="pbf" style="width:'+rp+'%;background:var(--co)"></div></div><div class="pbv">'+fn(aR)+'</div></div>';
-    p2+='<div class="pbr"><div class="pbl">Shares</div><div class="pbt"><div class="pbf" style="width:'+sp+'%;background:var(--gr)"></div></div><div class="pbv">'+fn(aS)+'</div></div>';
-    p2+='<div class="pbr"><div class="pbl">Comments</div><div class="pbt"><div class="pbf" style="width:'+cp+'%;background:var(--am)"></div></div><div class="pbv">'+fn(aC)+'</div></div></div>';
-  });
-  p2+='</div>';
-  var db='';dist.forEach(function(v,i){db+='<div style="flex:1;border-radius:3px 3px 0 0;background:var(--co);opacity:'+(0.35+i*0.16)+';height:'+Math.round((v/mD)*100)+'%"></div>';});
-  var p3='<div class="pcrd"><div class="ptit">Engagement distribution</div><div style="display:flex;align-items:flex-end;gap:4px;height:80px">'+db+'</div><div style="display:flex;gap:4px;margin-top:6px"><div style="flex:1;font-size:9px;color:var(--tx3);text-align:center">Low</div><div style="flex:1"></div><div style="flex:1;font-size:9px;color:var(--tx3);text-align:center">Mid</div><div style="flex:1"></div><div style="flex:1;font-size:9px;color:var(--tx3);text-align:center">High</div></div><div style="margin-top:12px;font-size:11px;color:var(--tx2)">'+dm+'</div></div>';
-  var dots='';s.slice(0,25).forEach(function(p,i){
-    var sv=mg('lifetime.shares_count')(p),lv=mg('lifetime.reactions')(p),ev=mg('lifetime.engagements')(p);
-    var x=Math.round((sv/mSc)*88+6),y=Math.round((1-(lv/mLc)*0.88)*100);
-    var col=ev>tEv*0.8?'var(--gr)':ev<bEv*1.2?'var(--re)':'var(--am)';
-    dots+='<div class="pdot" title="Post #'+(i+1)+'" style="left:'+x+'%;top:'+y+'%;background:'+col+';border:2px solid '+col+';opacity:0.85"></div>';
-  });
-  var p4='<div class="pcrd"><div class="ptit">Sends vs likes scatter</div><div class="psc">'+dots+'<div style="position:absolute;bottom:4px;left:0;right:0;text-align:center;font-size:9px;color:var(--tx3)">Sends</div><div style="position:absolute;top:4px;left:4px;font-size:9px;color:var(--tx3)">Likes</div></div><div style="display:flex;gap:12px;font-size:10px;color:var(--tx3);margin-top:8px"><span style="display:flex;align-items:center;gap:4px"><span style="width:7px;height:7px;border-radius:50%;background:var(--gr);display:inline-block"></span>Top</span><span style="display:flex;align-items:center;gap:4px"><span style="width:7px;height:7px;border-radius:50%;background:var(--am);display:inline-block"></span>Avg</span><span style="display:flex;align-items:center;gap:4px"><span style="width:7px;height:7px;border-radius:50%;background:var(--re);display:inline-block"></span>Low</span></div></div>';
-  document.getElementById('tp-patterns').innerHTML='<div class="pgrid">'+p1+p2+p3+p4+'</div>';
+if(!posts.length)return;
+function mg(k){return function(p){return(p.metrics&&p.metrics[k])||0;};}
+var s=posts.slice().sort(function(a,b){return mg('lifetime.engagements')(b)-mg('lifetime.engagements')(a);});
+var cut=Math.max(1,Math.floor(s.length*0.25)),top=s.slice(0,cut),bot=s.slice(-cut);
+function av(arr,fn){return arr.length?arr.reduce(function(x,p){return x+fn(p);},0)/arr.length:0;}
+var tE=av(top,mg('lifetime.engagements')),bE=av(bot,mg('lifetime.engagements'));
+var tI=av(top,mg('lifetime.impressions')),bI=av(bot,mg('lifetime.impressions'));
+var tER=tI>0?(tE/tI*100).toFixed(2):0,bER=bI>0?(bE/bI*100).toFixed(2):0;
+var tS=av(top,mg('lifetime.shares_count')),bS=av(bot,mg('lifetime.shares_count'));
+var tC=av(top,mg('lifetime.comments_count')),bC=av(bot,mg('lifetime.comments_count'));
+var tR=av(top,mg('lifetime.reactions')),bR=av(bot,mg('lifetime.reactions'));
+var bn={};
+posts.forEach(function(p){
+var n=gnet(p.guid);
+if(!bn[n])bn[n]={t:0,i:0,r:0,s:0,c:0,n:0};
+bn[n].t+=mg('lifetime.engagements')(p);bn[n].i+=mg('lifetime.impressions')(p);
+bn[n].r+=mg('lifetime.reactions')(p);bn[n].s+=mg('lifetime.shares_count')(p);
+bn[n].c+=mg('lifetime.comments_count')(p);bn[n].n++;
+});
+var ne=Object.keys(bn).map(function(k){return[k,bn[k]];}).sort(function(a,b){return(b[1].t/b[1].n)-(a[1].t/a[1].n);});
+var mR=Math.max.apply(null,ne.map(function(e){return e[1].n>0?e[1].r/e[1].n:0;}).concat([1]));
+var mS=Math.max.apply(null,ne.map(function(e){return e[1].n>0?e[1].s/e[1].n:0;}).concat([1]));
+var mC=Math.max.apply(null,ne.map(function(e){return e[1].n>0?e[1].c/e[1].n:0;}).concat([1]));
+var el=posts.map(mg('lifetime.engagements')),mE=Math.max.apply(null,el.concat([1]));
+var dist=[0,0,0,0,0];el.forEach(function(e){dist[Math.min(4,Math.floor((e/mE)*5))]++;});
+var mD=Math.max.apply(null,dist.concat([1]));
+var sl=posts.map(mg('lifetime.shares_count')),ll=posts.map(mg('lifetime.reactions'));
+var mSc=Math.max.apply(null,sl.concat([1])),mLc=Math.max.apply(null,ll.concat([1]));
+var tEv=av(top,mg('lifetime.engagements')),bEv=av(bot,mg('lifetime.engagements'));
+var dm=dist[0]+dist[1]>dist[3]+dist[4]?'Most posts underperform. A few outliers carry your metrics.':dist[3]+dist[4]>dist[0]+dist[1]?'Strong consistent performance. Content reliably engaging.':'Mixed results with high variance.';
+var rows=[['Avg engagement',fn(Math.round(tE)),fn(Math.round(bE))],['Avg reach',fn(Math.round(tI)),fn(Math.round(bI))],['Eng rate',tER+'%',bER+'%'],['Avg shares',fn(Math.round(tS)),fn(Math.round(bS))],['Avg comments',fn(Math.round(tC)),fn(Math.round(bC))],['Avg reactions',fn(Math.round(tR)),fn(Math.round(bR))]];
+var p1='<div class="pcrd"><div class="ptit">Top '+cut+' vs bottom '+cut+' posts</div><div class="pcmp"><div class="pg pg-t"><div class="pglbl">Top performers</div>';
+rows.forEach(function(r){p1+='<div class="psr"><span class="psk">'+r[0]+'</span><span class="psv">'+r[1]+'</span></div>';});
+p1+='</div><div class="pg pg-b"><div class="pglbl">Underperformers</div>';
+rows.forEach(function(r){p1+='<div class="psr"><span class="psk">'+r[0]+'</span><span class="psv">'+r[2]+'</span></div>';});
+p1+='</div></div></div>';
+var p2='<div class="pcrd"><div class="ptit">Platform breakdown</div>';
+ne.forEach(function(e){
+var n=e[0],d=e[1],aR=d.n>0?Math.round(d.r/d.n):0,aS=d.n>0?Math.round(d.s/d.n):0,aC=d.n>0?Math.round(d.c/d.n):0;
+var rp=Math.round((aR/mR)*100),sp=Math.round((aS/mS)*100),cp=Math.round((aC/mC)*100);
+p2+='<div style="margin-bottom:14px"><div style="font-size:11px;font-weight:600;color:var(--tx);margin-bottom:8px;display:flex;align-items:center;gap:6px"><div style="width:8px;height:8px;border-radius:50%;background:'+nc(n)+'"></div>'+n+'<span style="font-size:10px;color:var(--tx3);font-weight:400">('+d.n+' posts)</span></div>';
+p2+='<div class="pbr"><div class="pbl">Reactions</div><div class="pbt"><div class="pbf" style="width:'+rp+'%;background:var(--co)"></div></div><div class="pbv">'+fn(aR)+'</div></div>';
+p2+='<div class="pbr"><div class="pbl">Shares</div><div class="pbt"><div class="pbf" style="width:'+sp+'%;background:var(--gr)"></div></div><div class="pbv">'+fn(aS)+'</div></div>';
+p2+='<div class="pbr"><div class="pbl">Comments</div><div class="pbt"><div class="pbf" style="width:'+cp+'%;background:var(--am)"></div></div><div class="pbv">'+fn(aC)+'</div></div></div>';
+});
+p2+='</div>';
+var db='';dist.forEach(function(v,i){db+='<div style="flex:1;border-radius:3px 3px 0 0;background:var(--co);opacity:'+(0.35+i*0.16)+';height:'+Math.round((v/mD)*100)+'%"></div>';});
+var p3='<div class="pcrd"><div class="ptit">Engagement distribution</div><div style="display:flex;align-items:flex-end;gap:4px;height:80px">'+db+'</div><div style="display:flex;gap:4px;margin-top:6px"><div style="flex:1;font-size:9px;color:var(--tx3);text-align:center">Low</div><div style="flex:1"></div><div style="flex:1;font-size:9px;color:var(--tx3);text-align:center">Mid</div><div style="flex:1"></div><div style="flex:1;font-size:9px;color:var(--tx3);text-align:center">High</div></div><div style="margin-top:12px;font-size:11px;color:var(--tx2)">'+dm+'</div></div>';
+var dots='';s.slice(0,25).forEach(function(p,i){
+var sv=mg('lifetime.shares_count')(p),lv=mg('lifetime.reactions')(p),ev=mg('lifetime.engagements')(p);
+var x=Math.round((sv/mSc)*88+6),y=Math.round((1-(lv/mLc)*0.88)*100);
+var col=ev>tEv*0.8?'var(--gr)':ev<bEv*1.2?'var(--re)':'var(--am)';
+dots+='<div class="pdot" title="Post #'+(i+1)+'" style="left:'+x+'%;top:'+y+'%;background:'+col+';border:2px solid '+col+';opacity:0.85"></div>';
+});
+var p4='<div class="pcrd"><div class="ptit">Sends vs likes scatter</div><div class="psc">'+dots+'<div style="position:absolute;bottom:4px;left:0;right:0;text-align:center;font-size:9px;color:var(--tx3)">Sends</div><div style="position:absolute;top:4px;left:4px;font-size:9px;color:var(--tx3)">Likes</div></div><div style="display:flex;gap:12px;font-size:10px;color:var(--tx3);margin-top:8px"><span style="display:flex;align-items:center;gap:4px"><span style="width:7px;height:7px;border-radius:50%;background:var(--gr);display:inline-block"></span>Top</span><span style="display:flex;align-items:center;gap:4px"><span style="width:7px;height:7px;border-radius:50%;background:var(--am);display:inline-block"></span>Avg</span><span style="display:flex;align-items:center;gap:4px"><span style="width:7px;height:7px;border-radius:50%;background:var(--re);display:inline-block"></span>Low</span></div></div>';
+document.getElementById('tp-patterns').innerHTML='<div class="pgrid">'+p1+p2+p3+p4+'</div>';
 }
 function rendA(posts){
-  var ip=posts.filter(function(p){return p.guid&&p.guid.indexOf('igmed:')===0;});
-  aRows=ip.map(function(p,i){
-    var re=(p.metrics&&p.metrics['lifetime.impressions'])||0;
-    var se=(p.metrics&&p.metrics['lifetime.shares_count'])||0;
-    var li=(p.metrics&&p.metrics['lifetime.reactions'])||0;
-    var wr=(p.metrics&&p.metrics['lifetime.video_view_time_per_view'])||0;
-    var wt=wr>100?wr/1000:wr;
-    var sr=re>0?se/re:0,lr=re>0?li/re:0;
-    var sc=(sr*1000)+(lr*250)+(wt>0?Math.min(wt,60)/60*50:0);
-    return{i:i+1,g:p.guid,re:re,se:se,sr:sr,li:li,lr:lr,wt:wt,sc:sc};
-  }).filter(function(r){return r.re>0;});
-  var tab=document.getElementById('tp-adam');
-  if(!aRows.length){tab.innerHTML='<div class="emp" style="height:200px"><div class="etit">No IG posts</div><div class="esub">Select an Instagram profile</div></div>';return;}
-  var sum='<div class="astrip" id="asum"></div>';
-  var skeys=[['sc','Signal Score'],['sr','Sends/Reach'],['lr','Likes/Reach'],['re','Reach'],['wt','Watch Time']];
-  var sbh='<div class="asbr"><span style="font-size:11px;color:var(--tx3);font-weight:600">Sort:</span>';
-  skeys.forEach(function(k){sbh+='<button class="asbt'+(k[0]===aKey?' on':'')+'" onclick="asort(''+k[0]+'')">'+k[1]+'</button>';});
-  sbh+='</div>';
-  var flt='<div class="aflt"><div><select class="sel" id="atype" style="margin-bottom:0" onchange="rendAc()"><option value="">All types</option><option value="v">Video/Reel</option><option value="p">Photo</option></select></div><div><input class="sel" id="amin" type="number" placeholder="Min reach..." style="margin-bottom:0;padding:7px 10px" oninput="rendAc()"></div></div>';
-  var note='<div class="anote">Signal Score = Sends/reach x1000 + Likes/reach x250 + Watch time bonus up to 50pts. Stories excluded. 30+ strong, 10-30 avg, under 10 low.</div>';
-  tab.innerHTML=sum+sbh+flt+note+'<div id="acards"></div>';
-  rendAS();rendAc();
+var ip=posts.filter(function(p){return p.guid&&p.guid.indexOf('igmed:')===0;});
+aRows=ip.map(function(p,i){
+var re=(p.metrics&&p.metrics['lifetime.impressions'])||0;
+var se=(p.metrics&&p.metrics['lifetime.shares_count'])||0;
+var li=(p.metrics&&p.metrics['lifetime.reactions'])||0;
+var wr=(p.metrics&&p.metrics['lifetime.video_view_time_per_view'])||0;
+var wt=wr>100?wr/1000:wr;
+var sr=re>0?se/re:0,lr=re>0?li/re:0;
+var sc=(sr*1000)+(lr*250)+(wt>0?Math.min(wt,60)/60*50:0);
+return{i:i+1,g:p.guid,re:re,se:se,sr:sr,li:li,lr:lr,wt:wt,sc:sc};
+}).filter(function(r){return r.re>0;});
+var tab=document.getElementById('tp-adam');
+if(!aRows.length){tab.innerHTML='<div class="emp" style="height:200px"><div class="etit">No IG posts</div><div class="esub">Select an Instagram profile</div></div>';return;}
+var skeys=[['sc','Signal Score'],['sr','Sends/Reach'],['lr','Likes/Reach'],['re','Reach'],['wt','Watch Time']];
+var sbh='<div class="asbr"><span style="font-size:11px;color:var(--tx3);font-weight:600">Sort:</span>';
+skeys.forEach(function(k){sbh+='<button class="asbt'+(k[0]===aKey?' on':'')+'" onclick="asort(\''+k[0]+'\')">'+k[1]+'</button>';});
+sbh+='</div>';
+var flt='<div class="aflt"><div><select class="sel" id="atype" style="margin-bottom:0" onchange="rendAc()"><option value="">All types</option><option value="v">Video/Reel</option><option value="p">Photo</option></select></div><div><input class="sel" id="amin" type="number" placeholder="Min reach..." style="margin-bottom:0;padding:7px 10px" oninput="rendAc()"></div></div>';
+var note='<div class="anote">Signal Score = Sends/reach x1000 + Likes/reach x250 + Watch time bonus up to 50pts. Stories excluded. 30+ strong, 10-30 avg, under 10 low.</div>';
+var sum='<div class="astrip" id="asum"></div>';
+tab.innerHTML=sum+sbh+flt+note+'<div id="acards"></div>';
+rendAS();rendAc();
 }
 function rendAS(){
-  var el=document.getElementById('asum');if(!el)return;
-  function av(arr,fn){return arr.length?arr.reduce(function(s,r){return s+fn(r);},0)/arr.length:0;}
-  var as=av(aRows,function(r){return r.sr;}),al=av(aRows,function(r){return r.lr;});
-  var wr=aRows.filter(function(r){return r.wt>0;}),aw=av(wr,function(r){return r.wt;});
-  el.innerHTML=[['IG Posts',aRows.length],['Avg Sends/Reach',pc(as)],['Avg Likes/Reach',pc(al)],['Avg Watch Time',wr.length?tf(aw):'--']].map(function(c){return'<div class="ac"><div class="acl">'+c[0]+'</div><div class="acv">'+c[1]+'</div></div>';}).join('');
+var el=document.getElementById('asum');if(!el)return;
+function av(arr,fn){return arr.length?arr.reduce(function(s,r){return s+fn(r);},0)/arr.length:0;}
+var as=av(aRows,function(r){return r.sr;}),al=av(aRows,function(r){return r.lr;});
+var wr=aRows.filter(function(r){return r.wt>0;}),aw=av(wr,function(r){return r.wt;});
+el.innerHTML=[['IG Posts',aRows.length],['Avg Sends/Reach',pc(as)],['Avg Likes/Reach',pc(al)],['Avg Watch Time',wr.length?tf(aw):'--']].map(function(c){return'<div class="ac"><div class="acl">'+c[0]+'</div><div class="acv">'+c[1]+'</div></div>';}).join('');
 }
 function tf(s){if(!s||s<=0)return'--';if(s<60)return s.toFixed(1)+'s';var m=Math.floor(s/60),x=Math.round(s%60);return m+':'+(x<10?'0':'')+x;}
 function asort(k){
-  if(aKey===k)aDir=aDir==='asc'?'desc':'asc';else{aKey=k;aDir='desc';}
-  document.querySelectorAll('.asbt').forEach(function(b){b.classList.toggle('on',b.getAttribute('onclick').indexOf("'"+k+"'")!==-1);});
-  rendAc();
+if(aKey===k)aDir=aDir==='asc'?'desc':'asc';else{aKey=k;aDir='desc';}
+document.querySelectorAll('.asbt').forEach(function(b){b.classList.toggle('on',b.getAttribute('onclick').indexOf("'"+k+"'")!==-1);});
+rendAc();
 }
 function rendAc(){
-  var c=document.getElementById('acards');if(!c)return;
-  var mr=parseFloat((document.getElementById('amin')&&document.getElementById('amin').value)||0)||0;
-  var tf2=(document.getElementById('atype')&&document.getElementById('atype').value)||'';
-  var d=aRows.filter(function(r){return r.re>=mr;});
-  if(tf2==='v')d=d.filter(function(r){return r.wt>0;});
-  if(tf2==='p')d=d.filter(function(r){return r.wt===0;});
-  d=d.slice().sort(function(a,b){return aDir==='asc'?a[aKey]-b[aKey]:b[aKey]-a[aKey];});
-  if(!d.length){c.innerHTML='<div style="text-align:center;padding:32px;color:var(--tx3)">No posts match filters</div>';return;}
-  var mx=Math.max.apply(null,d.map(function(r){return r.sc;}).concat([1]));
-  var h='';
-  d.forEach(function(r,i){
-    var v=r.sc>mx*0.75?'strong':r.sc>mx*0.4?'mid':'weak';
-    var vl=v==='strong'?'Top signal':v==='weak'?'Low signal':'Average';
-    var dl=138,fi=Math.round((r.sc/mx)*dl);
-    var sc=v==='strong'?'var(--co)':v==='weak'?'var(--tx3)':'var(--am)';
-    var src=r.sr>=0.01?'var(--gr)':r.sr>=0.004?'var(--am)':'var(--re)';
-    var lrc=r.lr>=0.04?'var(--gr)':r.lr>=0.02?'var(--am)':'var(--re)';
-    var url=gurl(r.g);
-    h+='<div class="acrd">';
-    h+='<div class="adw"><svg width="56" height="56" viewBox="0 0 56 56"><circle cx="28" cy="28" r="22" fill="none" stroke="var(--sur2)" stroke-width="6"/><circle cx="28" cy="28" r="22" fill="none" stroke="'+sc+'" stroke-width="6" stroke-dasharray="'+fi+' '+(dl-fi)+'" stroke-dashoffset="34" stroke-linecap="round"/><text x="28" y="32" text-anchor="middle" font-size="11" font-weight="700" fill="'+sc+'">'+r.sc.toFixed(1)+'</text></svg><div class="adl">signal</div></div>';
-    h+='<div class="acm"><div class="act"><span class="actt">#'+(i+1)+' Post #'+r.i+'</span><span class="apill '+v+'">'+vl+'</span>'+(url?'<a href="'+url+'" target="_blank" class="vlink">View</a>':'')+'<span style="font-size:10px;color:var(--tx3);margin-left:auto">'+r.g.slice(0,20)+'...</span></div>';
-    h+='<div class="acmg">';
-    h+='<div class="acmi"><div class="acmil">Reach</div><div class="acmiv">'+fn(r.re)+'</div><div class="acmis">impressions</div></div>';
-    h+='<div class="acmi"><div class="acmil">Sends/reach</div><div class="acmiv" style="color:'+src+'">'+pc(r.sr)+'</div><div class="acmis">'+fn(r.se)+' sends</div></div>';
-    h+='<div class="acmi"><div class="acmil">Likes/reach</div><div class="acmiv" style="color:'+lrc+'">'+pc(r.lr)+'</div><div class="acmis">'+fn(r.li)+' likes</div></div>';
-    h+='</div></div></div>';
-  });
-  c.innerHTML=h;
+var c=document.getElementById('acards');if(!c)return;
+var mr=parseFloat((document.getElementById('amin')&&document.getElementById('amin').value)||0)||0;
+var tf2=(document.getElementById('atype')&&document.getElementById('atype').value)||'';
+var d=aRows.filter(function(r){return r.re>=mr;});
+if(tf2==='v')d=d.filter(function(r){return r.wt>0;});
+if(tf2==='p')d=d.filter(function(r){return r.wt===0;});
+d=d.slice().sort(function(a,b){return aDir==='asc'?a[aKey]-b[aKey]:b[aKey]-a[aKey];});
+if(!d.length){c.innerHTML='<div style="text-align:center;padding:32px;color:var(--tx3)">No posts match filters</div>';return;}
+var mx=Math.max.apply(null,d.map(function(r){return r.sc;}).concat([1]));
+var h='';
+d.forEach(function(r,i){
+var v=r.sc>mx*0.75?'strong':r.sc>mx*0.4?'mid':'weak';
+var vl=v==='strong'?'Top signal':v==='weak'?'Low signal':'Average';
+var dl=138,fi=Math.round((r.sc/mx)*dl);
+var sc=v==='strong'?'var(--co)':v==='weak'?'var(--tx3)':'var(--am)';
+var src=r.sr>=0.01?'var(--gr)':r.sr>=0.004?'var(--am)':'var(--re)';
+var lrc=r.lr>=0.04?'var(--gr)':r.lr>=0.02?'var(--am)':'var(--re)';
+var url=gurl(r.g);
+h+='<div class="acrd">';
+h+='<div class="adw"><svg width="56" height="56" viewBox="0 0 56 56"><circle cx="28" cy="28" r="22" fill="none" stroke="var(--sur2)" stroke-width="6"/><circle cx="28" cy="28" r="22" fill="none" stroke="'+sc+'" stroke-width="6" stroke-dasharray="'+fi+' '+(dl-fi)+'" stroke-dashoffset="34" stroke-linecap="round"/><text x="28" y="32" text-anchor="middle" font-size="11" font-weight="700" fill="'+sc+'">'+r.sc.toFixed(1)+'</text></svg><div class="adl">signal</div></div>';
+h+='<div class="acm"><div class="act"><span class="actt">#'+(i+1)+' Post #'+r.i+'</span><span class="apill '+v+'">'+vl+'</span>'+(url?'<a href="'+url+'" target="_blank" class="vlink">View</a>':'')+'<span style="font-size:10px;color:var(--tx3);margin-left:auto">'+r.g.slice(0,20)+'...</span></div>';
+h+='<div class="acmg">';
+h+='<div class="acmi"><div class="acmil">Reach</div><div class="acmiv">'+fn(r.re)+'</div><div class="acmis">impressions</div></div>';
+h+='<div class="acmi"><div class="acmil">Sends/reach</div><div class="acmiv" style="color:'+src+'">'+pc(r.sr)+'</div><div class="acmis">'+fn(r.se)+' sends</div></div>';
+h+='<div class="acmi"><div class="acmil">Likes/reach</div><div class="acmiv" style="color:'+lrc+'">'+pc(r.lr)+'</div><div class="acmis">'+fn(r.li)+' likes</div></div>';
+h+='</div></div></div>';
+});
+c.innerHTML=h;
 }
 function swTab(n,b){
-  document.querySelectorAll('.tb').forEach(function(x){x.classList.remove('on');});
-  document.querySelectorAll('.tp').forEach(function(x){x.classList.remove('on');});
-  b.classList.add('on');document.getElementById('tp-'+n).classList.add('on');
+document.querySelectorAll('.tb').forEach(function(x){x.classList.remove('on');});
+document.querySelectorAll('.tp').forEach(function(x){x.classList.remove('on');});
+b.classList.add('on');document.getElementById('tp-'+n).classList.add('on');
 }
 document.addEventListener('DOMContentLoaded',function(){
-  chkTok();
-  cid='528985';
-  ss('Loading profiles...','loading');
-  sget('/v1/'+cid+'/metadata/customer').then(function(d){
-    profs=d.data||[];renderSB();ss(profs.length+' profiles loaded','ok');
-  }).catch(function(e){ss('Error: '+e.message,'error');});
+chkTok();
+cid='528985';
+ss('Loading profiles...','loading');
+sget('/v1/'+cid+'/metadata/customer').then(function(d){
+profs=d.data||[];renderSB();ss(profs.length+' profiles loaded','ok');
+}).catch(function(e){ss('Error: '+e.message,'error');});
 });
 </script>
 </body>
