@@ -477,13 +477,16 @@ b.classList.add('on');
 var p=document.getElementById('ins-'+n);if(p)p.classList.add('on');
 }
 function insFetch(){
-if(!selProfs.length){
-document.getElementById('ins-heatmap').innerHTML='<div style="text-align:center;padding:40px;color:var(--tx3);font-size:12px">Select an account and run analysis first.</div>';
+var useProfs=selProfs.length?selProfs:profs.filter(function(p){var n=(p.network_type||"").toLowerCase();return n.indexOf("instagram")!==-1||n.indexOf("facebook")!==-1;}).slice(0,10).map(function(p){return p.customer_profile_id;});
+if(!useProfs.length){
+var msg='<div style="text-align:center;padding:40px;color:var(--tx3);font-size:12px">Select an account from the sidebar first.</div>';
+['ins-heatmap','ins-velocity','ins-decay'].forEach(function(id){var el=document.getElementById(id);if(el)el.innerHTML=msg;});
 return;}
 var end=new Date(),start=new Date();
 start.setDate(start.getDate()-90);
 function df(d){return d.toISOString().split('T')[0];}
-var pf='customer_profile_id.eq('+selProfs.join(',')+')',tf='created_time.in('+df(start)+'..'+df(end)+')';
+var pf='customer_profile_id.eq('+useProfs.join(',')+')',tf='created_time.in('+df(start)+'..'+df(end)+')';
+['ins-heatmap','ins-velocity','ins-decay'].forEach(function(id){var el=document.getElementById(id);if(el)el.innerHTML='<div style="text-align:center;padding:40px;color:var(--tx3);font-size:12px">Loading 90 days of data...</div>';});
 spost('/v1/'+cid+'/analytics/posts',{filters:[pf,tf],metrics:['lifetime.impressions','lifetime.engagements','lifetime.reactions','lifetime.shares_count','lifetime.comments_count'],page_size:500})
 .then(function(res){
 var posts=(res.data||[]).filter(function(p){return p.created_time;});
@@ -492,7 +495,7 @@ insRenderVelocity(posts);
 insRenderDecay(posts);
 }).catch(function(e){
 var msg='<div style="color:var(--re);padding:20px;font-size:12px">Error: '+e.message+'</div>';
-['ins-heatmap','ins-velocity','ins-decay'].forEach(function(id){document.getElementById(id).innerHTML=msg;});
+['ins-heatmap','ins-velocity','ins-decay'].forEach(function(id){var el=document.getElementById(id);if(el)el.innerHTML=msg;});
 });
 }
 function insRenderHeatmap(posts){
