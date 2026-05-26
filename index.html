@@ -487,7 +487,7 @@ start.setDate(start.getDate()-90);
 function df(d){return d.toISOString().split('T')[0];}
 var pf='customer_profile_id.eq('+useProfs.join(',')+')',tf='created_time.in('+df(start)+'..'+df(end)+')';
 ['ins-heatmap','ins-velocity','ins-decay'].forEach(function(id){var el=document.getElementById(id);if(el)el.innerHTML='<div style="text-align:center;padding:40px;color:var(--tx3);font-size:12px">Loading 90 days of data...</div>';});
-spost('/v1/'+cid+'/analytics/posts',{filters:[pf,tf],metrics:['lifetime.impressions','lifetime.engagements','lifetime.reactions','lifetime.shares_count','lifetime.comments_count'],page_size:500})
+spost('/v1/'+cid+'/analytics/posts',{filters:[pf,tf],fields:['created_time'],metrics:['lifetime.impressions','lifetime.engagements','lifetime.reactions','lifetime.shares_count','lifetime.comments_count'],page_size:500})
 .then(function(res){
 var posts=(res.data||[]).filter(function(p){return p.created_time;});
 insRenderHeatmap(posts);
