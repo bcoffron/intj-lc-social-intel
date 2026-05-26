@@ -504,7 +504,9 @@ var DAYS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 var grid={};for(var d=0;d<7;d++){grid[d]={};for(var h=0;h<24;h++)grid[d][h]={sum:0,count:0};}
 posts.forEach(function(p){
 var dt=new Date(p.created_time);
-var day=dt.getDay(),hr=dt.getHours();
+var ctMs=dt.getTime()-(5*3600000);
+var ctDt=new Date(ctMs);
+var day=ctDt.getUTCDay(),hr=ctDt.getUTCHours();
 var imp=(p.metrics&&p.metrics['lifetime.impressions'])||0;
 var eng=(p.metrics&&p.metrics['lifetime.engagements'])||0;
 var score=imp>0?(eng/imp*100):0;
@@ -516,13 +518,14 @@ function col(v){var t=maxV>0?v/maxV:0;var r=Math.round(232*t+(240*(1-t)));var g=
 var h='<div class="iscard"><div class="isctitle">Best time to post &mdash; avg engagement rate by day &amp; hour (90 days)</div>';
 h+='<div class="ishmap">';
 h+='<div class="ishhourlbl"></div>';
-for(var hr=0;hr<24;hr++)h+='<div class="ishhourlbl">'+hr+'</div>';
+var hrLabels=['12a','1a','2a','3a','4a','5a','6a','7a','8a','9a','10a','11a','12p','1p','2p','3p','4p','5p','6p','7p','8p','9p','10p','11p'];
+for(var hr=0;hr<24;hr++)h+='<div class="ishhourlbl">'+hrLabels[hr]+'</div>';
 for(var d=0;d<7;d++){
 h+='<div class="ishlbl">'+DAYS[d]+'</div>';
 for(var hr=0;hr<24;hr++){
 var c=grid[d][hr],avg=c.count?c.sum/c.count:0;
 var bg=c.count?col(avg):'var(--sur2)';
-var tip=c.count?DAYS[d]+' '+hr+'h: '+avg.toFixed(2)+'% ER ('+c.count+' posts)':'No data';
+var tip=c.count?DAYS[d]+' '+hrLabels[hr]+' CT: '+avg.toFixed(2)+'% ER ('+c.count+' posts)':'No data';
 h+='<div class="ishcell" style="background:'+bg+'" title="'+tip+'"></div>';
 }}
 h+='</div>';
@@ -530,7 +533,7 @@ h+='<div class="islegend"><span class="islegtext">Low</span><div class="islegbar
 for(var i=0;i<=8;i++)h+='<div class="islegcell" style="background:'+col(i/8*maxV)+'"></div>';
 h+='</div><span class="islegtext">High ER</span></div>';
 var best={day:0,hr:0,val:0};for(var d=0;d<7;d++)for(var hr=0;hr<24;hr++){var c=grid[d][hr],avg=c.count?c.sum/c.count:0;if(avg>best.val&&c.count>=2)best={day:d,hr:hr,val:avg,count:c.count};}
-if(best.val>0)h+='<div class="isinsight">Your best performing slot is <strong>'+DAYS[best.day]+' at '+best.hr+':00</strong> with an average engagement rate of '+best.val.toFixed(2)+'% across '+best.count+' posts. Posts in this window consistently outperform other time slots based on your last 90 days of data.</div>';
+if(best.val>0)h+='<div class="isinsight">Your best performing slot is <strong>'+DAYS[best.day]+' at '+hrLabels[best.hr]+' CT</strong> with an average engagement rate of '+best.val.toFixed(2)+'% across '+best.count+' posts. Posts in this window consistently outperform other time slots based on your last 90 days of data.</div>';
 h+='</div>';
 el.innerHTML=h;
 }
