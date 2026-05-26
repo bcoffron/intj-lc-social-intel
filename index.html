@@ -504,7 +504,9 @@ var DAYS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 var grid={};for(var d=0;d<7;d++){grid[d]={};for(var h=0;h<24;h++)grid[d][h]={sum:0,count:0};}
 posts.forEach(function(p){
 var dt=new Date(p.created_time);
-var ctMs=dt.getTime()-(5*3600000);
+function isCtDst(d){var yr=d.getUTCFullYear();var dstStart=new Date(Date.UTC(yr,2,8));while(dstStart.getUTCDay()!==0)dstStart=new Date(dstStart.getTime()+86400000);var dstEnd=new Date(Date.UTC(yr,10,1));while(dstEnd.getUTCDay()!==0)dstEnd=new Date(dstEnd.getTime()+86400000);return d>=dstStart&&d<dstEnd;}
+var ctOff=isCtDst(dt)?-5:-6;
+var ctMs=dt.getTime()+(ctOff*3600000);
 var ctDt=new Date(ctMs);
 var day=ctDt.getUTCDay(),hr=ctDt.getUTCHours();
 var imp=(p.metrics&&p.metrics['lifetime.impressions'])||0;
